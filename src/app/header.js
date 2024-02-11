@@ -1,54 +1,37 @@
-import React from 'react';
+'use client';
 
-const styles = {
-  logo: {
-    marginRight: '16px',
-  },
-  title: {
-    flexGrow: 1,
-    textAlign: 'center',
-  },
-  navigation: {
-    marginLeft: 'auto',
-  },
-  appBar: {
-    position: 'static',
-    color: 'white',
-    backgroundColor: '#3f51b5',
-    display: 'flex',
-    alignItems: 'center',
-    padding: '8px',
-  },
-  toolbar: {
-    display: 'flex',
-    alignItems: 'center',
-    width: '100%',
-  },
-  menuButton: {
-    color: 'inherit',
-    border: 'none',
-    background: 'none',
-    cursor: 'pointer',
-    marginRight: '16px',
-  },
-};
+import React from 'react';
+import { Box, Button, Flex, Heading , ButtonGroup} from '@chakra-ui/react';
 
 function Header() {
   return (
-    <header style={styles.appBar}>
-      <div style={styles.toolbar}>
-        <button style={styles.menuButton} aria-label="menu">
+    <Box as="header" bg="#3f51b5" color="white" p={2}>
+      <Flex align="center" justify="space-between">
+        <Button ml={4} mr={4} variant="ghost" aria-label="menu">
           ☰
-        </button>
-        <h1 style={styles.title}>
-          Website Name
-        </h1>
-        <div style={styles.navigation}>
-          {/* Add your navigation links here */}
-        </div>
-      </div>
-    </header>
+        </Button>
+        <Heading flexGrow={1} textAlign="center">
+          NAAM
+        </Heading>
+        <Box direction='row' spacing={4} align='center'>
+          <Button colorScheme='teal' variant='solid'>
+            Button
+          </Button>
+          <Button colorScheme='teal' variant='outline'>
+            Button
+          </Button>
+          <Button colorScheme='teal' variant='ghost'>
+            Button
+          </Button>
+          <Button colorScheme='teal' variant='link'>
+            Button
+          </Button>
+        </Box>
+      </Flex>
+    </Box>
+
   );
 }
+
 
 export default Header;
