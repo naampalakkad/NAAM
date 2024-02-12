@@ -1,8 +1,24 @@
 .header{
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
     height: 10vh;
+    justify-content: space-between;
     background-color: var(--prim_col);
     align-items: center;  
+}
+.heading{
+    display: flex;
+    flex-direction: column;
+    
+}
+.main_head{
+    font-size: 250%;
+}
+.sub_head{
+    font-size: 100%;
+}
+.main_menu{
+    display: flex;
+    flex-direction: row;
+    justify-content:space-between;
 }
