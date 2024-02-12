@@ -1,6 +1,18 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Readme File for Naam Website
 
+## Documentations: 
+Next JS : https://nextjs.org/docs/pages/building-your-application
+Chakra UI : https://chakra-ui.com/docs/components
 ## Getting Started
+
+clone the repo from github url : https://github.com/SreejithKSGupta/naam-website
+
+install the dependencies:
+
+```bash
+npm install
+``` 
+
 
 First, run the development server:
 
@@ -13,24 +25,30 @@ pnpm dev
 # or
 bun dev
 ```
-
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## using GIT:
+periodicaly pull to incorporate changes made from others, and provide proper commits.
+commit format: [ShortName change] eg: SJ updated readme.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Adding Images:
 
-## Learn More
+you can use the default method of using HTML's Image tag, or use optimized next JS image tag.
 
-To learn more about Next.js, take a look at the following resources:
+Next.js can serve static files, like images, under a folder called public in the root
+directory. Files inside public can then be referenced by your code starting from the
+base URL ( / ).
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+For example, the file public/avatars/me.png can be viewed by visiting the
+/avatars/me. png path. The code to display that image might look like:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+```bash
+import Image from 'next/image'
+ 
+export function Avatar({ id, alt }) {
+  return <Image src="{`/avatars/${id}.png`}" alt={alt} width="64" height="64" />
+}
+``` 
+## to create new urls: 
+ for eg: website.com/about me,
+ create a new folder, and add a page.js file, and an optional layout.js
