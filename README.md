@@ -3,6 +3,7 @@
 ## Documentations: 
 Next JS : https://nextjs.org/docs/pages/building-your-application
 Chakra UI : https://chakra-ui.com/docs/components
+Figma UI demo: https://www.figma.com/file/TTzi3AGI3qvdlUVNCzwZ99/Untitled?type=design&node-id=1%3A2&mode=design&t=Iqp97KG97Gz1Bcpt-1
 ## Getting Started
 
 clone the repo from github url : https://github.com/SreejithKSGupta/naam-website
