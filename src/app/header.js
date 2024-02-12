@@ -1,10 +1,9 @@
 import React from "react";
-import "./header.css";
 const Header = () => {
   return (
     <header className="header">
       <div className="main_logo">
-        <img src="" alt="NAAM Logo"/>
+        logo
       </div>
       <div className="heading">
         NAAM
