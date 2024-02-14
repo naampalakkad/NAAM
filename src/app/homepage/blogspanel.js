@@ -62,8 +62,8 @@ let styles = {
 
     "cardImage": {
         "borderRadius": "10px",
-        "margin-left": "auto",
-        "margin-right": "auto",
+        "marginLeft": "auto",
+        "marginRight": "auto",
         width: "80%",
        "aspectRatio": "1/1",
     },
