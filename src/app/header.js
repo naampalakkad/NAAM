@@ -4,17 +4,16 @@ import "./header.css";
 const Header = () => {
   return (
     <header id="header">
-      <div id="main_logo">
-        <Image src={`/assets/logo.png`} alt={"Main logo"} width="100" height="64" />
-      </div>
       <div id="heading">
-        <div id="main_head">
-          NAAM
+        <div id="logo">
+        <Image src={`/assets/logo.png`} alt={"Main logo"} width="100" height="64" />
         </div>
-        <div id="sub_head">
-          Navodaya Alumni Association, Malampuzha
+        <div id="heading_text">
+          <div id="main_head">NAAM</div>
+          <div id="sub_head">Navodaya Alumni Association, Malampuzha</div>
         </div>
       </div>
+
       <div id="main_menu">
         <div className="main_icons">Gallery</div>
         <div className="main_icons">Alum</div>
