@@ -1,6 +1,4 @@
 import React from 'react';
-import "./homepage.css";
-
 let blogposts = {
     "posts": [
         {
@@ -29,25 +27,18 @@ let blogposts = {
 }
 
 let styles = {
-   "containertitle":{
-        "fontSize": "4em",
-        "textAlign": "center",
-        "margin": "20px",
-        "color": "white"
-   },
-
     "cardcontainer": {
         "padding": "10px",
         "borderRadius": "10px",
         "display": "flex",
         "flexdirection": "row",
         "overflowX":"scroll",
-        width: "70%",
+        width: "100%",
+        backgroundColor: "#f2f2f2",
        
     },
 
     "card": {
-        height:"40vh",
         width:"30vh",
         backgroundColor: "white",
         color: "black",
@@ -98,7 +89,6 @@ export default function Blogspanel(){
    
     return (
         <div id="blogspanel" data-ride="panel" >
-            <h2 style={styles.containertitle}>Blog</h2>
             <div style={styles.cardcontainer}>
                 {blogposts.posts.map((post, index) => {
                     return (

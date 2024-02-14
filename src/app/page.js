@@ -3,20 +3,27 @@ import Statisticspanel from "./homepage/statisticspanel.js";
 import Blogspanel from "./homepage/blogspanel.js";
 import Gallerypanel from "./homepage/gallerypanel.js";
 import Testimonialpanel from "./homepage/testimonialpanel.js";
-import Contactpanel from "./homepage/contactpanel.js";
 
 
-import styles from "./page.module.css";
+
+let styles = {
+  "container": {
+    "display": "flex",
+    "flexDirection": "column",
+    "alignItems": "center",
+    "justifyContent": "center",
+    width: "100%",
+  }
+}
 
 export default function Home() {
   return (
-    <div className={styles.container} style={{width: '100vw'}}>
+    <div className={styles.container} style={styles.container} >
      <Carousel/>
      <Statisticspanel/>
      <Blogspanel/>
      <Gallerypanel/>
      <Testimonialpanel/>
-     <Contactpanel/>
     </div>
   );
 }
