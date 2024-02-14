@@ -1,4 +1,9 @@
-.header{
+*{
+    margin:0px;
+    padding:0px;
+    box-sizing:border-box;
+}
+#header{
     display: flex;
     flex-direction: row;
     height: 10vh;
@@ -6,19 +11,20 @@
     background-color: var(--prim_col);
     align-items: center;  
 }
-.heading{
+#heading{
     display: flex;
     flex-direction: column;
     
 }
-.main_head{
+#main_head{
     font-size: 250%;
 }
-.sub_head{
+#sub_head{
     font-size: 100%;
 }
-.main_menu{
+#main_menu{
     display: flex;
     flex-direction: row;
     justify-content:space-between;
+    width:45%;
 }
