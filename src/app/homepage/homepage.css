@@ -22,11 +22,11 @@
 
 #blogspanel {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 40vh;
+    height: 55vh;
     width: 100%;
-    overflow: hidden;
     background-color: rgb(53, 70, 6);
 }
 
