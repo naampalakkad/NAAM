@@ -1,12 +1,16 @@
 import React from 'react';
-import "./homepage.css";
+import "./blogspanel.css";
 
 export default function Blogspanel(){
 
    
     return (
-        <div id="blogspanel" data-ride="panel" >
-           blogspanel
+        <div className="blogspanel" data-ride="panel" >
+            <div className='lightblue'>one</div>
+            <div className='darkblue'>two</div>
+            <div className='lightblue'>three</div>
+            <div className='darkblue'>four</div>
+            <div className='lightblue'>three</div>
         </div>    
     )
 }
