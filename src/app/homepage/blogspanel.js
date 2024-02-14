@@ -41,7 +41,7 @@ let styles = {
         "borderRadius": "10px",
         "display": "flex",
         "flexdirection": "row",
-        "overflow-x":"scroll",
+        "overflowX":"scroll",
         width: "70%",
        
     },
