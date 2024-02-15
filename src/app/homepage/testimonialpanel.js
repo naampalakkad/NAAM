@@ -35,6 +35,7 @@ let styles = {
         "alignItems": "center",
         "justifyContent": "center",
         width: "80%",
+        color: "black",
     },
 
     "testimonialitem": {
@@ -48,6 +49,7 @@ let styles = {
         margin: "20px",
         borderRadius: "10px",
         boxShadow: "2px 3px 10px 2px #010110",
+        color: "black",
     },
     "testimonialimage": {
         "width": "100px",
@@ -58,14 +60,18 @@ let styles = {
     "testimonialname": {
         "fontSize": "20px",
         "fontWeight": "bold",
+        color: "#4f4b5f",
+
     },
     "testimonialbatch": {
         "fontSize": "15px",
         "fontWeight": "bold",
         textAlign: "right",
+        color: "black",
     },
     "testimonialcontent": {
         "fontSize": "15px",
+        color: "black",
     }
 
 }
