@@ -3,12 +3,13 @@ import Image from 'next/image'
 import "./header.css";
 
 const Header = () => {
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(true);
   const [hasMounted, setHasMounted] = useState(false);
 
   useEffect(() => {
     setIsMobile(window.innerWidth < 850);
     setHasMounted(true);
+    console.log("Mounted and set isMobile to ", isMobile);
   }, []);
 
   if (!hasMounted) {
@@ -60,9 +61,7 @@ const Header = () => {
       ) : (
         <div id='header'>
           <div id="heading">
-            <div id="logo">
-              <Image src={`/assets/logo.png`} alt={"Main logo"} width="100" height="64" />
-            </div>
+              <Image src={`/assets/logo.png`} alt={"Main logo"} width="100" height="64" id='logo' />
             <div id="heading_text">
               <div id="main_head">NAAM</div>
               <div id="sub_head">Navodaya Alumni Association, Malampuzha</div>
