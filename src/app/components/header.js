@@ -2,19 +2,31 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image'
 import "./header.css";
 
+
 const Header = () => {
-  const [isMobile, setIsMobile] = useState(true);
-  const [hasMounted, setHasMounted] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    setIsMobile(window.innerWidth < 850);
-    setHasMounted(true);
-    console.log("Mounted and set isMobile to ", isMobile);
+    function handleResize() {
+      setIsMobile(window.innerWidth < 850);
+    }
+
+    // Check if window is defined before adding event listener
+    if (typeof window !== 'undefined') {
+      window.addEventListener('resize', handleResize);
+
+      // Call the function directly to set the initial state
+      handleResize();
+    }
+
+    // Cleanup function to remove the event listener when the component unmounts
+    return () => {
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('resize', handleResize);
+      }
+    };
   }, []);
 
-  if (!hasMounted) {
-    return null;
-  }
 
   return (
     <header >
