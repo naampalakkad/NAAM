@@ -13,23 +13,23 @@ const Footer = () => {
       <div id="foooter">
         <div id="social">
           <div className="social_icons">
-            <SocialIcon url="www.linkedin.com" />
+            <SocialIcon url="www.linkedin.com" className="soc_icons"/>
           </div>
           <div className="social_icons">
-            <SocialIcon url="www.facebook.com" />
+            <SocialIcon url="www.facebook.com" className="soc_icons"/>
           </div>
           <div className="social_icons">
-            <SocialIcon url="www.twitter.com" />
+            <SocialIcon url="www.twitter.com" className="soc_icons"/>
           </div>
           <div className="social_icons">
-            <SocialIcon url="www.instagram.com" />
+            <SocialIcon url="www.instagram.com" className="soc_icons"/>
           </div>
           <div className="social_icons">
-            <SocialIcon url="www.youtube.com" />
+            <SocialIcon url="www.youtube.com" className="soc_icons"/>
           </div>
           <div className="social_icons phone_icon">
             <a href="https://www.yourwebsite.com/contact">
-              <FaPhoneSquareAlt size={32} />
+              <FaPhoneSquareAlt size={32} className="soc_icons"/>
             </a>
           </div>
 
