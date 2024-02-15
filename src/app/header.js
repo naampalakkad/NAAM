@@ -3,27 +3,25 @@ import Image from 'next/image'
 import "./header.css";
 
 const Header = () => {
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 850);
+  const [isMobile, setIsMobile] = useState(false);
+  const [hasMounted, setHasMounted] = useState(false);
 
   useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 850);
-    };
-
-    window.addEventListener('resize', handleResize);
-
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
+    setIsMobile(window.innerWidth < 850);
+    setHasMounted(true);
   }, []);
+
+  if (!hasMounted) {
+    return null;
+  }
 
   return (
     <header >
       {isMobile ? (
         <div id='header'>
           <div id="heading">
-            <div id="logo">
-              <Image src={`/assets/logo.png`} alt={"Main logo"} width="100" height="64" />
+            <div >
+              <Image id="logo" src={`/assets/logo.png`} alt={"Main logo"} width="100" height="64" />
             </div>
             <div id="heading_text">
               <div id="main_head">NAAM</div>
@@ -38,21 +36,21 @@ const Header = () => {
                 <span></span>
                 <span></span>
                 <ul id="menu">
-                  <a href="#">
-                    <li>Gallery</li>
-                  </a>
-                  <a href="#">
-                    <li>Alum</li>
-                  </a>
-                  <a href="#">
-                    <li>Calender</li>
-                  </a>
-                  <a href="#">
-                    <li>About Us</li>
-                  </a>
-                  <a href="#">
-                    <li>Register</li>
-                  </a>
+                  <li>
+                    <a href="#">Gallery</a>
+                  </li>
+                  <li>
+                    <a href="#">Alum</a>
+                  </li>
+                  <li>
+                    <a href="#">Calender</a>
+                  </li>
+                  <li>
+                    <a href="#">About Us</a>
+                  </li>
+                  <li>
+                    <a href="#">Register</a>
+                  </li>
                 </ul>
               </div>
             </nav>
