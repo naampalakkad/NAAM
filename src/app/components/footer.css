@@ -17,10 +17,20 @@
   justify-content: space-around;
   width: 70%;
 }
+.soc_icons :hover {
+    filter: brightness(115%);
+}
+a:hover{
+    filter: brightness(125%);
+}
 
 #copyright {
   padding: 0 20px;
+  color: white;
 }
+#copyright:hover {
+    color: rgb(211, 168, 168);
+  }
 .phone_icon a {
   display: inline-block;
   background-color: #279458;
@@ -43,6 +53,4 @@
   #social {
     width: 100%;
   }
-  
-
 }
