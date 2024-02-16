@@ -10,7 +10,7 @@ let styles = {
         width: "70%",
     },
     "card": {
-        width:"90%",
+        width:"clamp(200px, 40%, 400px)",
         backgroundColor: "white",
         color: "black",
         "margin": "10px",
@@ -22,7 +22,7 @@ let styles = {
         justifyContent: "space-evenly",
     },
     "statsval": {
-        "fontSize": "5em",
+        "fontSize": "3em",
         "padding": "10px",
         color:"teal",
         fontWeight:"bold",
@@ -35,7 +35,6 @@ let styles = {
         fontWeight:"bold",
         textAlign:"center",
     },
-
 }
 
 let statistics = [
