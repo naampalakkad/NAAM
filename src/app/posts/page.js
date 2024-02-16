@@ -1,6 +1,7 @@
 // This is the component that will be rendered when the user navigates to /news
 // It should render a list of news articles/updates/blogs etc. 
-
+import React from 'react';
+import './page.css'
 let posts = [
     {
         title: "Post 1",
@@ -35,17 +36,21 @@ let posts = [
 
 export default function Posts() {
     return (
-        <div>
-            <h1>News</h1>
-            <ul>
+        <div className='background'>
+            <div style={{display:"flex",flexDirection:"row",padding:"10px",width:"97%"}}>
+            <h1 className='news'>News</h1>
+            <button className='button'><a className='readmore' href>Add </a></button> 
+            </div>
+            
+            <ul >
             {posts.map((post, index) => (
-                <li key={index}>
-                <h2>{post.title}</h2>
-                <p>{post.content}</p>
-                <p>{post.date}</p>
-                <p>{post.author}</p>
-                <p>{post.edited}</p>
-                <a href={post.url}>Read more</a>
+                <li key={index} className='bigbox'>
+                <h2  className='title'>{post.title}</h2>
+                <p className='date'>{post.date}</p>
+                <p className='author'>{post.author}</p> 
+                <p className='content'>{post.content}</p>
+                
+                <button className='button'><a className='readmore' href={post.url}>Read more</a></button> 
                 </li>
             ))}
             </ul>
