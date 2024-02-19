@@ -11,7 +11,7 @@ clone the repo from github url : https://github.com/SreejithKSGupta/naam-website
 install the dependencies:
 
 ```bash
-npm install
+npm install or npm i
 ``` 
 
 
