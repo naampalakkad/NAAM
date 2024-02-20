@@ -1,3 +1,4 @@
+import { wrap } from 'framer-motion';
 import React from 'react';
 
 
@@ -34,8 +35,10 @@ let styles = {
         "flexDirection": "row",
         "alignItems": "center",
         "justifyContent": "center",
-        width: "80%",
+        width: "90%",
         color: "black",
+        flexWrap: "wrap",
+        
     },
 
     "testimonialitem": {
@@ -43,8 +46,8 @@ let styles = {
         "flexDirection": "column",
         "alignItems": "center",
         "justifyContent": "center",
-        "width": "300px",
-        backgroundColor: "222222",
+        "width": "clamp(300px, 30%, 300px)",
+        backgroundColor: "white",
         padding: "20px",
         margin: "20px",
         borderRadius: "10px",
