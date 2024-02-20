@@ -1,40 +1,8 @@
 import { CardBody, CardHeader, Stack, Badge, Card, Button, SimpleGrid, CardFooter, Divider } from '@chakra-ui/react';
 import React from 'react';
 import './blogspanel.css';
-let blogposts = {
-    "posts": [
-        {
-            "title": "Post 1",
-            "content": "This is the first post. this is some dummy text used to fill in the rest of the page, and this is some random text",
-            "image": "https://via.placeholder.com/150",
-            type: "offer",
-            author: "unnimaya",
-        },
-        {
-            "title": "Post 2",
-            "content": "This is the second post. this is some dummy text used to fill in the rest of the page, and this is some random text",
-            "image": "https://via.placeholder.com/150",
-            type: "blog",
-            author: "Sreejith KS",
-        },
-        {
-            "title": "Post 3",
-            "content": "This is the third post. this is some dummy text used to fill in the rest of the page, and this is some random text",
-            "image": "https://via.placeholder.com/150",
-            type: "announcement",
-            author: "Suneeb vishnu",
-        },
-        {
-            "title": "Post 4",
-            "content": "This is the fourth post. this is some dummy text used to fill in the rest of the page, and this is some random text",
-            "image": "https://via.placeholder.com/150",
-            type: "blog",
-            author: "Anjitha J",
-        },
+import { blogposts } from './data';
 
-    ]
-
-}
 
 export default function Blogspanel() {
 

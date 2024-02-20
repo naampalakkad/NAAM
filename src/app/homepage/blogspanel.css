@@ -1,16 +1,15 @@
 .cardcontainer {
     margin: 20px;
     width: 80%;
+    display: grid;
+    grid-gap: 10px;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
 }
 
 
 
 .cardImage {
-    border-radius: 10px;
-    margin-left: auto;
-    margin-right: auto;
-    width: 80%;
+    width: 100%;
     aspect-ratio: 1/1;
 }
 

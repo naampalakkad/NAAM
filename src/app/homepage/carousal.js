@@ -2,15 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import './carousal.css';
+import {carousalimgs} from './data';
 
-let carousalimgs = [
-     "./assets/carousalimgs/1.webp",
-     "./assets/carousalimgs/2.webp",
-     "./assets/carousalimgs/3.webp",
-     "./assets/carousalimgs/4.webp",
-     "./assets/carousalimgs/5.webp",
-     "./assets/carousalimgs/6.webp",
-];
 
 
 export default function Carousal(){
