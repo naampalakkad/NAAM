@@ -1,27 +1,7 @@
 import React from 'react';
 import './statisticspanel.css';
 import { Card, CardBody, CardHeader, SimpleGrid } from '@chakra-ui/react';
-
-let statistics = [
-    {
-        "title": "years",
-        "text": "7",
-    },
-    {
-        "title": "Years of Service",
-        "text": "35+",
-    },
-    {
-        "title": "Almunis",
-        "text": "10k+",
-    },
-    {
-        "title": "branches",
-        "text": "10+",
-    }
-
-
-]
+import { statistics } from './data';
 
 export default function Statisticspanel() {
     return (
