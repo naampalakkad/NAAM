@@ -111,3 +111,15 @@ a {
     color-scheme: dark;
   }
 }
+
+#mainbody{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  width: 100%;
+  height: 100%;
+  background-color: var(--prim_col);
+  color: var(--sec_col);
+}

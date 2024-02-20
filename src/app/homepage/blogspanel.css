@@ -1,20 +1,26 @@
-.lightblue{ 
-    width: 300px;
-    height: 521px;
-    
-    color: white;
-    background: #31304D;
-} 
-.darkblue{ 
-    width: 300px;
-    height: 521px;
-    
-    color: white;
-    background: #161A30;
-}
-.blogspanel{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+.cardcontainer {
+    margin: 20px;
+    width: 80%;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
 }
 
+
+
+.cardImage {
+    border-radius: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 80%;
+    aspect-ratio: 1/1;
+}
+
+.cardTitle {
+    font-size: 1.5em;
+    padding: 10px;
+    color: cadetblue;
+}
+
+.cardText {
+    font-size: 1.2em;
+    padding: 10px;
+}

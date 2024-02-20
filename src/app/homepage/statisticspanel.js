@@ -1,41 +1,6 @@
 import React from 'react';
-
-let styles = {
-    "cardcontainer": {
-        "padding": "10px",
-        "borderRadius": "10px",
-        "display": "flex",
-        "flexdirection": "row",
-        "overflowX":"scroll",
-        width: "70%",
-    },
-    "card": {
-        width:"clamp(200px, 40%, 400px)",
-        backgroundColor: "white",
-        color: "black",
-        "margin": "10px",
-        "boxShadow": "0 0 10px rgba(0,0,0,0.5)",
-        "padding": "10px",
-        "borderRadius": "10px",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "space-evenly",
-    },
-    "statsval": {
-        "fontSize": "3em",
-        "padding": "10px",
-        color:"teal",
-        fontWeight:"bold",
-        textAlign:"center",
-    },
-    "statstitle": {
-        "fontSize": "2em",
-        "padding": "10px",
-        color:"black",
-        fontWeight:"bold",
-        textAlign:"center",
-    },
-}
+import './statisticspanel.css';
+import { Card, CardBody, CardHeader, SimpleGrid } from '@chakra-ui/react';
 
 let statistics = [
     {
@@ -55,24 +20,20 @@ let statistics = [
         "text": "10+",
     }
 
-  
+
 ]
 
-export default function Statisticspanel(){
-
-   
+export default function Statisticspanel() {
     return (
-        <div style={styles.cardcontainer}>
+        <SimpleGrid spacing={4} className='cardcontainer' >
             {statistics.map((statistic, index) => {
                 return (
-                    <div style={styles.card} key={index}>
-                        <h2 style={styles.statsval}>{statistic.text}</h2>
-                        <h3 style={styles.statstitle}>{statistic.title}</h3>
-                        
-                    </div>
+                    <Card variant={"elevated"} size={"sm"} className='card' key={index}>
+                        <CardHeader className='statsval'>{statistic.text}</CardHeader>
+                        <CardBody className='statstitle'>{statistic.title}</CardBody>
+                    </Card>
                 )
             })}
-        </div>
- 
+        </SimpleGrid>
     )
 }
