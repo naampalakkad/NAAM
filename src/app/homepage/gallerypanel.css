@@ -1,8 +1,11 @@
 .gallerypanel{
-    width: 100%;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    grid-gap: 40px;
+    width:clamp(300px, 80%, 1500px);
     margin: 20px;
-    background-color: aquamarine;
+    background-color: rgb(36, 36, 36);
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.gallerybutton{
+    margin: 10px;
 }

@@ -1,49 +1,22 @@
 'use client'
 import React from 'react';
+import { Button, SimpleGrid } from "@chakra-ui/react";
 import PhotoAlbum from "react-photo-album";
-// import {photos} from './data';
+import {galleryphotos, photogalleryurl} from './data';
 import './gallerypanel.css';
 
-let photos = [
-  {
-      src: "https://picsum.photos/210/300",
-  },
-  {
-      src: "https://picsum.photos/300/300",
-  },
-  {
-      src: "https://picsum.photos/400/300",
-  },
-  {
-      src: "https://picsum.photos/600/300",
-  },
-  {
-      src: "https://picsum.photos/200/700",
-  },
-  {
-      src: "https://picsum.photos/200/200",
-  },
-  {
-      src: "https://picsum.photos/200/800",
-  },
-  {
-      src: "https://picsum.photos/200/900",
-  },
-  {
-      src: "https://picsum.photos/300/400",
-  },
-  {
-      src: "https://picsum.photos/600/200",
-  },
-];
+export default function Gallerypanel() {
+    const goToLink = () => {
+        window.location.href = photogalleryurl;
+    };
 
-
-
-export default function Gallerypanel(){
     return (
-      <div className="gallerypanel" >
-      <PhotoAlbum photos={photos} layout="rows" />
-      </div>
-      );
+        <SimpleGrid column={1} className="gallerypanel" >
+            <PhotoAlbum layout="rows" photos={galleryphotos} />
+            <Button colorScheme="teal" size="lg" className="gallerybutton" onClick={goToLink}>
+                   Relive your memories through photos (Google Photos) -&gt;
+            </Button>
+        </SimpleGrid>
+    );
 }
 

@@ -1,5 +1,7 @@
 //let photossrc ="https://photos.app.goo.gl/DAAhH2DiYoqy9ohP8";
 
+export const photogalleryurl = "https://photos.app.goo.gl/DAAhH2DiYoqy9ohP8";
+
 export const statistics = [
     {
         "title": "years",
@@ -65,37 +67,17 @@ export let carousalimgs = [
     "./assets/carousalimgs/6.webp",
 ];
 
-export let photos = [
-    {
-        src: "https://picsum.photos/200/300",
-    },
-    {
-        src: "https://picsum.photos/200/300",
-    },
-    {
-        src: "https://picsum.photos/200/300",
-    },
-    {
-        src: "https://picsum.photos/200/300",
-    },
-    {
-        src: "https://picsum.photos/200/300",
-    },
-    {
-        src: "https://picsum.photos/200/300",
-    },
-    {
-        src: "https://picsum.photos/200/300",
-    },
-    {
-        src: "https://picsum.photos/200/300",
-    },
-    {
-        src: "https://picsum.photos/200/300",
-    },
-    {
-        src: "https://picsum.photos/200/300",
-    },
+export const galleryphotos = [
+    { src: "assets/galleryimages/1.jpg", width: 560, height: 320 },
+    { src: "assets/galleryimages/2.jpg", width: 720, height: 480 },
+    { src: "assets/galleryimages/3.jpg", width: 640, height: 360 },
+    { src: "assets/galleryimages/4.jpg", width: 480, height: 240 },
+    { src: "assets/galleryimages/5.jpg", width: 800, height: 600 },
+    { src: "assets/galleryimages/6.jpg", width: 720, height: 480 },
+    { src: "assets/galleryimages/7.jpg", width: 600, height: 400 },
+    { src: "assets/galleryimages/8.jpg", width: 640, height: 360 },
+    { src: "assets/galleryimages/9.jpg", width: 500, height: 300 },
+    { src: "assets/galleryimages/10.jpg", width: 400, height: 300 },
 ];
 
 export let testimonial = [
