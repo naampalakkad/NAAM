@@ -1,0 +1,10 @@
+.mainbody{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    background-color: var(--prim_col);
+    color: var(--sec_col);
+}
+

@@ -1,0 +1,9 @@
+
+
+@media screen and (max-width: 600px) {
+    .cardcontainer {
+        width: 100%;
+        background-color: red;
+    }
+    
+}
