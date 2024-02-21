@@ -8,12 +8,3 @@
     color: var(--sec_col);
 }
 
-.gallerybox{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    width: 90%;
-    background-color: var(--prim_col);
-    color: var(--sec_col);
-}

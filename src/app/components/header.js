@@ -31,10 +31,10 @@ const Header = () => {
   return (
     <header >
       {isMobile ? (
-        <div id='header'>
+        <div id='header' >
           <div id="heading">
             <div >
-              <Image id="logo" src={`/assets/logo.png`} alt={"Main logo"} width="100" height="64" />
+              <Image id="logo" src={`/assets/logo.png`} alt={"Main logo"} width="100" height="100" />
             </div>
             <div id="heading_text">
               <div id="main_head">NAAM</div>
