@@ -3,6 +3,7 @@
   padding: 0px;
   box-sizing: border-box;
   font-weight: bold;
+  user-select: none;
 
 }
 
@@ -62,8 +63,10 @@
 
 .main_icons {
   padding: 10px;
+  font-size: 100%;
 
 }
+
 
 #mob_heading {
   display: flex;
@@ -84,7 +87,7 @@ a {
   text-decoration: none !important;
   color: #000000;
   transition: color 0.3s ease;
-  font-size: large;
+
 }
 
 a:hover {

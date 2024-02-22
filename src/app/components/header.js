@@ -73,7 +73,7 @@ const Header = () => {
       ) : (
         <div id='header'>
           <div id="heading">
-              <Image src={`/assets/logo.png`} alt={"Main logo"} width="100" height="64" id='logo' />
+            <Image src={`/assets/logo.png`} alt={"Main logo"} width="100" height="64" id='logo' />
             <div id="heading_text">
               <div id="main_head">NAAM</div>
               <div id="sub_head">Navodaya Alumni Association, Malampuzha</div>
@@ -81,7 +81,9 @@ const Header = () => {
           </div>
 
           <div id="main_menu">
-            <div className="main_icons">Gallery</div>
+            <a href="https://photos.app.goo.gl/DAAhH2DiYoqy9ohP8">
+              <div className="main_icons">Gallery</div>
+            </a>
             <div className="main_icons">Alum</div>
             <div className="main_icons">News</div>
             <div className="main_icons">Calender</div>
