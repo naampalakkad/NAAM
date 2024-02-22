@@ -3,9 +3,14 @@
   padding: 0px;
   box-sizing: border-box;
   font-weight: bold;
+
 }
 
 #header {
+  position: fixed;
+  top: 0; 
+  width: 100%;
+  z-index: 1000;
   padding-left: 5px;
   padding-right: 5px;
   display: flex;
@@ -36,6 +41,7 @@
   align-items: flex-start;
   justify-content: center;
   padding: 10px;
+  justify-content: space-around;
 }
 
 #main_head {
@@ -43,7 +49,7 @@
 }
 
 #sub_head {
-  font-size: 100%;
+  font-size: 90%;
 }
 
 #main_menu {
@@ -178,7 +184,7 @@ a:hover {
   }
 
   #sub_head {
-    font-size: 75%;
+    font-size: 65%;
   }
 
   #header {
@@ -193,7 +199,7 @@ a:hover {
   }
 
   #sub_head {
-    font-size: 65%;
+    font-size: 55%;
   }
 
   #header {
