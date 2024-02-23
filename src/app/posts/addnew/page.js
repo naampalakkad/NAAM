@@ -1,70 +1,117 @@
 'use client';
+
+
+import React, { useState } from 'react';
 import { Box, Input, Center, Heading, Button, Select } from "@chakra-ui/react";
-import {
-    FormControl,
-    FormLabel,
-    FormHelperText,
-  } from '@chakra-ui/react';
-  import { ChevronDownIcon } from '@chakra-ui/icons';
-  import Dropzone from 'react-dropzone';
+import { FormControl, FormLabel, FormHelperText } from '@chakra-ui/react';
+import { ChevronDownIcon } from '@chakra-ui/icons';
+import { Textarea } from '@chakra-ui/react';
+import Dropzone from 'react-dropzone';
 
+function Page() {
+  const [author, setAuthor] = useState('');
+  const [description, setDescription] = useState('');
+  const [title, setTitle] = useState('');
+  const [mediaType, setMediaType] = useState('');
+  const [uploadedFiles, setUploadedFiles] = useState([]);
 
-function page(){
+  const handleFileDrop = (acceptedFiles) => {
+    setUploadedFiles([...uploadedFiles, ...acceptedFiles]);
+  };
 
-    return (
-        <Center bg='lightgrey'  color='rgb(0, 19, 59)' mt='50px' ml={'150px'} mr={'150px'} mb={'50px'}>
+  const getDropzoneLabel = () => {
+    if (mediaType === 'option1') {
+      return ''; 
+    } else {
+      return 'Drop your files here'; 
+    }
+  };
 
-        <Box maxW="480px" height={'500px'}> <center>
-            <Heading mb={'30px'}>Upload Your Files</Heading></center>
-            <form method="post" action="/">
-            <FormControl isRequired>
-  <FormLabel>Author</FormLabel>
-  <Input variant='filled' placeholder='Enter the name' type='text' />
-  <FormHelperText></FormHelperText>
-</FormControl>
+  const handleSubmit = (event) => {
+    event.preventDefault();
 
-        <FormControl>
-        <FormLabel>Description</FormLabel>
-        <Input variant='filled' placeholder='Description' type='text' />
-        <FormHelperText></FormHelperText>
-        </FormControl>
+    setAuthor('');
+    setDescription('');
+    setTitle('');
+    setMediaType('');
+    setUploadedFiles([]);
+  };
 
-        <FormControl isRequired> 
-            
-        <Select icon={<ChevronDownIcon />} placeholder='Select Media' >
-        <option value='option1'>Image</option>
-  <     option value='option2'>Video</option>
-        <option value='option3'>Audio</option>
-        <option value='option3'>Text-based post</option>
-        <option value='option3'>GIFs/memes</option>
-        <option value='option3'>URL/links to other content </option>
-        </Select>
-        <FormHelperText></FormHelperText>
-        </FormControl>
-        <FormControl isRequired>
-        <Dropzone onDrop={acceptedFiles => console.log(acceptedFiles)}>
-  {({getRootProps, getInputProps}) => (
-    <section>
-      <div {...getRootProps()}>
-        <input {...getInputProps()} />
-        <Box bg={'lightgreen'} p={'50px'} bgGradient="radial(gray.300, green.100, green.200)" >
-        <p>Drag 'n' drop some files here, or click to select files</p>
-        </Box>
-      </div>
-    </section>
-  )}
-</Dropzone>
-<FormHelperText></FormHelperText>
-        </FormControl>
-        <FormControl>
-            <center><Button type="submit"> upload </Button></center>
-        </FormControl>
+  return (
+    <Center bg='lightgrey' color='rgb(0, 19, 59)' mt='50px' ml={'150px'} mr={'150px'} mb={'50px'}>
+      <Box maxW="480px" height={'600px'}>
+        <center>
+          <Heading mb={'30px'}>Upload Your Files</Heading>
+        </center>
+        <form onSubmit={handleSubmit}>
+          <FormControl isRequired>
+            <FormLabel>Author</FormLabel>
+            <Input variant='filled' placeholder='Enter the name' type='text' />
+            <FormHelperText></FormHelperText>
+          </FormControl>
 
-</form>
-        </Box>
-        </Center>
-    )
-    
-    
+          <FormControl isRequired>
+            <Select
+              icon={<ChevronDownIcon />}
+              placeholder='Select Media'
+              onChange={(e) => setMediaType(e.target.value)}
+              value={mediaType}
+            >
+              <option value='option1'>Text-based post</option>
+              <option value='option2'>File Upload</option>
+            </Select>
+            <FormHelperText></FormHelperText>
+          </FormControl>
+
+          <FormControl>
+            <FormLabel>Title</FormLabel>
+            <Input variant='filled' placeholder='Enter the title' type='text' onChange={(e) => setTitle(e.target.value)} />
+            <FormHelperText></FormHelperText>
+          </FormControl>
+
+          <FormControl>
+            <FormLabel>Content</FormLabel>
+            {mediaType === 'option1' ? (
+              <Textarea variant='filled' placeholder='Enter your text here' onChange={(e) => setDescription(e.target.value)} />
+            ) : (
+              <Dropzone onDrop={handleFileDrop}>
+                {({ getRootProps, getInputProps }) => (
+                  <section>
+                    <div {...getRootProps()}>
+                      <input {...getInputProps()} multiple />
+                      <Box p={'50px'} style={{ background: '#8491d7', borderRadius: '8px' }}>
+                        <p>{getDropzoneLabel()}</p>
+                        {uploadedFiles.length > 0 && (
+                          <div>
+                            <p>Selected Files:</p>
+                            <ul>
+                              {uploadedFiles.map((file, index) => (
+                                <li key={index}>{file.name}</li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+                      </Box>
+                    </div>
+                  </section>
+                )}
+              </Dropzone>
+            )}
+            <FormHelperText></FormHelperText>
+          </FormControl>
+
+          <FormControl>
+            <center><Button type="submit" colorScheme="green"> upload </Button></center>
+          </FormControl>
+        </form>
+      </Box>
+    </Center>
+  );
 }
-export default page;
+
+export default Page;
+
+
+
+
+
