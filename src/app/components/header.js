@@ -25,6 +25,7 @@ export default function Header () {
 
   return (
     <header>
+      <div id='header'>
         <div id="heading">
           <Image id="logo" src={`/assets/logo.png`} alt={"Main logo"} width="100" height={isMobile ? "100" : "64"} />
           <div id="heading_text">
@@ -48,6 +49,8 @@ export default function Header () {
             {MenuItems.map(item => <MenuItem key={item.name} item={item} />)}
           </div>
         )}
+        </div>
+        <div id="header_space"></div>
     </header>
   );
 };
