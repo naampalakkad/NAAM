@@ -67,6 +67,23 @@ export let carousalimgs = [
     "./assets/carousalimgs/6.webp",
 ];
 
+export const MenuItems = [
+    { name: 'Gallery', link: 'https://photos.app.goo.gl/DAAhH2DiYoqy9ohP8' },
+    { name: 'Alum', link: 'alumni' },
+    { name: 'News', link: 'posts' },
+    { name: 'Calender', link: 'calender' },
+    { name: 'About Us', link: 'aboutus' },
+    { name: 'Login', link: 'login' },
+  ];
+
+  export const socialMediaUrls = [
+    "www.linkedin.com",
+    "www.facebook.com",
+    "www.twitter.com",
+    "www.instagram.com",
+    "www.youtube.com"
+  ];  
+
 export const galleryphotos = [
     { src: "assets/galleryimages/1.jpg", width: 560, height: 320 },
     { src: "assets/galleryimages/2.jpg", width: 720, height: 480 },
