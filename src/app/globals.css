@@ -89,6 +89,7 @@ html,
 body {
   max-width: 100vw;
   overflow-x: hidden;
+  overscroll-behavior: none;
 }
 
 body {
@@ -110,4 +111,16 @@ a {
   html {
     color-scheme: dark;
   }
+}
+
+#mainbody{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  width: 100%;
+  height: 100%;
+  background-color: var(--prim_col);
+  color: var(--sec_col);
 }

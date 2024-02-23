@@ -27,10 +27,8 @@ const Footer = () => {
           <div className="social_icons">
             <SocialIcon url="www.youtube.com" className="soc_icons"/>
           </div>
-          <div className="social_icons phone_icon">
-            <a href="https://www.yourwebsite.com/contact" className="soc_icons">
+          <div className="social_icons">
               <FaPhoneSquareAlt size={32} className="soc_icons"/>
-            </a>
           </div>
 
         </div>
