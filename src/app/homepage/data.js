@@ -76,6 +76,14 @@ export const MenuItems = [
     { name: 'Login', link: 'login' },
   ];
 
+  export const socialMediaUrls = [
+    "www.linkedin.com",
+    "www.facebook.com",
+    "www.twitter.com",
+    "www.instagram.com",
+    "www.youtube.com"
+  ];  
+
 export const galleryphotos = [
     { src: "assets/galleryimages/1.jpg", width: 560, height: 320 },
     { src: "assets/galleryimages/2.jpg", width: 720, height: 480 },
