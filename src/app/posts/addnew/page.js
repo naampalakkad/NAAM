@@ -1,6 +1,5 @@
 'use client';
 
-
 import React, { useState } from 'react';
 import { Box, Input, Center, Heading, Button, Select } from "@chakra-ui/react";
 import { FormControl, FormLabel, FormHelperText } from '@chakra-ui/react';
@@ -110,8 +109,4 @@ function Page() {
 }
 
 export default Page;
-
-
-
-
 
