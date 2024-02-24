@@ -104,6 +104,7 @@ const Blog = () => {
                         <option value="BLOG">Blog</option>
                     </select>
                 </Box>
+                
                 <Box
                     display="grid"
                     gridTemplateColumns={['1fr', '1fr', '1fr 1fr', '1fr 1fr 1fr']}
