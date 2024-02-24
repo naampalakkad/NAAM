@@ -76,9 +76,8 @@ const BlogPost = ({ post }) => {
     );
 };
 
-
 const Blog = () => {
-    const [filter, setFilter] = React.useState("all"); // "all" is the default option
+    const [filter, setFilter] = React.useState("all");
 
     const filteredPosts = filter === "all" ? posts : posts.filter(post => post.type === filter);
 
@@ -88,9 +87,9 @@ const Blog = () => {
                 display="flex"
                 flexDirection="column"
                 alignItems="center"
-                mt="50px"
-                px={['100px', '150px']}
-                mb="50px"
+                mt={['20px', '50px']}
+                px={['20px', '100px', '150px']}
+                mb={['20px', '50px']}
             >
                 <Heading mb="30px">NEWS AND UPDATES</Heading>
                 <Box mb="20px" width={['100%', 'auto']}>
@@ -107,11 +106,10 @@ const Blog = () => {
                 </Box>
                 <Box
                     display="grid"
-                    gridTemplateColumns={['1fr', '1fr 1fr 1fr']}
+                    gridTemplateColumns={['1fr', '1fr', '1fr 1fr', '1fr 1fr 1fr']}
                     gap={['20px', '20px']}
                     width="100%"
                 >
-                    {/* Render blog posts using the BlogPost component */}
                     {filteredPosts.map((post, index) => (
                         <BlogPost key={index} post={post} />
                     ))}
