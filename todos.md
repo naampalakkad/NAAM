@@ -1,7 +1,4 @@
-1. Adjust foooter [Move copyright, re-alighn contact icons]
-2. Filter for posts
-3. Sticky header
-4. Filter for posts
+clicking on the naam logo should take to the homepage
 
 
 #about NAAM Alumni Association
