@@ -8,7 +8,7 @@ export default function Blogspanel() {
 
 
     return (
-        <SimpleGrid className='cardcontainer'  >
+        <div className='cardcontainer'  >
             {blogposts.posts.map((post, index) => {
                 return (
                     <Card key={index} variant={"elevated"} size={"sm"} className='card'>
@@ -27,6 +27,6 @@ export default function Blogspanel() {
                     </Card>
                 )
             })}
-        </SimpleGrid>
+        </div>
     )
 }
