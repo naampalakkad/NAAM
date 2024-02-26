@@ -2,10 +2,10 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import './carousal.css';
-import {carousalimgs, getCarouselImageUrls} from './data';
+import { carousalimgs, getCarouselImageUrls } from './data';
 
 
-export default function Carousal(){
+export default function Carousal() {
   const [currentImg, setCurrentImg] = useState(null);
   const [imageUrls, setImageUrls] = useState([]);
   let currentIndex = 0;
@@ -26,13 +26,16 @@ export default function Carousal(){
   }, [imageUrls]);
 
   if (!currentImg) {
-    return null; // or a loading spinner
+    <div className='carousalbox' >
+      {/* <motion.img className='carousalimg' src={currentImg}  key={currentImg}  initial={{ opacity: 0, y: -100  }} animate={{ opacity: 0.5, y:0 }} transition={{ duration: 1 }}   /> */}
+      <div className='heroText'>NAAAM: The Navodayan Family</div>
+    </div>
   }
 
   return (
     <div className='carousalbox' >
-      <motion.img className='carousalimg' src={currentImg}  key={currentImg}  initial={{ opacity: 0, y: -100  }} animate={{ opacity: 0.5, y:0 }} transition={{ duration: 1 }}   />
-      <div  className='heroText'>NAAAM: The Navodayan Family</div>
+      <motion.img className='carousalimg' src={currentImg} key={currentImg} initial={{ opacity: 0, y: -100 }} animate={{ opacity: 0.5, y: 0 }} transition={{ duration: 1 }} />
+      <div className='heroText'>NAAAM: The Navodayan Family</div>
     </div>
   );
 }

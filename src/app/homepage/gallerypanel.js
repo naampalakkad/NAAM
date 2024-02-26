@@ -14,6 +14,7 @@ export default function Gallerypanel() {
 
     useEffect(() => {
         getGalleryImageUrls().then((urls) => {
+            
             setImgUrls(urls);
         });
     }, []);
