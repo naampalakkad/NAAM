@@ -1,11 +1,12 @@
 .cardcontainer {
+    width: 100vw;
+    height: 80vh;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: space-evenly;
     align-items: center;
- 
-
+    background-color: rgb(172, 172, 172);
 }
 
 .profilebox, .infobox {
@@ -13,12 +14,61 @@
     flex-direction: column;
     align-items: center;
     border-radius: 5px;
+    padding: 20px;
+    margin: 10px;
+    background-color: white;
+}
+
+.profilebox p{
+    font-size: 20px;
+    margin: 20PX;
+}
+
+.infobox {
     width: 40%;
+}
+
+.profileimage {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+}
+
+.detaillist{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    width: 90%;
+    justify-content: space-between;
+    margin: 10px;
+    align-items: center;
+}
+
+.detaillist label {
+    font-size: 15PX; 
+    width: 30%;
 }
 
 .detailitem{
     margin: 10px;
     padding: 10px;
     border-radius: 5px;
-    width: 80%;
+    width: 70%;
+}
+
+@media screen and (max-width: 768px) {
+    .cardcontainer {
+        flex-direction: column;
+        height:auto;
+    }
+    .infobox {
+        width: 95%;
+    }
+    .detaillist{
+        width: 100%;
+        margin: 2px;
+    }
+    .detailitem{
+        margin: 2px;
+    }
 }
