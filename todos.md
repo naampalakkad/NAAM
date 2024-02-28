@@ -1,6 +1,3 @@
-clicking on the naam logo should take to the homepage
-set a veryy small size image default for carousal
-
-#about NAAM Alumni Association
+Cache everything so that new requests wouldnt bee needed for each refresh
 #short blocks about 1-2 events
 #Alumni Achievements block
