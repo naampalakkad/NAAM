@@ -22,8 +22,8 @@ export default function Gallerypanel() {
     return (
         <SimpleGrid column={1} className="gallerypanel" >
             <PhotoAlbum layout="rows" photos={imgurls} />
-            <Button colorScheme="teal" size="lg" className="gallerybutton" onClick={goToLink}>
-                   Relive your memories through photos (Google Photos) -&gt;
+            <Button colorScheme="teal" alignSelf={"right"} size="sm" className="gallerybutton" onClick={goToLink}>
+                  Photos -&gt;
             </Button>
         </SimpleGrid>
     );

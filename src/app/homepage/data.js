@@ -1,49 +1,32 @@
 //let photossrc ="https://photos.app.goo.gl/DAAhH2DiYoqy9ohP8";
-import { ref, listAll, getDownloadURL } from "firebase/storage";
 export const photogalleryurl = "https://photos.app.goo.gl/DAAhH2DiYoqy9ohP8";
-import { storage } from "@/lib/firebase";
+import {getdatafromStorage } from "@/lib/firebase";
+
+
 export async function getCarouselImageUrls() {
 
-    const carouselImagesRef = ref(storage, 'carousalimages');
-    const res = await listAll(carouselImagesRef);
-    const carouselImageUrls = [];
-    for (let i = 0; i < res.items.length; i++) {
-        const carouselImageUrl = await getDownloadURL(res.items[i]);
-        carouselImageUrls.push(carouselImageUrl);
-    }
+    const carouselImageUrls = getdatafromStorage('carousalimages');
 
     return carouselImageUrls;
 }
 
 export async function getGalleryImageUrls() {
-    const galleryImagesRef = ref(storage, 'galleryimgs');
-    const res = await listAll(galleryImagesRef);
     const galleryImageUrls = [];
-
-    for (let i = 0; i < res.items.length; i++) {
-        const galleryImageUrl = await getDownloadURL(res.items[i]);
-
-        // Create a new Image object
+    const urls = await getdatafromStorage('galleryimgs');
+    for (let i = 0; i < urls.length; i++) {
+        const galleryImageUrl = urls[i];
         const img = new Image();
-
-        // Once the image has loaded, get the width and height
         img.onload = function() {
             const width = this.width;
             const height = this.height;
-
             const imgdata = { src: galleryImageUrl, width: width, height: height };
             galleryImageUrls.push(imgdata);
         };
-
-        // Set the image source to start loading the image
         img.src = galleryImageUrl;
     }
-
-    // Wait until all images have loaded
-    while (galleryImageUrls.length < res.items.length) {
+    while (galleryImageUrls.length < urls.length) {
         await new Promise(r => setTimeout(r, 1000));
     }
-
     return galleryImageUrls;
 }
 

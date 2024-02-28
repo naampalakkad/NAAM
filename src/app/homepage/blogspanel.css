@@ -1,9 +1,5 @@
 .cardcontainer {
-    margin: 20px;
     width: 80%;
-    display: grid;
-    grid-gap: 10px;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
 }
 
 
@@ -22,4 +18,12 @@
 .cardText {
     font-size: 1.2em;
     padding: 10px;
+}
+
+@media screen and (max-width: 600px)
+{
+    .cardcontainer {
+        width: 100%;
+    }
+    
 }
