@@ -52,11 +52,11 @@ export function signInoutWithGoogle(){
     return auth.currentUser;
   }
 
-  export function savedatatodb(location,data){
-    console.log("Saving to Firebase. Location",location,"Data",data);
-    if (user) {
-        let data = ref(db, location);
-        set(userRef, data)
+  export function savedatatodb(location, data){
+    console.log("Saving to Firebase. Location", location, "Data", data);
+    if (auth.currentUser) {
+        let dataRef = ref(db, location);
+        set(dataRef, data)
             .then(() => {
                 console.log("Document successfully written!");
             })
@@ -64,7 +64,7 @@ export function signInoutWithGoogle(){
                 console.error("Error writing document: ", error);
             });
     }
-  }
+}
 
   export async function getdatafromdb(location){
     console.log("Fetching from Firebase. Location",location);
