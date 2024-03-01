@@ -6,6 +6,10 @@ import { FormControl, FormLabel, FormHelperText } from '@chakra-ui/react';
 import { ChevronDownIcon } from '@chakra-ui/icons';
 import { Textarea } from '@chakra-ui/react';
 import Dropzone from 'react-dropzone';
+import './page.css';
+
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 function Page() {
   const [author, setAuthor] = useState('');
@@ -14,17 +18,6 @@ function Page() {
   const [mediaType, setMediaType] = useState('');
   const [uploadedFiles, setUploadedFiles] = useState([]);
 
-  const handleFileDrop = (acceptedFiles) => {
-    setUploadedFiles([...uploadedFiles, ...acceptedFiles]);
-  };
-
-  const getDropzoneLabel = () => {
-    if (mediaType === 'option1') {
-      return ''; 
-    } else {
-      return 'Drop your files here'; 
-    }
-  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -36,29 +29,32 @@ function Page() {
     setUploadedFiles([]);
   };
 
-  return (
-    <Center bg='lightgrey' color='rgb(0, 19, 59)' mt='50px' ml={'150px'} mr={'150px'} mb={'50px'}>
-      <Box maxW="480px" height={'600px'}>
-        <center>
-          <Heading mb={'30px'}>Upload Your Files</Heading>
-        </center>
-        <form onSubmit={handleSubmit}>
-          <FormControl isRequired>
-            <FormLabel>Author</FormLabel>
-            <Input variant='filled' placeholder='Enter the name' type='text' />
-            <FormHelperText></FormHelperText>
-          </FormControl>
+  const [value, setValue] = useState('');
 
-          <FormControl isRequired>
-            <Select
-              icon={<ChevronDownIcon />}
-              placeholder='Select Media'
-              onChange={(e) => setMediaType(e.target.value)}
-              value={mediaType}
-            >
-              <option value='option1'>Text-based post</option>
-              <option value='option2'>File Upload</option>
-            </Select>
+  const modules ={
+    toolbar:[
+      [{header: [1,2,3,4,5,6,false] }],
+      [{ font: []}],
+      [{ size: []}],
+      ["bold", "italic", "underline" ,"strike","blockquote"],
+      [
+        { list:"ordered"},
+        {list:"bullet"},
+    ],
+    ["link","image","video"]
+    ]
+  }
+
+  return (
+    <div className='container'>
+      <h1>Upload Your Post
+      <hr></hr>
+      </h1>
+      
+    <form onSubmit={handleSubmit}>
+          <FormControl isRequired >
+            <FormLabel className='font' >Author</FormLabel>
+            <Input variant='filled' placeholder='Enter the name' type='text'  />
             <FormHelperText></FormHelperText>
           </FormControl>
 
@@ -69,42 +65,29 @@ function Page() {
           </FormControl>
 
           <FormControl>
-            <FormLabel>Content</FormLabel>
-            {mediaType === 'option1' ? (
-              <Textarea variant='filled' placeholder='Enter your text here' onChange={(e) => setDescription(e.target.value)} />
-            ) : (
-              <Dropzone onDrop={handleFileDrop}>
-                {({ getRootProps, getInputProps }) => (
-                  <section>
-                    <div {...getRootProps()}>
-                      <input {...getInputProps()} multiple />
-                      <Box p={'50px'} style={{ background: '#8491d7', borderRadius: '8px' }}>
-                        <p>{getDropzoneLabel()}</p>
-                        {uploadedFiles.length > 0 && (
-                          <div>
-                            <p>Selected Files:</p>
-                            <ul>
-                              {uploadedFiles.map((file, index) => (
-                                <li key={index}>{file.name}</li>
-                              ))}
-                            </ul>
-                          </div>
-                        )}
-                      </Box>
-                    </div>
-                  </section>
-                )}
-              </Dropzone>
-            )}
-            <FormHelperText></FormHelperText>
+          <FormLabel>Description</FormLabel>
+          <Textarea minH={'100px'} backgroundColor={" rgb(218, 223, 228)"}></Textarea>
+          <FormHelperText></FormHelperText>
+          </FormControl>
+
+
+          <FormControl >
+          <FormLabel>Write your post here</FormLabel>
+          <div>
+
+          <ReactQuill theme="snow" value={value} onChange={(setValue)} 
+              modules={modules}
+              className='editor'
+              />  
+              </div>
+          <FormHelperText></FormHelperText>
           </FormControl>
 
           <FormControl>
             <center><Button type="submit" colorScheme="green"> upload </Button></center>
           </FormControl>
         </form>
-      </Box>
-    </Center>
+        </div>
   );
 }
 
