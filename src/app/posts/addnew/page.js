@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { Box, Input, Center, Heading, Button, Select } from "@chakra-ui/react";
 import { FormControl, FormLabel, FormHelperText } from '@chakra-ui/react';
-import { ChevronDownIcon } from '@chakra-ui/icons';
+import { ChevronDownIcon} from '@chakra-ui/icons';
 import { Textarea } from '@chakra-ui/react';
 import Dropzone from 'react-dropzone';
 import './page.css';
@@ -70,6 +70,11 @@ function Page() {
           <FormHelperText></FormHelperText>
           </FormControl>
 
+          <FormControl>
+            <FormLabel>Thumbnail photo</FormLabel>
+            
+            <FormHelperText></FormHelperText>
+          </FormControl>
 
           <FormControl >
           <FormLabel>Write your post here</FormLabel>
