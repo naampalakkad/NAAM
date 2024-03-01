@@ -72,7 +72,7 @@ function Page() {
 
           <FormControl>
             <FormLabel>Thumbnail photo</FormLabel>
-            
+               <input type='file'></input>
             <FormHelperText></FormHelperText>
           </FormControl>
 
