@@ -1,4 +1,4 @@
-import { CardBody, CardHeader, Stack, Badge, Card, Button, SimpleGrid, CardFooter, Divider } from '@chakra-ui/react';
+import { CardBody, CardHeader, Stack, Badge, Card, Button, SimpleGrid, CardFooter, Image } from '@chakra-ui/react';
 import React from 'react';
 import './blogspanel.css';
 import { blogposts } from './data';
@@ -8,11 +8,11 @@ export default function Blogspanel() {
 
 
     return (
-        <SimpleGrid className='cardcontainer'  >
+        <SimpleGrid minChildWidth='260px'  spacing='10px' className='cardcontainer' >
             {blogposts.posts.map((post, index) => {
                 return (
-                    <Card key={index} variant={"elevated"} size={"sm"} className='card'>
-                        <img src={post.image} alt={post.title} className='cardImage' />
+                    <Card key={index} minBlockSize={300} variant={"elevated"} size={"sm"} className='card'>
+                        <Image src={post.image} alt={post.title} className='cardImage' />
                         <CardHeader className='cardTitle'>{post.title} </CardHeader>
                         <CardBody className='cardText'>{post.content}</CardBody>
                         <Stack direction='row'>
