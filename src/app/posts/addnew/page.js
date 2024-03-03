@@ -52,21 +52,21 @@ function Page() {
       </h1>
       
     <form onSubmit={handleSubmit}>
-          <FormControl isRequired >
-            <FormLabel className='font' >Author</FormLabel>
+          <FormControl isRequired onChange={onChangeHandler} >
+            <FormLabel className='font' htmlFor='author' >Author</FormLabel>
             <Input variant='filled' placeholder='Enter the name' type='text'  />
             <FormHelperText></FormHelperText>
           </FormControl>
 
           <FormControl>
             <FormLabel>Title</FormLabel>
-            <Input variant='filled' placeholder='Enter the title' type='text' onChange={(e) => setTitle(e.target.value)} />
+            <Input variant='filled' placeholder='Enter the title' type='text' onChange={onChangeHandler} />
             <FormHelperText></FormHelperText>
           </FormControl>
 
           <FormControl>
           <FormLabel>Description</FormLabel>
-          <Textarea minH={'100px'} backgroundColor={" rgb(218, 223, 228)"}></Textarea>
+          <Textarea minH={'100px'} backgroundColor={" rgb(218, 223, 228)"} onChange={onChangeHandler}></Textarea>
           <FormHelperText></FormHelperText>
           </FormControl>
 
@@ -78,21 +78,19 @@ function Page() {
 
           <FormControl >
           <FormLabel>Write your post here</FormLabel>
-          <div>
-
-          <ReactQuill theme="snow" value={value} onChange={(setValue)} 
+          <ReactQuill theme="snow" value={value} onChange={(setValue) } 
               modules={modules}
               className='editor'
               />  
-              </div>
+              
           <FormHelperText></FormHelperText>
           </FormControl>
 
           <FormControl>
-            <center><Button type="submit" colorScheme="green"> upload </Button></center>
+            <center><Button type="submit" colorScheme={"blue"} onClick={()=>console.log(formData)}> UPLOAD </Button></center>
           </FormControl>
         </form>
-        </div>
+        </div>      
   );
 }
 
