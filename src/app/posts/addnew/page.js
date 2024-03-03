@@ -44,6 +44,18 @@ function Page() {
     ["link","image","video"]
     ]
   }
+  const [formData,setFormData] = useState({
+    author:'',
+    title:'',
+    description:'',
+    thumbnail:''
+
+  })
+  const onChangeHandler =(e)=>{
+    setFormData(()=>({
+      ...formData,[e.target.name]:e.target.value
+    }))
+  }
 
   return (
     <div className='container'>
@@ -54,25 +66,25 @@ function Page() {
     <form onSubmit={handleSubmit}>
           <FormControl isRequired onChange={onChangeHandler} >
             <FormLabel className='font' htmlFor='author' >Author</FormLabel>
-            <Input variant='filled' placeholder='Enter the name' type='text'  />
+            <Input variant='filled' placeholder='Enter the name' type='text' name='author' />
             <FormHelperText></FormHelperText>
           </FormControl>
 
           <FormControl>
             <FormLabel>Title</FormLabel>
-            <Input variant='filled' placeholder='Enter the title' type='text' onChange={onChangeHandler} />
+            <Input variant='filled' placeholder='Enter the title' type='text' name='title' onChange={onChangeHandler} />
             <FormHelperText></FormHelperText>
           </FormControl>
 
           <FormControl>
           <FormLabel>Description</FormLabel>
-          <Textarea minH={'100px'} backgroundColor={" rgb(218, 223, 228)"} onChange={onChangeHandler}></Textarea>
+          <Textarea minH={'100px'} backgroundColor={" rgb(218, 223, 228)"} name='description' onChange={onChangeHandler}></Textarea>
           <FormHelperText></FormHelperText>
           </FormControl>
 
           <FormControl>
             <FormLabel>Thumbnail photo</FormLabel>
-               <input type='file'></input>
+               <input type='file' name='thumbnail'  onChange={onChangeHandler}></input>
             <FormHelperText></FormHelperText>
           </FormControl>
 
