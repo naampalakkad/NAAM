@@ -31,39 +31,41 @@ function Page() {
       ['link', 'image', 'video'],
     ],
   };
-
+  
   const onChangeHandler = (e) => {
     setFormData((prevFormData) => ({
       ...prevFormData,
       [e.target.name]: e.target.value,
     }));
   };
-
+  
   const handleSubmit = (event) => {
     event.preventDefault();
-    const quillInstance = quillRef.current?.getEditor();
-
-    if (quillInstance) {
-      console.log({
-        author: formData.author,
-        title: formData.title,
+    const quillContent = quillRef.current?.getEditor().getContents();
+    const processedContent = quillContent ? quillContent.ops.map(processOp).join('\n') : '';
+  
+    console.log({
+      details: {
+        authorName: formData.author,
         description: formData.description,
-        thumbnail: formData.thumbnail,
-        content: quillInstance.getContents(),
-      });
-    } else {
-      console.error("Quill instance is not available");
+        title: formData.title,
+      },
+      blogDetails: {
+        content: processedContent,
+      },
+    });
+  
+  };
+  
+  const processOp = (op) => {
+    if (typeof op.insert === 'object' && op.insert.image) {
+      return `Image: ${op.insert.image}`;
     }
 
-  
-    setFormData({
-      author: '',
-      title: '',
-      description: '',
-      thumbnail: '',
-    });
-    setValue('');
+    return op.insert;
   };
+  
+  
 
   return (
     <div className='container'>
@@ -102,14 +104,21 @@ function Page() {
         <FormControl>
           <FormLabel>Write your post here</FormLabel>
           <ReactQuill
-            ref={quillRef} 
-            theme='snow'
-            value={value}
-            onChange={(content) => setValue(content)}
-            modules={modules}
-            style={{ border: 'none', minHeight: '200px', borderRadius: '0' }}
-            className='editor'
-          />
+  ref={quillRef}
+  value={value}
+  onChange={(content) => setValue(content)}
+  modules={modules}
+  style={{ border: 'none',  height: 'auto', borderRadius: '0' }}
+  className='editor'
+  onKeyUp={() => {
+    const editor = quillRef.current?.getEditor();
+    if (editor) {
+      const height = Math.max(editor.container.clientHeight, 200);
+      editor.container.style.height = `${height}px`;
+    }
+  }}
+/>
+
           <FormHelperText></FormHelperText>
         </FormControl>
 
