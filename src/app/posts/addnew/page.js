@@ -7,6 +7,7 @@ import './page.css';
 
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import { saveposttodb } from '@/lib/firebase';
 
 function Page() {
   const [author, setAuthor] = useState('');
@@ -42,18 +43,18 @@ function Page() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const quillContent = quillRef.current?.getEditor().getContents();
-    const processedContent = quillContent ? quillContent.ops.map(processOp).join('\n') : '';
   
-    console.log({
-      details: {
+    let postdata ={
         authorName: formData.author,
         description: formData.description,
         title: formData.title,
-      },
-      blogDetails: {
-        content: processedContent,
-      },
-    });
+        thumbnail: formData.thumbnail,
+        content: quillContent,
+        type: "BLOG",
+        time : new Date().getTime(),
+    };
+    
+   saveposttodb( postdata);
   
   };
   
@@ -88,7 +89,16 @@ function Page() {
           <Input variant='filled' placeholder='Enter the title' type='text' name='title' onChange={onChangeHandler} />
           <FormHelperText></FormHelperText>
         </FormControl>
-
+        <FormControl>
+          <FormLabel>Type of post</FormLabel>
+          <Select variant='filled' icon={<ChevronDownIcon />} placeholder='Select the type' name='type' onChange={onChangeHandler}>
+            <option value='EVENT'>Event</option>
+            <option value='JOB'>Job</option>
+            <option value='anoun'>Announcement</option>
+            <option value='BLOG'>Blog</option>
+          </Select>
+          <FormHelperText></FormHelperText>
+        </FormControl>
         <FormControl>
           <FormLabel>Description</FormLabel>
           <Textarea minH={'100px'} backgroundColor={' rgb(218, 223, 228)'} name='description' onChange={onChangeHandler}></Textarea>
