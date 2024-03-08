@@ -40,6 +40,23 @@ function Page() {
     }));
   };
   
+  const resetForm = () => {
+    setAuthor('');
+    setDescription('');
+    setValue('');
+    setFormData({
+      author: '',
+      title: '',
+      description: '',
+      thumbnail: '',
+    });
+    // Reset the Quill editor
+    if (quillRef.current) {
+      quillRef.current.getEditor().setContents('');
+    }
+  
+ };
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const quillContent = quillRef.current?.getEditor().getContents();
@@ -54,7 +71,10 @@ function Page() {
         time : new Date().getTime(),
     };
     
-   saveposttodb( postdata);
+   saveposttodb(postdata)
+   window.alert("Form submitted");
+      resetForm(); // Reset the form after submission
+
   
   };
   
@@ -80,18 +100,18 @@ function Page() {
           <FormLabel className='font' htmlFor='author'>
             Author
           </FormLabel>
-          <Input variant='filled' placeholder='Enter the name' type='text' name='author' />
+          <Input variant='filled' placeholder='Enter the name' type='text' name='author' value={formData.author} />
           <FormHelperText></FormHelperText>
         </FormControl>
 
         <FormControl>
           <FormLabel>Title</FormLabel>
-          <Input variant='filled' placeholder='Enter the title' type='text' name='title' onChange={onChangeHandler} />
+          <Input variant='filled' placeholder='Enter the title' type='text' name='title' value={formData.title} onChange={onChangeHandler} />
           <FormHelperText></FormHelperText>
         </FormControl>
         <FormControl>
           <FormLabel>Type of post</FormLabel>
-          <Select variant='filled' icon={<ChevronDownIcon />} placeholder='Select the type' name='type' onChange={onChangeHandler}>
+          <Select variant='filled' icon={<ChevronDownIcon />} placeholder='Select the type' name='type' value={"Select the type"} onChange={onChangeHandler}>
             <option value='EVENT'>Event</option>
             <option value='JOB'>Job</option>
             <option value='anoun'>Announcement</option>
@@ -101,13 +121,13 @@ function Page() {
         </FormControl>
         <FormControl>
           <FormLabel>Description</FormLabel>
-          <Textarea minH={'100px'} backgroundColor={' rgb(218, 223, 228)'} name='description' onChange={onChangeHandler}></Textarea>
+          <Textarea minH={'100px'} backgroundColor={' rgb(218, 223, 228)'} name='description' value={formData.description} onChange={onChangeHandler}></Textarea>
           <FormHelperText></FormHelperText>
         </FormControl>
 
         <FormControl>
           <FormLabel>Thumbnail photo</FormLabel>
-          <input type='file' name='thumbnail' onChange={onChangeHandler}></input>
+          <input type='file' name='thumbnail' value={formData.thumbnail} onChange={onChangeHandler}></input>
           <FormHelperText></FormHelperText>
         </FormControl>
 
@@ -134,7 +154,7 @@ function Page() {
 
         <FormControl>
           <center>
-            <Button type='submit' colorScheme={'blue'}>
+            <Button type='submit' colorScheme={'blue'} >
               UPLOAD
             </Button>
           </center>
