@@ -1,12 +1,17 @@
 'use client'
 import React, { useState, useRef } from 'react';
-import {Box,Input,Center,Heading, Button,Select,FormControl,FormLabel,FormHelperText,Textarea,} from '@chakra-ui/react';
+import { Box, Input, Center, Heading, Button, Select, FormControl, FormLabel, FormHelperText, Textarea, } from '@chakra-ui/react';
 import { ChevronDownIcon } from '@chakra-ui/icons';
 import Dropzone from 'react-dropzone';
 import './page.css';
 
-import ReactQuill from 'react-quill';
+let ReactQuill;
+if (typeof window !== 'undefined') {
+  ReactQuill = require('react-quill');
+}
+
 import 'react-quill/dist/quill.snow.css';
+import { saveposttodb } from '@/lib/firebase';
 
 function Page() {
   const [author, setAuthor] = useState('');
@@ -19,7 +24,7 @@ function Page() {
     thumbnail: '',
   });
 
-  const quillRef = useRef(); 
+  const quillRef = ReactQuill ? useRef() : null;
 
   const modules = {
     toolbar: [
@@ -31,32 +36,54 @@ function Page() {
       ['link', 'image', 'video'],
     ],
   };
-  
+
   const onChangeHandler = (e) => {
     setFormData((prevFormData) => ({
       ...prevFormData,
       [e.target.name]: e.target.value,
     }));
   };
-  
+
+  const resetForm = () => {
+    setAuthor('');
+    setDescription('');
+    setValue('');
+    setFormData({
+      author: '',
+      title: '',
+      description: '',
+      thumbnail: '',
+    });
+    // Reset the Quill editor
+    if (quillRef.current) {
+      quillRef.current.getEditor().setContents('');
+    }
+
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const quillContent = quillRef.current?.getEditor().getContents();
-    const processedContent = quillContent ? quillContent.ops.map(processOp).join('\n') : '';
-  
-    console.log({
-      details: {
-        authorName: formData.author,
-        description: formData.description,
-        title: formData.title,
-      },
-      blogDetails: {
-        content: processedContent,
-      },
-    });
-  
+
+    let postdata = {
+      authorName: formData.author,
+      description: formData.description,
+      title: formData.title,
+      thumbnail: formData.thumbnail,
+      content: quillContent,
+      type: "BLOG",
+      time: new Date().getTime(),
+    };
+
+    saveposttodb(postdata)
+    if (typeof window !== "undefined") {
+      window.alert("Form submitted");
+    }
+    resetForm(); // Reset the form after submission
+
+
   };
-  
+
   const processOp = (op) => {
     if (typeof op.insert === 'object' && op.insert.image) {
       return `Image: ${op.insert.image}`;
@@ -64,8 +91,8 @@ function Page() {
 
     return op.insert;
   };
-  
-  
+
+
 
   return (
     <div className='container'>
@@ -79,52 +106,62 @@ function Page() {
           <FormLabel className='font' htmlFor='author'>
             Author
           </FormLabel>
-          <Input variant='filled' placeholder='Enter the name' type='text' name='author' />
+          <Input variant='filled' placeholder='Enter the name' type='text' name='author' value={formData.author} onChange={onChangeHandler} />
           <FormHelperText></FormHelperText>
         </FormControl>
 
         <FormControl>
           <FormLabel>Title</FormLabel>
-          <Input variant='filled' placeholder='Enter the title' type='text' name='title' onChange={onChangeHandler} />
+          <Input variant='filled' placeholder='Enter the title' type='text' name='title' value={formData.title} onChange={onChangeHandler} />
           <FormHelperText></FormHelperText>
         </FormControl>
-
+        <FormControl>
+          <FormLabel>Type of post</FormLabel>
+          <Select variant='filled' icon={<ChevronDownIcon />} placeholder='Select the type' name='type' value={"Select the type"} onChange={onChangeHandler}>
+            <option value='EVENT'>Event</option>
+            <option value='JOB'>Job</option>
+            <option value='anoun'>Announcement</option>
+            <option value='BLOG'>Blog</option>
+          </Select>
+          <FormHelperText></FormHelperText>
+        </FormControl>
         <FormControl>
           <FormLabel>Description</FormLabel>
-          <Textarea minH={'100px'} backgroundColor={' rgb(218, 223, 228)'} name='description' onChange={onChangeHandler}></Textarea>
+          <Textarea minH={'100px'} backgroundColor={' rgb(218, 223, 228)'} name='description' value={formData.description} onChange={onChangeHandler}></Textarea>
           <FormHelperText></FormHelperText>
         </FormControl>
 
         <FormControl>
           <FormLabel>Thumbnail photo</FormLabel>
-          <input type='file' name='thumbnail' onChange={onChangeHandler}></input>
+          <input type='file' name='thumbnail' value={formData.thumbnail} onChange={onChangeHandler}></input>
           <FormHelperText></FormHelperText>
         </FormControl>
 
         <FormControl>
           <FormLabel>Write your post here</FormLabel>
-          <ReactQuill
-  ref={quillRef}
-  value={value}
-  onChange={(content) => setValue(content)}
-  modules={modules}
-  style={{ border: 'none',  height: 'auto', borderRadius: '0' }}
-  className='editor'
-  onKeyUp={() => {
-    const editor = quillRef.current?.getEditor();
-    if (editor) {
-      const height = Math.max(editor.container.clientHeight, 200);
-      editor.container.style.height = `${height}px`;
-    }
-  }}
-/>
-
+          {ReactQuill && (
+            <ReactQuill
+              ref={quillRef}
+              value={value}
+              onChange={(content) => setValue(content)}
+              modules={modules}
+              style={{ border: 'none', height: 'auto', borderRadius: '0' }}
+              className='editor'
+              onKeyUp={() => {
+                const editor = quillRef.current?.getEditor();
+                if (editor) {
+                  const height = Math.max(editor.container.clientHeight, 200);
+                  editor.container.style.height = `${height}px`;
+                }
+              }}
+            />
+          )}
           <FormHelperText></FormHelperText>
         </FormControl>
 
         <FormControl>
           <center>
-            <Button type='submit' colorScheme={'blue'}>
+            <Button type='submit' colorScheme={'blue'} >
               UPLOAD
             </Button>
           </center>
