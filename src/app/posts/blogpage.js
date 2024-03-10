@@ -26,16 +26,19 @@ export const BlogPost = ({ post }) => {
                     alt={postdata.title}
                     style={{ width: '100%', height: 'auto', objectFit: 'cover', borderRadius: '8px', marginBottom: '10px' }}
                 />
-                <p style={{ textAlign: 'right' }}>{formattedDate}</p>
-                <p>Author: {postdata.authorName}</p>
-                <Heading fontSize={['lg', 'xl']} mb="2" textAlign="center">{postdata.title}</Heading>
+                <Box display="flex" justifyContent="space-between" alignItems="baseline" mb="2">
+                    <p style={{ textAlign: 'left', marginBottom: '5px' }}>Author: {postdata.authorName}</p>
+                    <p style={{ textAlign: 'right', fontSize: '0.6em'}}>{formattedDate}</p>
+                </Box>
+                <Heading fontSize={['xl', '2xl']} mb="2" textAlign="center" color="yellow">{postdata.title}</Heading>
                 <Box
-                    maxH="2em"   // Set a maximum height for two lines
+                    maxH="4.5em"
                     overflow="hidden"
                     textOverflow="ellipsis"
                     whiteSpace="normal"
-                    lineHeight="1em"  // Set line height to control the spacing between lines
-                    maxLines={2}     // Limit the description to two lines
+                    lineHeight="1.5em"
+                    maxLines={3}
+                    mb="2"
                 >
                     <p>{postdata.description}</p>
                 </Box>
@@ -49,4 +52,4 @@ export const BlogPost = ({ post }) => {
             </Box>
         </Box>
     );
-}; 
+};
