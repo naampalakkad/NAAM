@@ -1,15 +1,11 @@
 'use client'
 import React, { useState, useRef } from 'react';
-import { Box, Input, Center, Heading, Button, Select, FormControl, FormLabel, FormHelperText, Textarea, } from '@chakra-ui/react';
+import {Box,Input,Center,Heading, Button,Select,FormControl,FormLabel,FormHelperText,Textarea,} from '@chakra-ui/react';
 import { ChevronDownIcon } from '@chakra-ui/icons';
 import Dropzone from 'react-dropzone';
 import './page.css';
 
-let ReactQuill;
-if (typeof window !== 'undefined') {
-  ReactQuill = require('react-quill');
-}
-
+import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { saveposttodb } from '@/lib/firebase';
 
@@ -24,7 +20,7 @@ function Page() {
     thumbnail: '',
   });
 
-  const quillRef = ReactQuill ? useRef() : null;
+  const quillRef = useRef(); 
 
   const modules = {
     toolbar: [
@@ -36,14 +32,14 @@ function Page() {
       ['link', 'image', 'video'],
     ],
   };
-
+  
   const onChangeHandler = (e) => {
     setFormData((prevFormData) => ({
       ...prevFormData,
       [e.target.name]: e.target.value,
     }));
   };
-
+  
   const resetForm = () => {
     setAuthor('');
     setDescription('');
@@ -58,32 +54,30 @@ function Page() {
     if (quillRef.current) {
       quillRef.current.getEditor().setContents('');
     }
-
-  };
+  
+ };
 
   const handleSubmit = (event) => {
     event.preventDefault();
     const quillContent = quillRef.current?.getEditor().getContents();
-
-    let postdata = {
-      authorName: formData.author,
-      description: formData.description,
-      title: formData.title,
-      thumbnail: formData.thumbnail,
-      content: quillContent,
-      type: "BLOG",
-      time: new Date().getTime(),
+  
+    let postdata ={
+        authorName: formData.author,
+        description: formData.description,
+        title: formData.title,
+        thumbnail: formData.thumbnail,
+        content: quillContent,
+        type: formData.type,
+        time : new Date().getTime(),
     };
+    
+   saveposttodb(postdata)
+   window.alert("Form submitted");
+      resetForm(); // Reset the form after submission
 
-    saveposttodb(postdata)
-    if (typeof window !== "undefined") {
-      window.alert("Form submitted");
-    }
-    resetForm(); // Reset the form after submission
-
-
+  
   };
-
+  
   const processOp = (op) => {
     if (typeof op.insert === 'object' && op.insert.image) {
       return `Image: ${op.insert.image}`;
@@ -91,8 +85,8 @@ function Page() {
 
     return op.insert;
   };
-
-
+  
+  
 
   return (
     <div className='container'>
@@ -106,7 +100,7 @@ function Page() {
           <FormLabel className='font' htmlFor='author'>
             Author
           </FormLabel>
-          <Input variant='filled' placeholder='Enter the name' type='text' name='author' value={formData.author} onChange={onChangeHandler} />
+          <Input variant='filled' placeholder='Enter the name' type='text' name='author' value={formData.author} />
           <FormHelperText></FormHelperText>
         </FormControl>
 
@@ -116,15 +110,22 @@ function Page() {
           <FormHelperText></FormHelperText>
         </FormControl>
         <FormControl>
-          <FormLabel>Type of post</FormLabel>
-          <Select variant='filled' icon={<ChevronDownIcon />} placeholder='Select the type' name='type' value={"Select the type"} onChange={onChangeHandler}>
-            <option value='EVENT'>Event</option>
-            <option value='JOB'>Job</option>
-            <option value='anoun'>Announcement</option>
-            <option value='BLOG'>Blog</option>
-          </Select>
-          <FormHelperText></FormHelperText>
-        </FormControl>
+        <FormLabel>Type of post</FormLabel>
+        <Select
+          variant='filled'
+          icon={<ChevronDownIcon />}
+          placeholder='Select the type'
+          name='type'
+          value={formData.type}
+          onChange={onChangeHandler}
+        >
+          <option value='EVENT'>Event</option>
+          <option value='JOB'>Job</option>
+          <option value='anoun'>Announcement</option>
+          <option value='BLOG'>Blog</option>
+        </Select>
+        <FormHelperText></FormHelperText>
+      </FormControl>
         <FormControl>
           <FormLabel>Description</FormLabel>
           <Textarea minH={'100px'} backgroundColor={' rgb(218, 223, 228)'} name='description' value={formData.description} onChange={onChangeHandler}></Textarea>
@@ -139,23 +140,22 @@ function Page() {
 
         <FormControl>
           <FormLabel>Write your post here</FormLabel>
-          {ReactQuill && (
-            <ReactQuill
-              ref={quillRef}
-              value={value}
-              onChange={(content) => setValue(content)}
-              modules={modules}
-              style={{ border: 'none', height: 'auto', borderRadius: '0' }}
-              className='editor'
-              onKeyUp={() => {
-                const editor = quillRef.current?.getEditor();
-                if (editor) {
-                  const height = Math.max(editor.container.clientHeight, 200);
-                  editor.container.style.height = `${height}px`;
-                }
-              }}
-            />
-          )}
+          <ReactQuill
+  ref={quillRef}
+  value={value}
+  onChange={(content) => setValue(content)}
+  modules={modules}
+  style={{ border: 'none',  height: 'auto', borderRadius: '0' }}
+  className='editor'
+  onKeyUp={() => {
+    const editor = quillRef.current?.getEditor();
+    if (editor) {
+      const height = Math.max(editor.container.clientHeight, 200);
+      editor.container.style.height = `${height}px`;
+    }
+  }}
+/>
+
           <FormHelperText></FormHelperText>
         </FormControl>
 
