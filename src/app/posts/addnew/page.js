@@ -71,7 +71,7 @@ function Page() {
       title: formData.title,
       thumbnail: formData.thumbnail,
       content: quillContent,
-      type: "BLOG",
+      type: formData.type,
       time: new Date().getTime(),
     };
 
