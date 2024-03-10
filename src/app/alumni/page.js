@@ -42,12 +42,12 @@ export default function alumnilist() {
                                     </div> */}
                                     <div className='alumnidetails'>
                                         <Heading>{alumni.name}</Heading>
-                                        <p><span>Batch :</span> <span>{alumni.batch}</span></p>
-                                        <p><span>Job :</span> <span>{alumni.occupation}</span></p>
-                                        <p><span>Email :</span> <span>{alumni.email}</span></p>
-                                        <p><span>Phone N. :</span> <span>{alumni.number}</span></p>
-                                        <p><span>Facebook ID :</span> <span>{alumni.facebook}</span></p>
-                                        <p><span>Admission No. :</span> <span>{alumni.rollno}</span></p>
+                                        <p class="alumni-detail-item"><span class="alumni-detail-label">Batch </span> <span class="alumni-detail-value">{alumni.batch}</span></p>
+                                        <p class="alumni-detail-item"><span class="alumni-detail-label">Job </span> <span class="alumni-detail-value">{alumni.occupation}</span></p>
+                                        <p class="alumni-detail-item"><span class="alumni-detail-label">Email </span> <span class="alumni-detail-value">{alumni.email}</span></p>
+                                        <p class="alumni-detail-item"><span class="alumni-detail-label">Phone N0. </span> <span class="alumni-detail-value">{alumni.number}</span></p>
+                                        <p class="alumni-detail-item"><span class="alumni-detail-label">Facebook ID </span> <span class="alumni-detail-value">{alumni.facebook}</span></p>
+                                        <p class="alumni-detail-item"><span class="alumni-detail-label">Admission No. </span> <span class="alumni-detail-value">{alumni.rollno}</span></p>
                                     </div>
                                     <Button id='button'>Connect</Button>
                                 </Card>
@@ -59,6 +59,6 @@ export default function alumnilist() {
                     }
                 </SimpleGrid>
             </div>
-        </div>
+  </div>
     );
 }
