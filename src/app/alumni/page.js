@@ -2,7 +2,11 @@
 import React, { useState, useEffect } from 'react';
 import { Heading, Image, Button, Input, Card, SimpleGrid, background } from "@chakra-ui/react";
 import { getdatafromdb } from "@/lib/firebase";
+import { SocialIcon } from 'react-social-icons/component'
 import "./alumni.css";
+import 'react-social-icons/linkedin'
+import 'react-social-icons/facebook'
+import 'react-social-icons/whatsapp'
 
 export default function alumnilist() {
     const [alumnidata, setAlumnidata] = useState([]);
@@ -31,25 +35,41 @@ export default function alumnilist() {
                             return (
                                 <Card className='alumniitem' backgroundColor={"rgb(0, 19, 59)"} key={index}>
                                     <Image src={alumni.photo} className='alumniimage' />
-                                    {/* <div className='alumnidetails'>
-                                        <Heading>{alumni.name}</Heading>
-                                        <p>Batch : {alumni.batch}</p>
-                                        <p>Job : {alumni.occupation}</p>
-                                        <p>Email : {alumni.email}</p>
-                                        <p>Phone N. : {alumni.number}</p>
-                                        <p>Facebook ID : {alumni.facebook}</p>
-                                        <p>Admission No. : {alumni.rollno}</p>
-                                    </div> */}
                                     <div className='alumnidetails'>
                                         <Heading>{alumni.name}</Heading>
                                         <p><span>Batch :</span> <span>{alumni.batch}</span></p>
-                                        <p><span>Job :</span> <span>{alumni.occupation}</span></p>
-                                        <p><span>Email :</span> <span>{alumni.email}</span></p>
-                                        <p><span>Phone N. :</span> <span>{alumni.number}</span></p>
-                                        <p><span>Facebook ID :</span> <span>{alumni.facebook}</span></p>
                                         <p><span>Admission No. :</span> <span>{alumni.rollno}</span></p>
+                                        <p><span>Job :</span> <span>{alumni.occupation}</span></p>
+                                        <p><span>Phone N. :</span> <span>{alumni.number}</span></p>
+                                        <p><span>Email :</span> <span>{alumni.email}</span></p>
+                                        <p><span>About Me :</span> <span>{alumni.about}</span></p>
+                                        <div className='alumni_contact'>
+                                            {/* <a href={`mailto:${alumni.email}`}>
+                                                <Button>Email</Button>
+                                            </a> */}
+                                            <a href={`https://www.linkedin.com/in/${alumni.linkedIn}`} target="_blank" rel="noopener noreferrer">
+                                                <Button>
+                                                    <SocialIcon network="linkedin" style={{ height: 25, width: 25 }} />
+                                                </Button>
+                                            </a>
+                                            <a href={`https://www.facebook.com/${alumni.facebook}`} target="_blank" rel="noopener noreferrer">
+                                                <Button>
+                                                    <SocialIcon network="facebook" style={{ height: 25, width: 25 }} />
+                                                </Button>
+                                            </a>
+                                            <a href={`https://wa.me/${alumni.number}`} target="_blank" rel="noopener noreferrer">
+                                                <Button>
+                                                    <SocialIcon network="whatsapp" style={{ height: 25, width: 25 }} />
+                                                </Button>
+                                            </a>
+                                        </div>
+                                        {/* 
+                                        
+                                        <p><span>Facebook ID :</span> <span>{alumni.facebook}</span></p>
+                                        <p><span>LinkedIn :</span> <span>{alumni.linkedIn}</span></p> */}
+
                                     </div>
-                                    <Button id='button'>Connect</Button>
+                                    {/* <Button id='button'>Connect</Button> */}
                                 </Card>
                             )
                         })
