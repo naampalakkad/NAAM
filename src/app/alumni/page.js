@@ -11,6 +11,7 @@ import 'react-social-icons/whatsapp'
 export default function alumnilist() {
     const [alumnidata, setAlumnidata] = useState([]);
 
+
     useEffect(() => {
         const fetchData = async () => {
             const data = await getdatafromdb('users');
