@@ -1,0 +1,37 @@
+.cardcontainer {
+    padding: 10px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: row;
+    overflow-x: scroll;
+    width: 80%;
+    grid-template-columns:repeat(auto-fill, minmax(300px, 1fr));
+}
+
+.card {
+    background-color: white;
+    color: black;
+    margin: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    padding: 10px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+.statsval {
+    font-size: 3em;
+    padding: 10px;
+    color: teal;
+    font-weight: bold;
+    text-align: center;
+}
+
+.statstitle {
+    font-size: 2em;
+    padding: 10px;
+    color: black;
+    font-weight: bold;
+    text-align: center;
+}

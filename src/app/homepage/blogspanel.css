@@ -1,20 +1,29 @@
-.lightblue{ 
-    width: 300px;
-    height: 521px;
-    
-    color: white;
-    background: #31304D;
-} 
-.darkblue{ 
-    width: 300px;
-    height: 521px;
-    
-    color: white;
-    background: #161A30;
-}
-.blogspanel{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+.cardcontainer {
+    width: 80%;
 }
 
+
+
+.cardImage {
+    width: 100%;
+    aspect-ratio: 1/1;
+}
+
+.cardTitle {
+    font-size: 1.5em;
+    padding: 10px;
+    color: cadetblue;
+}
+
+.cardText {
+    font-size: 1.2em;
+    padding: 10px;
+}
+
+@media screen and (max-width: 600px)
+{
+    .cardcontainer {
+        width: 100%;
+    }
+    
+}
