@@ -28,14 +28,14 @@ export default function Carousal() {
   if (!currentImg) {
     <div className='carousalbox' >
       {/* <motion.img className='carousalimg' src={currentImg}  key={currentImg}  initial={{ opacity: 0, y: -100  }} animate={{ opacity: 0.5, y:0 }} transition={{ duration: 1 }}   /> */}
-      <div className='heroText'>NAAAM: The Navodayan Family</div>
+      <div className='heroText'>NAAM: The Navodayan Family</div>
     </div>
   }
 
   return (
     <div className='carousalbox' >
       <motion.img className='carousalimg' src={currentImg} key={currentImg} initial={{ opacity: 0, y: -100 }} animate={{ opacity: 0.5, y: 0 }} transition={{ duration: 1 }} />
-      <div className='heroText'>NAAAM: The Navodayan Family</div>
+      <div className='heroText'>NAAM: The Navodayan Family</div>
     </div>
   );
 }
