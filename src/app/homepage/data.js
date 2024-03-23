@@ -94,6 +94,7 @@ export const MenuItems = [
     { name: 'News', link: 'posts' },
     { name: 'Calender', link: 'calender' },
     { name: 'About Us', link: 'aboutus' },
+    { name: 'Bye-Law', link: 'https://vidyatcklmr.ac.in/admin/upload/pdf/1629672737BTech2019Curriculum.pdf' },
     { name: 'Login', link: 'login' },
 ];
 
