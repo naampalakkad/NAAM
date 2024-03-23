@@ -1,8 +1,9 @@
 'use client'
 import React, { useState, useRef } from 'react';
-import { Box, Input, Button, Select, FormControl, FormLabel, FormHelperText, Textarea, } from '@chakra-ui/react';
+import { Input, Button, Select, FormControl, FormLabel, FormHelperText, Textarea, } from '@chakra-ui/react';
 import { ChevronDownIcon } from '@chakra-ui/icons';
 import './page.css';
+import dynamic from 'next/dynamic';
 
 if (typeof window !== 'undefined') {
   var ReactQuill = require('react-quill');
@@ -178,4 +179,4 @@ function Page() {
     </div>
   );
 }
-export default Page;
+export default dynamic(() => Promise.resolve(Page),{ssr:false});
