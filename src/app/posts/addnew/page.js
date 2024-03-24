@@ -120,6 +120,7 @@ function Page() {
             name='type'
             value={formData.type}
             onChange={onChangeHandler}
+            style={{ border: '2px solid black' }} 
           >
             <option value='EVENT'>Event</option>
             <option value='JOB'>Job</option>
@@ -130,7 +131,14 @@ function Page() {
         </FormControl>
         <FormControl>
           <FormLabel>Description</FormLabel>
-          <Textarea minH={'100px'} backgroundColor={' rgb(218, 223, 228)'} name='description' value={formData.description} onChange={onChangeHandler}></Textarea>
+          <Textarea
+            minH={'100px'}
+            backgroundColor={'white'} 
+            name='description'
+            value={formData.description}
+            onChange={onChangeHandler}
+            style={{ border: '2px solid black' }} 
+          ></Textarea>
           <FormHelperText></FormHelperText>
         </FormControl>
 
