@@ -89,7 +89,7 @@ export const blogposts = {
 
 
 export const MenuItems = [
-    { name: 'Gallery', link: 'https://photos.app.goo.gl/DAAhH2DiYoqy9ohP8' },
+    { name: 'Gallery', link: 'gallery' },
     { name: 'Alum', link: 'alumni' },
     { name: 'News', link: 'posts' },
     { name: 'Calender', link: 'calender' },
