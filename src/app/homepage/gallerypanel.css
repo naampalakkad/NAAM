@@ -1,7 +1,7 @@
 .gallerypanel{
     width:clamp(300px, 80%, 1500px);
     margin: 20px;
-    background-color: rgb(36, 36, 36);
+    background-color: rgb(24, 24, 24);
     padding: 10px;
     border-radius: 10px;
 }

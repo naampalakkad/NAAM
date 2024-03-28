@@ -8,14 +8,17 @@ import { MenuItems } from "../homepage/data";
 
 export default function Header() {
   const [isMobile, setIsMobile] = useState(false);
-  window.addEventListener('scroll', function () {
-    const header = document.getElementById('header');
-    if (window.pageYOffset > 0) {
-      header.style.backgroundColor = 'rgb(0, 19, 59)';
-    } else {
-      header.style.backgroundColor = 'none';
-    }
-  });
+  if (typeof window !== 'undefined') {
+    window.addEventListener('scroll', function () {
+      const header = document.getElementById('header');
+      if (window.pageYOffset > 0) {
+        header.style.backgroundColor = 'rgb(0, 19, 59)';
+      } else {
+        header.style.backgroundColor = 'transparent';
+}
+});
+  }
+
 
   useEffect(() => {
     function handleResize() {

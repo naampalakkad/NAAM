@@ -4,7 +4,7 @@
     height: 100vh;
     overflow: hidden;
     background-color: black;
-    user-select: all;
+    
 }
 
 .carousalimg {
@@ -14,35 +14,47 @@
     opacity: 0.3;
 }
 
-.heroText {
+.ctextbox {
+    display: flex;
     position: absolute;
-    top: 3      0%;
-    left: 10%;
+    flex-direction: column;
+    justify-content: left;
+    align-items: left;
+    top: 20vh;
+    left: 10vw;
+}
+
+.heroText {
     color: white;
-    font-size: 5rem;
-    font-weight: bold;
+    font-size:  7rem;
+    font-family: "Carter One", system-ui;
+    text-shadow: 8px 3px 2px rgba(8,206,125,0.63);
+  
 }
 
 .herosubText{
-    position: absolute;
-    top: 60%;
-    left: 10%;
     color: white;
-    font-size: 2rem;
-    font-weight: bold;
+    font-size: 3rem;
+    font-family: "Black Ops One", system-ui;
 
 }
 
 /* Responsive Styles */
 @media only screen and (max-width: 768px) {
    
+    .ctextbox {
+        top: 15vh;
+        left: 8vw;
+    }
+
     .carousalbox {
-        height: 30vh; /* Adjust height for smaller screens */
+        height: 50vh; /* Adjust height for smaller screens */
     }
 
     .heroText {
-        top: 20%; /* Adjust top positioning for smaller screens */
-        left: 10%; /* Adjust left positioning for smaller screens */
-        font-size: 3rem; /* Adjust font size for smaller screens */
+        font-size: 2.5rem; /* Adjust font size for smaller screens */
+    }
+    .herosubText{
+        font-size: 1rem; /* Adjust font size for smaller screens */
     }
 }
