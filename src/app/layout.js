@@ -1,16 +1,6 @@
-'use client';
-
-import "./globals.css";
 import Header from "./components/header";
 import Footer from "./components/footer";
-import { ChakraProvider } from '@chakra-ui/react'
-
-let styles={
-  "main":{
-    minHeight:"80vh",
-  }
-
-}
+import { ChakraProvider } from '@chakra-ui/react';
 
 export default function RootLayout({ children }) {
   return (
@@ -18,7 +8,7 @@ export default function RootLayout({ children }) {
       <body>
         <Header />
         <ChakraProvider>
-          <div id="main" style={styles.main}>{children}</div>
+          {children}
         </ChakraProvider>
         <Footer />
       </body>

@@ -1,9 +1,11 @@
+SimpleGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 20px;
+    padding: 20px;
+    margin: 20px;
+    background-color: var(--cardcol);
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 
-
-@media screen and (max-width: 600px) {
-    .cardcontainer {
-        width: 100%;
-        background-color: red;
-    }
-    
 }
