@@ -20,6 +20,13 @@ const Footer = () => {
         <div id="footer_heading">NAAM</div>
         <div id="footer_subhead">Navodaya Alumni Association, Malampuzha</div>
       </div>
+      <div id="footer_links">
+        <div className="footer_link">Home</div>
+        <div className="footer_link">About</div>
+        <div className="footer_link">Events</div>
+        <div className="footer_link">Gallery</div>
+        <div className="footer_link">Contact</div>
+      </div>
       <div id="social">
         {socialMediaUrls.map(url => (
           <div className="social_icons" key={url}>
@@ -31,9 +38,9 @@ const Footer = () => {
         </div>
       </div>
       </div>
-      <div id="copyright"></div>
+      <div id="copyright">
       copyright@2024
-
+      </div>
     </div>
 
 

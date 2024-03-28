@@ -14,12 +14,30 @@
   align-items: center;
   justify-content: space-between;
 }
+#footer_text {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  width: 40%;
+  padding: 10px;
+  color: white;
+
+}
+#footer_links {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 20%;
+  padding: 10px;
+  color: white;
+}
 
 #social {
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
-  width: 50%;
+  width: 40%;
   padding: 10px;
 }
 
@@ -36,6 +54,10 @@
   padding: 8px;
   color: #ffffff;
 }
+#footer {
+  display: flex;
+  flex-direction: COLUMN;
+}
 #footer_heading {
   color: white;
   font-size: 200%;
@@ -47,7 +69,7 @@
 
 #copyright {
   text-align: center;
-  color: white;
+  color: rgb(185, 185, 185);
   background-color: rgb(0, 7, 22);
 }
 
