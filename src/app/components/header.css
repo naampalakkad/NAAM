@@ -67,8 +67,11 @@
 }
 
 .main_icons {
-  padding: 10px;
-  font-size: 100%;
+  padding: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.3s ease;
+  font-size: 130%;
 }
 
 a {
