@@ -7,7 +7,7 @@ import './aboutnaam.css'
 export default function AboutNaam() {
     return (
         <SimpleGrid  columns={{ base: 1, md: 2 }} spacing={4} p={0} className='cardcontainer'>
-            <Card p={0} boxShadow="lg" >
+            <Card p={0} boxShadow="lg" className='card'>
                 <CardHeader fontSize="5xl" color="rgb(23, 110, 81)" >About Naam</CardHeader>
                 <CardBody >
                     <SimpleGrid columns={{ base: 1, md: 2 }} gridTemplateColumns="1fr 2fr" gap='6'>
@@ -16,7 +16,7 @@ export default function AboutNaam() {
                     </SimpleGrid>
                 </CardBody>
             </Card>
-            <Card p={0} boxShadow="lg" bg="white" borderRadius="10px" >
+            <Card p={0} boxShadow="lg" borderRadius="10px" className='card' >
                 <CardHeader fontSize="5xl"  color="rgb(23, 110, 81)" >Our Mission</CardHeader>
                 <CardBody  >
                     {aboutnaam.mission}

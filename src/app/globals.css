@@ -1,11 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Bungee+Spice&family=Titan+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Carter+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Carter+One&family=Play:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Londrina+Solid:wght@100;300;400;900&display=swap');
 :root {
   --max-width: 1100px;
   --border-radius: 12px;
-  --font-mono: ui-monospace, Menlo, Monaco, "Cascadia Mono", "Segoe UI Mono";
+  --font-mono: ui-monospace, "Cascadia Mono", "Segoe UI Mono";
   --prim_col: rgb(255, 255, 255);
-  --btncol: rgb(0, 73, 107);
-  --bgcolor: rgb(255, 255, 255);
-  --cardcol: rgb(183, 232, 255);
+  --btncol: rgb(253, 253, 253);
+  --bgcolor: rgb(199, 255, 246);
+  --cardcol: rgb(0, 40, 58);
   --txt_col: black;
 
   --foreground-rgb: 0, 0, 0;
@@ -107,6 +111,28 @@ a:hover {
   height: 100%;
   background-color: var(--bgcolor);
   color: var(--txt_col);
+}
+
+.cardcontainer {
+  padding: 10px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: row;
+  overflow-x: scroll;
+  width: 80%;
+  grid-template-columns:repeat(auto-fill, minmax(300px, 1fr));
+}
+
+.card {
+  background-color: var(--cardcol);
+  color: var(--txt_col);
+  margin: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  padding: 10px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
 }
 
 ::-webkit-scrollbar {
