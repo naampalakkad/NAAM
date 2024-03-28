@@ -9,9 +9,20 @@ import 'react-social-icons/twitter'
 import 'react-social-icons/instagram'
 import 'react-social-icons/youtube'
 import Image from 'next/image'
+import { MenuItems } from "../homepage/data";
+const MenuItem = ({ item }) => (
+  <a href={item.link}>
+    <div className="footer-menu-item">{item.name}</div>
+  </a>
+);
+const gotohome = () => {
+  window.location.href = '/';
+}
+
 
 
 const Footer = () => {
+
   return (
     <div id="footer">
       <div id="foooter">
@@ -22,11 +33,7 @@ const Footer = () => {
           <div id="footer_subhead">Malampuzha, Palakkad, kerala, India</div>
         </div>
         <div id="footer_links">
-          <div className="footer_link">Home</div>
-          <div className="footer_link">About</div>
-          <div className="footer_link">Events</div>
-          <div className="footer_link">Gallery</div>
-          <div className="footer_link">Contact</div>
+          {MenuItems.map(item => <MenuItem key={item.name} item={item} />)}
         </div>
         <div id="social">
           {socialMediaUrls.map(url => (
@@ -34,9 +41,9 @@ const Footer = () => {
               <SocialIcon url={url} className="soc_icons" />
             </div>
           ))}
-          <div className="social_icons">
+          {/* <div className="social_icons">
             <FaPhoneSquareAlt size={32} className="soc_icons" />
-          </div>
+          </div> */}
         </div>
       </div>
       <div id="copyright">
