@@ -94,6 +94,7 @@ export const MenuItems = [
     { name: 'News', link: 'posts' },
     { name: 'Calender', link: 'calender' },
     { name: 'About Us', link: 'aboutus' },
+    { name: 'Bye-Law', link: '' },
     { name: 'Login', link: 'login' },
 ];
 
