@@ -6,10 +6,6 @@ import Testimonialpanel from "./homepage/testimonialpanel.js";
 import AboutNaam from "./homepage/aboutnaam.js";
 import "./globals.css";
 
-
-
-
-
 export default function Home() {
   return (
     <div id="mainbody" >
