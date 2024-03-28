@@ -23,10 +23,14 @@ export default function Header() {
     </a>
   );
 
+  const gotohome = () => {
+    window.location.href = '/';
+  }
+
   return (
     <header>
       <div id='header'>
-        <div id="heading">
+        <div id="heading" onClick={gotohome}>
           <Image id="logo" src={`/assets/logo.png`} alt={"Main logo"} width="100" height={isMobile ? "100" : "64"} />
           <div id="heading_text">
             <div id="main_head">NAAM</div>

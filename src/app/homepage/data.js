@@ -1,6 +1,35 @@
 //let photossrc ="https://photos.app.goo.gl/DAAhH2DiYoqy9ohP8";
-
 export const photogalleryurl = "https://photos.app.goo.gl/DAAhH2DiYoqy9ohP8";
+import {getdatafromStorage } from "@/lib/firebase";
+
+
+export async function getCarouselImageUrls() {
+
+    const carouselImageUrls = getdatafromStorage('carousalimages');
+
+    return carouselImageUrls;
+}
+
+export async function getGalleryImageUrls() {
+    const galleryImageUrls = [];
+    const urls = await getdatafromStorage('galleryimgs');
+    for (let i = 0; i < urls.length; i++) {
+        const galleryImageUrl = urls[i];
+        const img = new Image();
+        img.onload = function() {
+            const width = this.width;
+            const height = this.height;
+            const imgdata = { src: galleryImageUrl, width: width, height: height };
+            galleryImageUrls.push(imgdata);
+        };
+        img.src = galleryImageUrl;
+    }
+    while (galleryImageUrls.length < urls.length) {
+        await new Promise(r => setTimeout(r, 1000));
+    }
+    return galleryImageUrls;
+}
+
 
 export const statistics = [
     {
@@ -58,14 +87,6 @@ export const blogposts = {
 
 }
 
-export let carousalimgs = [
-    "./assets/carousalimgs/1.webp",
-    "./assets/carousalimgs/2.webp",
-    "./assets/carousalimgs/3.webp",
-    "./assets/carousalimgs/4.webp",
-    "./assets/carousalimgs/5.webp",
-    "./assets/carousalimgs/6.webp",
-];
 
 export const MenuItems = [
     { name: 'Gallery', link: 'https://photos.app.goo.gl/DAAhH2DiYoqy9ohP8' },
@@ -73,16 +94,17 @@ export const MenuItems = [
     { name: 'News', link: 'posts' },
     { name: 'Calender', link: 'calender' },
     { name: 'About Us', link: 'aboutus' },
+    { name: 'Bye-Law', link: '' },
     { name: 'Login', link: 'login' },
-  ];
+];
 
-  export const socialMediaUrls = [
+export const socialMediaUrls = [
     "www.linkedin.com",
     "www.facebook.com",
     "www.twitter.com",
     "www.instagram.com",
     "www.youtube.com"
-  ];  
+];
 
 export const galleryphotos = [
     { src: "assets/galleryimages/1.jpg", width: 560, height: 320 },
@@ -105,19 +127,19 @@ export let testimonial = [
         image: "https://www.w3schools.com/w3images/avatar2.png",
     },
     {
-        name:"Anjitha J",
+        name: "Anjitha J",
         batch: "25th Batch",
         testimonial: "I am very happy to be a part of this institution. I have learned a lot from here. The teachers are very helpful and the environment is very good. I am very happy to be a part of this institution. I have learned a lot from here. The teachers are very helpful and the environment is very good.",
         image: "https://www.w3schools.com/w3images/avatar2.png",
     },
     {
-        name:"Unnimaya T",
+        name: "Unnimaya T",
         batch: "5th Batch",
         testimonial: "I am very happy to be a part of this institution. I have learned a lot from here. The teachers are very helpful and the environment is very good. I am very happy to be a part of this institution. I have learned a lot from here. The teachers are very helpful and the environment is very good.",
         image: "https://www.w3schools.com/w3images/avatar2.png",
     },
     {
-        name:"suneeb",
+        name: "suneeb",
         batch: "17th Batch",
         testimonial: "I am very happy to be a part of this institution. I have learned a lot from here. The teachers are very helpful and the environment is very good. I am very happy to be a part of this institution. I have learned a lot from here. The teachers are very helpful and the environment is very good.",
         image: "https://www.w3schools.com/w3images/avatar2.png",
@@ -125,7 +147,7 @@ export let testimonial = [
 ]
 
 export let aboutnaam = {
-    
+
     about: " NAAM (Navodaya Alumni Association Malampuzha), unites Alumnis from Jawahar Navodaya Vidyalaya Palakkad. We celebrate shared experiences, fostering connections, and giving back to our alma mater and the community.",
-    mission : "NAAM unites Jawahar Navodaya Vidyalaya Palakkad alumni, fostering lifelong connections and professional growth. Our mission is to celebrate shared experiences, give back to our alma mater, and engage in impactful community initiatives. NAAM stands for camaraderie, excellence, and service, embodying the values instilled by Jawahar Navodaya Vidyalaya Palakkad."
+    mission: "NAAM unites Jawahar Navodaya Vidyalaya Palakkad alumni, fostering lifelong connections and professional growth. Our mission is to celebrate shared experiences, give back to our alma mater, and engage in impactful community initiatives. NAAM stands for camaraderie, excellence, and service, embodying the values instilled by Jawahar Navodaya Vidyalaya Palakkad."
 }
