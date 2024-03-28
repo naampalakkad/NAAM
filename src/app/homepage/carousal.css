@@ -43,8 +43,8 @@
 @media only screen and (max-width: 768px) {
    
     .ctextbox {
-        top: 10vh;
-        left: 10vw;
+        top: 15vh;
+        left: 8vw;
     }
 
     .carousalbox {
@@ -52,7 +52,7 @@
     }
 
     .heroText {
-        font-size: 3rem; /* Adjust font size for smaller screens */
+        font-size: 2.5rem; /* Adjust font size for smaller screens */
     }
     .herosubText{
         font-size: 1rem; /* Adjust font size for smaller screens */

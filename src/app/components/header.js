@@ -15,8 +15,8 @@ export default function Header() {
         header.style.backgroundColor = 'rgb(0, 19, 59)';
       } else {
         header.style.backgroundColor = 'transparent';
-      }
-    });
+}
+});
   }
 
 
