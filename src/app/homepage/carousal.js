@@ -38,7 +38,7 @@ export default function Carousal() {
             4000, // wait 1s before replacing "Mice" with "Hamsters"
             'Exit to serve.',
             4000,
-            'Navodaya Alumni Association Plakkad',
+            'Navodaya Alumni Association Palakkad',
             4000
           ]}
           wrapper="span"
