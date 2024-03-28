@@ -1,9 +1,10 @@
 .carousalbox {
     position: relative;
     width: 100%;
-    height: 65vh;
+    height: 100vh;
     overflow: hidden;
     background-color: black;
+    user-select: all;
 }
 
 .carousalimg {
@@ -15,12 +16,21 @@
 
 .heroText {
     position: absolute;
-    top: 50%;
-    left: 20%;
+    top: 3      0%;
+    left: 10%;
     color: white;
     font-size: 5rem;
     font-weight: bold;
-    color: rgb(33, 235, 250);
+}
+
+.herosubText{
+    position: absolute;
+    top: 60%;
+    left: 10%;
+    color: white;
+    font-size: 2rem;
+    font-weight: bold;
+
 }
 
 /* Responsive Styles */
