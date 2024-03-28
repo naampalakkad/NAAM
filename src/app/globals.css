@@ -4,8 +4,11 @@
   --font-mono: ui-monospace, Menlo, Monaco, "Cascadia Mono", "Segoe UI Mono",
     "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro",
     "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
---prim_col : antiquewhite;
---sec_col : black;
+--prim_col : rgb(255, 255, 255);
+--btncol: rgb(0, 73, 107);
+--bgcolor : rgb(255, 255, 255);
+--cardcol: rgb(183, 232, 255);
+--txt_col : black;
 
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
@@ -85,6 +88,7 @@
   margin: 0;
 }
 
+
 html,
 body {
   max-width: 100vw;
@@ -105,6 +109,11 @@ body {
 a {
   color: inherit;
   text-decoration: none;
+} 
+
+a:hover {
+  text-decoration: underline;
+  cursor: pointer;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -121,6 +130,6 @@ a {
   padding: 20px;
   width: 100%;
   height: 100%;
-  background-color: var(--prim_col);
-  color: var(--sec_col);
+  background-color: var(--bgcolor);
+  color: var(--txt_col);
 }
