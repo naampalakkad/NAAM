@@ -27,13 +27,13 @@ export default function CalendarComponent() {
     };
     const addEvent = () => {
         const newEvent = {
-            id: events.length + 1, // You may want to generate a unique ID here
+            id: events.length + 1,  
             date: selectedDate.toDateString(),
             title: eventTitle,
             desc: eventDesc, 
         };
         setEvents([...events, newEvent]);
-        setShowAddEventForm(false); // Close the form after adding the event
+        setShowAddEventForm(false); 
     };
     
     
@@ -52,6 +52,10 @@ export default function CalendarComponent() {
         setEventTitle('');
         setEventDesc('');
     }
+   
+    
+    
+    
     return (
         <div className='partition'>
             <div className="event-list">
@@ -88,6 +92,7 @@ export default function CalendarComponent() {
 
             {showAddEventForm && (
                 <div className="add-event-form"> 
+                    <p className='title' style={{fontSize:16}}>{selectedDate.toDateString()}</p>
                         <label>
                             Event Title:
                             <input type="text" value={eventTitle} onChange={handleEventTitleChange} />
