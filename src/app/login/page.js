@@ -45,6 +45,16 @@ export default function signin() {
             default: "Enter your JNV Roll No",
             type: "Number"
         },
+        {
+            prop: "About Me",
+            default: "Enter about yourself",
+            type: "Text"
+        },
+        {
+            prop: "LinkedIn Profile",
+            default: "Enter your LinkedIn Profile",
+            type: "text"
+        }
 
     ]
 
@@ -71,6 +81,9 @@ export default function signin() {
         let facebook = document.querySelector(".detaillist:nth-child(5) input").value;
         let occupation = document.querySelector(".detaillist:nth-child(6) input").value;
         let rollno = document.querySelector(".detaillist:nth-child(7) input").value;
+        let about = document.querySelector(".detaillist:nth-child(8) input").value;
+        let linkedIn = document.querySelector(".detaillist:nth-child(9) input").value;
+
         let photo = user.photoURL;
         let userdetails = {
             name: name,
@@ -80,7 +93,10 @@ export default function signin() {
             facebook: facebook,
             occupation: occupation,
             rollno: rollno,
-            photo: photo
+            photo: photo,
+            about: about,
+            linkedIn: linkedIn
+
         }
        savedatatodb("users/"+user.uid,userdetails);
     }

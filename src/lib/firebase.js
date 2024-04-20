@@ -64,6 +64,37 @@ export function signInoutWithGoogle(){
                 console.error("Error writing document: ", error);
             });
     }
+}  
+
+export function saveposttodb(data){
+if (auth.currentUser) {
+      let dataRef = ref(db, "posts/" + data.time);
+      set(dataRef, data)
+          .then(() => {
+              console.log("post successfully written!");
+          })
+          .catch((error) => {
+              console.error("Error writing post: ", error);
+          });
+  }
+}
+
+export async function getpostsfromdb(){
+  const userRef = ref(db, "posts");
+  return get(userRef)
+    .then((snapshot) => {
+      if (snapshot.exists()) {
+        console.log("Document data:", snapshot.val());
+        return snapshot.val();
+      } else {
+        console.log("No data available");
+        return null;
+      }
+    })
+    .catch((error) => {
+      console.error("Error getting document: ", error);
+      throw error; // If you want to handle this error in the calling function
+    });
 }
 
   export async function getdatafromdb(location){
