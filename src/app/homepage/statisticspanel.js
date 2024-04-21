@@ -8,7 +8,7 @@ export default function Statisticspanel() {
         <SimpleGrid spacing={4} className='cardcontainer' >
             {statistics.map((statistic, index) => {
                 return (
-                    <Card variant={"elevated"} size={"sm"} className='card' key={index}>
+                    <Card variant={"elevated"} size={"sm"} borderRadius={"50%"} className='card' key={index}>
                         <CardHeader className='statsval'>{statistic.text}</CardHeader>
                         <CardBody className='statstitle'>{statistic.title}</CardBody>
                     </Card>
