@@ -1,0 +1,114 @@
+
+.partition {
+    display: flex; 
+    height: 100%;
+  }
+.title{
+  color: rgb(21, 21, 90);  
+  text-align: center;  
+  font-weight: bold;  
+  font-size: 24px;
+  padding: 10px;
+}
+  .calendar {
+    width: 25%; 
+    background-color: white; 
+    height: 100vh;
+  }
+  
+  .events-for-date {
+    margin-top: 20px;
+  }
+  
+  .event-list {
+    flex: 1;
+    overflow-y: auto;
+    border-right: 1px solid #ccc; 
+    height: 100vh;
+    background-color: rgba(120, 119, 160, 0.558);
+  }
+  .event-card {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px;
+    margin-bottom: 10px;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .event-card h3 {
+    color: rgb(41, 41, 125);
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  .event-card p {
+    margin: 5px 0;
+    font-size: 16px;
+    font-weight: 400;
+  }
+  .custom-calendar {
+    border: 1px solid #2a3d84;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px;
+    color: #142c80;
+    font-size: 12px;
+    font-weight: 300;
+    background-color: #f2f1f4;
+    box-shadow: 0 2px 4px rgba(114, 138, 217, 0.782);
+  }
+  .list{
+    margin: 5px 0;
+    padding: 10px;
+    font-size: 16px;
+    font-weight: 400;
+    list-style: none;
+  }
+  .row{
+    display: flex;
+    justify-content: space-between; /* This will push the contents to the ends */
+    align-items: center;
+  } 
+  .add-event-form {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .add-event-form label {
+    display: block;
+    margin-bottom: 10px;
+  }
+  
+  .add-event-form input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 10px;
+  }
+  
+  .add-event-form button {
+    padding: 8px 16px;
+    background-color: rgb(21, 21, 90);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .add-event-form button[type="button"] {
+    background-color: rgb(63, 65, 69); 
+  }
+  
+  .add-event-form button[type="submit"] {
+    margin-right: 10px;
+  }
+  
