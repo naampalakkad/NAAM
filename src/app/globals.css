@@ -113,6 +113,10 @@ a:hover {
   color: var(--txt_col);
 }
 
+#contentbody{
+  min-height: 80vh;
+}
+
 .cardcontainer {
   padding: 10px;
   border-radius: 10px;

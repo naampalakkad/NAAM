@@ -27,7 +27,7 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  color: white;
+  color: rgb(0, 105, 88);
   padding: 10px;
 }
 #logo {

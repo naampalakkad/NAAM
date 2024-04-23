@@ -13,8 +13,10 @@ export default function Header() {
       const header = document.getElementById('header');
       if (window.pageYOffset > 0) {
         header.style.backgroundColor = 'rgb(0, 19, 59)';
+        header.style.color = 'rgb(255, 255, 255)';
       } else {
         header.style.backgroundColor = 'transparent';
+        header.style.color = 'rgb(23, 110, 81)';
 }
 });
   }
