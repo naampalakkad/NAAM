@@ -90,7 +90,7 @@ export const blogposts = {
 
 export const MenuItems = [
     { name: 'Gallery', link: 'gallery' },
-    { name: 'Alum', link: 'alumni' },
+    { name: 'Alumni', link: 'alumni' },
     { name: 'News', link: 'posts' },
     { name: 'Calender', link: 'calender' },
     { name: 'About Us', link: 'aboutus' },
