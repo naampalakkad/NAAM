@@ -36,13 +36,13 @@ export default function alumnilist() {
                                 <Card className='alumniitem' backgroundColor={"rgb(0, 19, 59)"} key={index}>
                                     <Image src={alumni.photo} className='alumniimage' />
                                     <div className='alumnidetails'>
-                                        <Heading>{alumni.name}</Heading>
+                                        <Heading id="name">{alumni.name}</Heading>
                                         <p><span>Batch :</span> <span>{alumni.batch}</span></p>
-                                        <p><span>Admission No. :</span> <span>{alumni.rollno}</span></p>
                                         <p><span>Job :</span> <span>{alumni.occupation}</span></p>
+                                        {/* <p><span>Admission No. :</span> <span>{alumni.rollno}</span></p>
                                         <p><span>Phone N. :</span> <span>{alumni.number}</span></p>
                                         <p><span>Email :</span> <span>{alumni.email}</span></p>
-                                        <p><span>About Me :</span> <span>{alumni.about}</span></p>
+                                        <p><span>About Me :</span> <span>{alumni.about}</span></p> */}
                                         <div className='alumni_contact'>
                                             {/* <a href={`mailto:${alumni.email}`}>
                                                 <Button>Email</Button>
@@ -62,6 +62,11 @@ export default function alumnilist() {
                                                     <SocialIcon network="whatsapp" style={{ height: 25, width: 25 }} />
                                                 </Button>
                                             </a>
+                                        </div>
+                                        <div className="read_more">
+                                            <button>Read More...</button>
+
+
                                         </div>
                                         {/* 
                                         

@@ -53,10 +53,10 @@
 }
 
 .alumniimage {
-  width: 100%;
-  aspect-ratio: 1/1;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
+  width: 50%;
+  border-radius: 50%;
+  /* border-top-left-radius: 10px;
+  border-top-right-radius: 10px; */
 }
 #button {
   background-color: rgb(4, 44, 117);
@@ -76,9 +76,27 @@
   padding: 10px;
   width: 100%;
   background-color: #eeebeb;
-  min-height: 250px;
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
+
+
+}
+#name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  height:50px;
+  width:100%;
+}
+
+.hidden-text {
+  display: none;
+}
+
+.show-more {
+  display: block;
+  color: blue;
+  cursor: pointer;
 }
 .alumnidetails p span:first-child {
   font-weight: 1000;
@@ -97,6 +115,20 @@
   flex-direction: row;
   justify-content: space-around;
   width: 100%;
+}
+.read_more{
+  width: 100%;
+
+}
+#btn{
+  display: flex;
+ margin: auto;
+ margin-left: auto;
+ margin-right: auto;
+  background-color: rgb(6, 109, 75);
+  color:white;
+  border-radius: 20px;
+  padding: 10px;
 }
 /* Media query for screens smaller than 600px */
 @media only screen and (max-width: 600px) {
