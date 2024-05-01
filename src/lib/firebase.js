@@ -78,6 +78,21 @@ if (auth.currentUser) {
           });
   }
 }
+ 
+
+export function eventSave(data){
+  if (auth.currentUser) {
+        let dataRef = ref(db, "events/" + data.timestamp);
+        set(dataRef, data)
+            .then(() => {
+                console.log("event successfully written!");
+            })
+            .catch((error) => {
+                console.error("Error writing event: ", error);
+            });
+    }
+  }
+
 
 export async function getpostsfromdb(){
   const userRef = ref(db, "posts");

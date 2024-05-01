@@ -24,8 +24,7 @@
     flex: 1;
     overflow-y: auto;
     border-right: 1px solid #ccc; 
-    height: 100vh;
-    background-color: rgba(120, 119, 160, 0.558);
+    height: 100vh; 
   }
   .event-card {
     border: 1px solid #ccc;
@@ -74,12 +73,13 @@
   .add-event-form {
     position: fixed;
     top: 50%;
-    left: 50%;
+    right: 0%;
     transform: translate(-50%, -50%);
     background-color: white;
     border-radius: 8px;
     padding: 20px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 15%;
   }
   
   .add-event-form label {
@@ -111,4 +111,50 @@
   .add-event-form button[type="submit"] {
     margin-right: 10px;
   }
+  .addbutton{
+    background-color:  rgb(21, 21, 90);
+    color: white;
+    padding: 10px;
+    border-radius:5%;
+  }
+  .event-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.event-list li {
+    margin-bottom: 8px;
+}
+
+.event-title {
+    font-weight: bold;
+}
+
+.event-date{
+  font-style: italic;
+  margin-left: 15%;
+}
+.event-time {
+    color: #666;
+    font-style: italic;
+}
+.custom-event {
+  display: flex;
+  justify-content: space-between;  
+  background-color: #f0f0f0;
+  padding: 5px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.event-title {
+  font-weight: bold;
+}
+
+.event-time {
+  font-style: italic;
+  margin-left: 15%;
+}
+
+
   
