@@ -1,6 +1,6 @@
 'use client'
 import React, { useState, useRef } from 'react';
-import { Input, Button, Select, FormControl, FormLabel, FormHelperText, Textarea, } from '@chakra-ui/react';
+import { Input, Button, Select, FormControl, FormLabel, FormHelperText, Textarea } from '@chakra-ui/react';
 import { ChevronDownIcon } from '@chakra-ui/icons';
 import './page.css';
 import dynamic from 'next/dynamic';
@@ -12,13 +12,9 @@ if (typeof window !== 'undefined') {
 import { saveposttodb } from '@/lib/firebase';
 
 function Page() {
-  const [author, setAuthor] = useState('');
-  const [description, setDescription] = useState('');
   const [value, setValue] = useState('');
   const [formData, setFormData] = useState({
-    author: '',
     title: '',
-    description: '',
     thumbnail: '',
   });
 
@@ -43,8 +39,6 @@ function Page() {
   };
 
   const resetForm = () => {
-    setAuthor('');
-    setDescription('');
     setValue('');
     setFormData({
       author: '',
@@ -64,8 +58,7 @@ function Page() {
     const quillContent = quillRef.current?.getEditor().getContents();
 
     let postdata = {
-      authorName: formData.author,
-      description: formData.description,
+//authorName 
       title: formData.title,
       thumbnail: formData.thumbnail,
       content: quillContent,
@@ -98,13 +91,7 @@ function Page() {
       </h1>
 
       <form onSubmit={handleSubmit}>
-        <FormControl isRequired onChange={onChangeHandler}>
-          <FormLabel className='font' htmlFor='author'>
-            Author
-          </FormLabel>
-          <Input variant='filled' placeholder='Enter the name' type='text' name='author' value={formData.author} />
-          <FormHelperText></FormHelperText>
-        </FormControl>
+        
 
         <FormControl>
           <FormLabel>Title</FormLabel>
@@ -128,19 +115,7 @@ function Page() {
             <option value='BLOG'>Blog</option>
           </Select>
           <FormHelperText></FormHelperText>
-        </FormControl>
-        <FormControl>
-          <FormLabel>Description</FormLabel>
-          <Textarea
-            minH={'100px'}
-            backgroundColor={'white'} 
-            name='description'
-            value={formData.description}
-            onChange={onChangeHandler}
-            style={{ border: '2px solid black' }} 
-          ></Textarea>
-          <FormHelperText></FormHelperText>
-        </FormControl>
+        </FormControl>      
 
         <FormControl>
           <FormLabel>Thumbnail photo</FormLabel>
