@@ -23,6 +23,22 @@
   padding: 20px;
 }
 
+.alumni-detail-item{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 10px;
+  width: 90%;
+  text-align: left;
+}
+
+.alumni-detail-label{
+  width:40%;
+}
+.alumni-detail-value{
+  width: 60%;
+}
+
 .alumniitem {
   margin: 10px;
   padding: 10px;
