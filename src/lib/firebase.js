@@ -80,7 +80,7 @@ if (auth.currentUser) {
 }
  
 
-export function eventSave(data){
+export  function eventSave(data){
   if (auth.currentUser) {
         let dataRef = ref(db, "events/" + data.timestamp);
         set(dataRef, data)
@@ -93,6 +93,9 @@ export function eventSave(data){
     }
   }
 
+  export function eventtsave(){
+    console.log(newEvent, "From firebase");
+  }
 
 export async function getpostsfromdb(){
   const userRef = ref(db, "posts");

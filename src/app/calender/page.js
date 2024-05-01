@@ -6,7 +6,7 @@ import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
-import eventSave  from "@/lib/firebase";
+import {eventSave}  from "@/lib/firebase"
 export default function CalendarComponent() {
     const calendarRef = useRef(null);
 
@@ -72,7 +72,7 @@ export default function CalendarComponent() {
     };
 
     return (
-        <div style={{ display: 'flex', height: '100vh' }}>
+        <div style={{ paddingTop:"10vh", display: 'flex', height: '100vh' }}>
             <div style={{ flex: '0 0 calc(75vw)', height: '100%', overflow: 'hidden', padding: '0vh', margin: '1rem' }}>
                 <FullCalendar
                     ref={calendarRef}
