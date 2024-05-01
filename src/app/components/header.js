@@ -1,11 +1,24 @@
+'use client';
+
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image'
 import "./header.css";
 import { MenuItems } from "../homepage/data";
 
 
-export default function Header () {
+export default function Header() {
   const [isMobile, setIsMobile] = useState(false);
+  if (typeof window !== 'undefined') {
+    window.addEventListener('scroll', function () {
+      const header = document.getElementById('header');
+      if (window.pageYOffset > 0) {
+        header.style.backgroundColor = 'rgb(0, 19, 59)';
+      } else {
+        header.style.backgroundColor = 'transparent';
+}
+});
+  }
+
 
   useEffect(() => {
     function handleResize() {
@@ -16,7 +29,7 @@ export default function Header () {
       handleResize();
     }
   }, []);
-  
+
   const MenuItem = ({ item }) => (
     <a href={item.link}>
       <div className="main_icons">{item.name}</div>
@@ -37,24 +50,24 @@ export default function Header () {
             <div id="sub_head">Navodaya Alumni Association, Malampuzha</div>
           </div>
         </div>
-  
+
         {isMobile ? (
-              <div id="menuToggle">
-                <input type="checkbox" />
-                <span></span>
-                <span></span>
-                <span></span>
-                <ul id="menu">
-                  {MenuItems.map(item => <li key={item.name}><MenuItem item={item} /></li>)}
-                </ul>
-              </div>
+          <div id="menuToggle">
+            <input type="checkbox" />
+            <span></span>
+            <span></span>
+            <span></span>
+            <ul id="menu">
+              {MenuItems.map(item => <li key={item.name}><MenuItem item={item} /></li>)}
+            </ul>
+          </div>
         ) : (
           <div id="main_menu">
             {MenuItems.map(item => <MenuItem key={item.name} item={item} />)}
           </div>
         )}
-        </div>
-        <div id="header_space"></div>
+      </div>
+      <div id="header_space"></div>
     </header>
   );
 };

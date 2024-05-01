@@ -89,12 +89,12 @@ export const blogposts = {
 
 
 export const MenuItems = [
-    { name: 'Gallery', link: 'https://photos.app.goo.gl/DAAhH2DiYoqy9ohP8' },
+    { name: 'Gallery', link: 'gallery' },
     { name: 'Alum', link: 'alumni' },
     { name: 'News', link: 'posts' },
     { name: 'Calender', link: 'calender' },
     { name: 'About Us', link: 'aboutus' },
-    { name: 'Bye-Law', link: 'https://vidyatcklmr.ac.in/admin/upload/pdf/1629672737BTech2019Curriculum.pdf' },
+    { name: 'Bye-Law', link: 'https://drive.google.com/file/d/1GNdgzwnpyBVJKcixNkPq7XkgywU3RUT9/view' },
     { name: 'Login', link: 'login' },
 ];
 
