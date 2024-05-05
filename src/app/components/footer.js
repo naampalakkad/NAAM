@@ -27,10 +27,12 @@ const Footer = () => {
     <div id="footer">
       <div id="foooter">
         <div id="footer_text">
-          <Image id="logo" src={`/assets/logo.png`} alt={"Main logo"} width="100" height="100" />
+          <Image id="logo" src={`/assets/logo.png`} alt={"Main logo"} width="250" height="250" />
+          <div>
           <div id="footer_heading">NAAM</div>
           <div id="footer_subhead">Navodaya Alumni Association</div>
           <div id="footer_subhead">Malampuzha, Palakkad, kerala, India</div>
+          </div>
         </div>
         <div id="footer_links">
           {MenuItems.map(item => <MenuItem key={item.name} item={item} />)}
