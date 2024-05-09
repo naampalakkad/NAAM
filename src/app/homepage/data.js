@@ -92,7 +92,7 @@ export const MenuItems = [
     { name: 'Calender', link: 'calender' },
     { name: 'About Us', link: 'aboutus' },
     { name: 'Bye-Law', link: 'law' },
-    { name: 'Profile', link: 'login' },
+    { name: 'Login', link: 'login' },
 ];
 
 export const socialMediaUrls = [
