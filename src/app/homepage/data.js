@@ -94,7 +94,7 @@ export const MenuItems = [
     { name: 'News', link: 'posts' },
     { name: 'Calender', link: 'calender' },
     { name: 'About Us', link: 'aboutus' },
-    { name: 'Bye-Law', link: 'https://drive.google.com/file/d/1GNdgzwnpyBVJKcixNkPq7XkgywU3RUT9/view' },
+    { name: 'Bye-Law', link: 'law' },
     { name: 'Login', link: 'login' },
 ];
 
