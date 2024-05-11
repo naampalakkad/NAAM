@@ -4,6 +4,9 @@
   flex-direction: column;
   align-items: center;
   min-height: 85vh;
+  width: clamp(350px, 70vw, 900vw);
+  margin-left: auto;
+  margin-right: auto;
 }
 
 #search_bar {
@@ -11,7 +14,7 @@
   padding: 5px 20px;
   border-radius: 20px;
   font-weight: 500;
-  margin: 5px;
+  margin: 10px;
 }
 
 .alumni_box {
@@ -19,10 +22,8 @@
   padding: 15px;
 }
 
-
-
 .alumniitem {
-  padding:5px;
+  padding:15px;
   border-radius: 5px;
   display: flex;
   flex-direction: column;
@@ -30,7 +31,7 @@
 }
 
 .alumniimage {
-  width:200px;
+  width:120px;
   aspect-ratio: 1/1;
   border-radius: 10px;
 }

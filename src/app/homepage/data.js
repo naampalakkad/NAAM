@@ -1,12 +1,11 @@
 //let photossrc ="https://photos.app.goo.gl/DAAhH2DiYoqy9ohP8";
 export const photogalleryurl = "https://photos.app.goo.gl/DAAhH2DiYoqy9ohP8";
-import {getdatafromStorage } from "@/lib/firebase";
+import {getdatafromStorage, auth} from "@/lib/firebase";
 
+let profilepagename = "profile";
 
 export async function getCarouselImageUrls() {
-
     const carouselImageUrls = getdatafromStorage('carousalimages');
-
     return carouselImageUrls;
 }
 
@@ -90,12 +89,12 @@ export const blogposts = {
 
 export const MenuItems = [
     { name: 'Gallery', link: 'gallery' },
-    { name: 'Alum', link: 'alumni' },
+    { name: 'Alumni', link: 'alumni' },
     { name: 'News', link: 'posts' },
     { name: 'Calender', link: 'calender' },
     { name: 'About Us', link: 'aboutus' },
     { name: 'Bye-Law', link: 'https://drive.google.com/file/d/1GNdgzwnpyBVJKcixNkPq7XkgywU3RUT9/view' },
-    { name: 'Login', link: 'login' },
+    { name: profilepagename, link: 'login' },
 ];
 
 export const socialMediaUrls = [
