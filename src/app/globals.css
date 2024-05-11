@@ -113,13 +113,17 @@ a:hover {
   color: var(--txt_col);
 }
 
+#contentbody{
+  min-height: 75vh;
+}
+
 .cardcontainer {
   padding: 10px;
   border-radius: 10px;
   display: flex;
   flex-direction: row;
   overflow-x: scroll;
-  width: 80%;
+  width: 81%;
   grid-template-columns:repeat(auto-fill, minmax(300px, 1fr));
 }
 

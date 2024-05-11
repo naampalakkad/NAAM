@@ -1,6 +1,6 @@
 "use client"
 import { React, useEffect, useState } from "react";
-import { auth ,signInoutWithGoogle, savedatatodb} from "@/lib/firebase";
+import { auth ,signInoutWithGoogle, savedatatodb,getuserdetailfromdb} from "@/lib/firebase";
 import './login.css';
 import { Box, Heading, Image, Button, Input, Card } from "@chakra-ui/react";
 import { onAuthStateChanged } from "firebase/auth";
@@ -8,7 +8,6 @@ import { onAuthStateChanged } from "firebase/auth";
 
 export default function signin() {
     const [user, setUser] = useState(null);
-
     let personaldetails = [
         {
             prop: "Name",
@@ -57,20 +56,38 @@ export default function signin() {
         }
 
     ]
+    const [userdata, setUserData] = useState(null)
 
-    useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
-            if (user) {
-                setUser(user);
-                console.log(user.uid);
-            } else {
-                setUser(null);
-            }
-        });
-        return () => unsubscribe();
-    }, [auth]);
+    
 
  
+
+useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+        if (user) {
+            setUser(user);
+            let udata = getuserdetailfromdb(user.uid);
+            udata.then((data) => {
+                setdatacolumns(data);
+            });
+        } else {
+            setUser(null);
+        }
+    });
+    return () => unsubscribe;
+}, [auth]);
+
+  function setdatacolumns(userdata){
+    document.querySelector(".detaillist:nth-child(1) input").value = userdata.name;
+    document.querySelector(".detaillist:nth-child(2) input").value = userdata.email;
+    document.querySelector(".detaillist:nth-child(3) input").value = userdata.batch;
+    document.querySelector(".detaillist:nth-child(4) input").value = userdata.number;
+    document.querySelector(".detaillist:nth-child(5) input").value = userdata.facebook;
+    document.querySelector(".detaillist:nth-child(6) input").value = userdata.occupation;
+    document.querySelector(".detaillist:nth-child(7) input").value = userdata.rollno;
+    document.querySelector(".detaillist:nth-child(8) input").value = userdata.about;
+    document.querySelector(".detaillist:nth-child(9) input").value = userdata.linkedIn;
+  }
 
     function updatefirebaseuserdata() {
         console.log("updating user data");

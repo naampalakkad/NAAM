@@ -1,8 +1,3 @@
-// Import the functions you need from the SDKs you need
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 'use client'
 
 import { initializeApp } from "firebase/app";
@@ -78,6 +73,42 @@ if (auth.currentUser) {
           });
   }
 }
+ 
+
+export function eventSave(data){
+  if (auth.currentUser) {
+        data.userId = auth.currentUser.uid;
+        data.userName = auth.currentUser.displayName;
+        let dataRef = ref(db, "events/" + data.timestamp);
+        set(dataRef, data)
+            .then(() => {
+                console.log("event successfully written!");
+            })
+            .catch((error) => {
+                console.error("Error writing event: ", error);
+            });
+    }
+  }
+
+  export async function fetchEventsFromDB() {
+    const eventsRef = ref(db, 'events');
+    try {
+        const snapshot = await get(eventsRef);
+        if (snapshot.exists()) {
+            const eventData = snapshot.val();
+            return Object.keys(eventData).map(key => ({
+                ...eventData[key],
+                id: key
+            }));
+        } else {
+            console.log("No events available");
+            return [];
+        }
+    } catch (error) {
+        console.error("Error fetching events:", error);
+        throw error;
+    }
+}
 
 export async function getpostsfromdb(){
   const userRef = ref(db, "posts");
@@ -126,4 +157,21 @@ export async function getpostsfromdb(){
         resurls.push(url);
     }
     return resurls;
+  }
+
+  export async function getuserdetailfromdb(uid){
+    const userRef = ref(db, "users/" + uid);
+    return get(userRef)
+     .then((snapshot) => {
+        if (snapshot.exists()) {
+          return snapshot.val();
+        } else {
+          console.log("No data available");
+          return null;
+        }
+      })
+     .catch((error) => {
+        console.error("Error getting document: ", error);
+        throw error; // If you want to handle this error in the calling function
+      });
   }
