@@ -148,3 +148,60 @@ export let aboutnaam = {
     about: " NAAM (Navodaya Alumni Association Malampuzha), unites Alumnis from Jawahar Navodaya Vidyalaya Palakkad. We celebrate shared experiences, fostering connections, and giving back to our alma mater and the community.",
     mission: "NAAM unites Jawahar Navodaya Vidyalaya Palakkad alumni, fostering lifelong connections and professional growth. Our mission is to celebrate shared experiences, give back to our alma mater, and engage in impactful community initiatives. NAAM stands for camaraderie, excellence, and service, embodying the values instilled by Jawahar Navodaya Vidyalaya Palakkad."
 }
+
+export let personaldetailsdata = [
+    {
+        prop: "Name",
+        name: "name",
+        default: "Enter your name",
+        type: "text"
+    },
+    {
+        prop: "Email",
+        name:"email",
+        default: "Enter your email",
+        type: "email"
+    },
+    {
+        prop: "Batch",
+        name: "batch",
+        default: "Enter your batch,  eg: 25",
+        type: "Number"
+    },
+    {
+        prop: "Number",
+        name:"number",
+        default: "Enter your Mobile number",
+        type: "Number"
+    },
+    {
+        prop: "Facebook",
+        name: "facebook",
+        default: "Enter your Facebook Profile",
+        type: "text"
+    },
+    {
+        prop: "Occupation",
+        name: "occupation",
+        default: "Enter your occupation",
+        type: "text"
+    },
+    {
+        prop: "JNV Roll No",
+        name: "rollno",
+        default: "Enter your JNV Roll No",
+        type: "Number"
+    },
+    {
+        prop: "About",
+        name: "about",
+        default: "Enter about yourself",
+        type: "Text"
+    },
+    {
+        prop: "LinkedIn",
+        name: "linkedIn",
+        default: "Enter your LinkedIn Profile",
+        type: "text"
+    }
+]

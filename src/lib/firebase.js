@@ -2,7 +2,7 @@
 
 import { initializeApp } from "firebase/app";
 import {getAuth,  GoogleAuthProvider, signInWithPopup} from "firebase/auth";
-import { getStorage ,ref as sref, listAll, getDownloadURL} from "firebase/storage";
+import { getStorage ,ref as sref, uploadBytes, listAll, getDownloadURL } from "firebase/storage";
 import {getDatabase,set,get,ref} from "firebase/database"
 
 const firebaseConfig = {
@@ -48,7 +48,6 @@ export function signInoutWithGoogle(){
   }
 
   export function savedatatodb(location, data){
-    console.log("Saving to Firebase. Location", location, "Data", data);
     if (auth.currentUser) {
         let dataRef = ref(db, location);
         set(dataRef, data)
@@ -171,4 +170,33 @@ export async function getpostsfromdb(){
         console.error("Error getting document: ", error);
         throw error; // If you want to handle this error in the calling function
       });
+  }
+
+  export async function uploadImageToStorage(userId, imageFile) {
+    const storageRef = sref(storage, `profile_images/${userId}/${imageFile.name}`); // Create reference with user ID and filename
+    try {
+      await uploadBytes(storageRef, imageFile); // Upload the image file
+      const imageUrl = await getDownloadURL(storageRef); // Get download URL for the uploaded image
+      return imageUrl;
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      throw error; // Re-throw the error for handling in the `handleImageChange` function
+    }
+  }
+
+  export async function getImageUrlFromStorage(userId) {
+    const storageRef = sref(storage, `profile_images/${userId}`); // Create reference with user ID
+  
+    try {
+      const imageUrl = await getDownloadURL(storageRef); // Get download URL for the image file (if it exists)
+      return imageUrl;
+    } catch (error) {
+      if (error.code === 'storage/object-not-found') {
+        // Handle case where image doesn't exist
+        return null;  // Return null to indicate no image
+      } else {
+        console.error("Error getting image URL:", error);
+        throw error; // Re-throw the error for handling in the calling code (e.g., display notification)
+      }
+    }
   }
