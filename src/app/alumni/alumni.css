@@ -16,7 +16,7 @@
   font-weight: 500;
   margin: 10px;
 }
-
+                   
 .alumni_box {
   width: 100%;
   padding: 15px;
@@ -41,10 +41,6 @@
   flex-direction: column;
   align-items: flex-start;
 }
-.alumnidetails p span:first-child {
-  font-weight: 1000;
-  color: rgb(1, 27, 83);
-}
 
 .alumni_contact {
   display: flex;
@@ -52,6 +48,7 @@
   justify-content: space-around;
   width: 100%;
 }
+
 .alumni-detail-item{
   display: flex;
   flex-direction: row;
@@ -59,12 +56,17 @@
   width: 90%;
   text-align: left;
 }
-
-p:nth-child(1){
-  width:40%;
+p{
+  width: 100%;
 }
-p:nth-child(2){
-  width: 60%;
+
+.detailName{
+  width:50%;
+  font-weight: bold;
+
+}
+.detailValue{
+  width: 50%;
 }
 
 

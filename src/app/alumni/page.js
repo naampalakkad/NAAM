@@ -1,6 +1,6 @@
 'use client'
 import React, { useState, useEffect } from 'react'
-import { Heading, Image, Button, Input, Card, SimpleGrid, background } from "@chakra-ui/react"
+import { Heading, Image,Input, Card, SimpleGrid} from "@chakra-ui/react"
 import { getdatafromdb } from "@/lib/firebase"
 import { SocialIcon } from 'react-social-icons/component'
 import "./alumni.css"
@@ -50,8 +50,8 @@ export default function alumnilist() {
                 <Image src={alumni.photo} className='alumniimage' />
                 <div className='alumnidetails'>
                   <Heading as='h3' size='md'>{alumni.name}</Heading>
-                  <p><span>Batch :</span> <span>{alumni.batch}</span></p>
-                  <p><span>Phone. :</span> <span>{alumni.number}</span></p>
+                  <p><span className='detailName'>Batch </span> <span className='detailValue'>{alumni.batch}</span></p>
+                  <p><span className='detailName'>Phone </span> <span className='detailValue'>{alumni.number}</span></p>
                   <div className='alumni_contact'>
                       <SocialIcon network="email"    style={{ height: 25, width: 25 }} href={`https://mail.google.com/mail/?view=cm&fs=1&to=${alumni.email}`} />
                       <SocialIcon network="linkedin" style={{ height: 25, width: 25 }} href={`https://www.linkedin.com/in/${alumni.linkedIn}`} />
