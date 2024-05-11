@@ -1,12 +1,11 @@
 .cardcontainer {
     width: 100vw;
-    height: 80vh;
+    margin-top: 10vh;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: space-evenly;
     align-items: center;
-    background-color: rgb(172, 172, 172);
 }
 
 .profilebox, .infobox {
@@ -14,18 +13,16 @@
     flex-direction: column;
     align-items: center;
     border-radius: 5px;
-    padding: 20px;
-    margin: 10px;
+    padding: 10px;
     background-color: white;
 }
 
 .profilebox p{
     font-size: 20px;
-    margin: 20PX;
 }
 
 .infobox {
-    width: 40%;
+    width: 50%;
 }
 
 .profileimage {
@@ -40,7 +37,7 @@
     flex-wrap: nowrap;
     width: 90%;
     justify-content: space-between;
-    margin: 10px;
+    margin: 5px;
     align-items: center;
 }
 
@@ -50,8 +47,7 @@
 }
 
 .detailitem{
-    margin: 10px;
-    padding: 10px;
+    padding: 5px;
     border-radius: 5px;
     width: 70%;
 }
