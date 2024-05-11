@@ -78,6 +78,42 @@ if (auth.currentUser) {
           });
   }
 }
+ 
+
+export function eventSave(data){
+  if (auth.currentUser) {
+        data.userId = auth.currentUser.uid;
+        data.userName = auth.currentUser.displayName;
+        let dataRef = ref(db, "events/" + data.timestamp);
+        set(dataRef, data)
+            .then(() => {
+                console.log("event successfully written!");
+            })
+            .catch((error) => {
+                console.error("Error writing event: ", error);
+            });
+    }
+  }
+
+  export async function fetchEventsFromDB() {
+    const eventsRef = ref(db, 'events');
+    try {
+        const snapshot = await get(eventsRef);
+        if (snapshot.exists()) {
+            const eventData = snapshot.val();
+            return Object.keys(eventData).map(key => ({
+                ...eventData[key],
+                id: key
+            }));
+        } else {
+            console.log("No events available");
+            return [];
+        }
+    } catch (error) {
+        console.error("Error fetching events:", error);
+        throw error;
+    }
+}
 
 export async function getpostsfromdb(){
   const userRef = ref(db, "posts");

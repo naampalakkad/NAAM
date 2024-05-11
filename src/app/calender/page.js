@@ -1,109 +1,146 @@
-'use client';
-import React, { useState } from 'react';
-import Calendar from 'react-calendar';
-import './calendar.css';
+'use client';  
+import React, { useState, useRef ,useEffect} from 'react';
+import DateTimePicker from './DateTimePicker';  
+import './calendar.css'; 
+import FullCalendar from '@fullcalendar/react';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import timeGridPlugin from '@fullcalendar/timegrid';
+import interactionPlugin from '@fullcalendar/interaction';
+import {eventSave}  from "@/lib/firebase"
 
+import { fetchEventsFromDB } from "@/lib/firebase";
+import {  Card } from "@chakra-ui/react";
 export default function CalendarComponent() {
-    const [selectedDate, setSelectedDate] = useState(new Date());
-    const [eventTitle, setEventTitle] = useState('');
-    const [eventDesc, setEventDesc] = useState('');
-    const [events, setEvents] = useState([]);
-    const [showAddEventForm, setShowAddEventForm] = useState(false);
+    const calendarRef = useRef(null);
 
-    const handleDateChange = (date) => {
-        setSelectedDate(date);
+    const [selectedDate, setSelectedDate] = useState(new Date());
+    const [selectedTime, setSelectedTime] = useState('00:00');
+    const [showAddEventModal, setShowAddEventModal] = useState(false);
+    const [eventTitle, setEventTitle] = useState(''); 
+    const [events, setEvents] = useState([]);
+
+    const loadEventsFromFirebase = async () => {
+        try {
+            const eventsData = await fetchEventsFromDB();
+            setEvents(eventsData);
+        } catch (error) {
+            console.error("Error loading events from Firebase:", error);
+        }
     };
 
-    const filteredEvents = events.filter((event) => {
-        return new Date(event.date).toDateString() === selectedDate.toDateString();
-    });
+    // Load events from Firebase when component mounts
+    useEffect(() => {
+        loadEventsFromFirebase();
+    }, []);
+    const handleClose = () => {
+        setShowAddEventModal(false);
+    };
 
     const handleEventTitleChange = (event) => {
         setEventTitle(event.target.value);
+    }; 
+
+    const submit = (e) => {
+        e.preventDefault();
+        addEvent();
+        setEventTitle(''); 
+        setSelectedDate(new Date());
+        setSelectedTime('00:00');
     };
 
-    const handleEventDescChange = (event) => {
-        setEventDesc(event.target.value);
+    const handleDateClick = (arg) => {
+        setSelectedDate(arg.date);
+        setShowAddEventModal(true);
     };
+
+    const handleEventClick = (arg) => { 
+        console.log('Event clicked:', arg.event);
+    };
+
+    const handleAddEvent = () => {
+        setShowAddEventModal(true);
+    };
+
     const addEvent = () => {
         const newEvent = {
-            id: events.length + 1,  
-            date: selectedDate.toDateString(),
             title: eventTitle,
-            desc: eventDesc, 
+            date: selectedDate.toISOString().split('T')[0],
+            time: selectedTime,
+            timestamp:new Date().getTime()
         };
+        eventSave(newEvent);
+       
         setEvents([...events, newEvent]);
-        setShowAddEventForm(false); 
+        setShowAddEventModal(false);
     };
     
-    
+    const futureEvents = events.filter(event => new Date(event.date + 'T' + event.time) > new Date());
 
-    const handlePlus = () => {
-        setShowAddEventForm(true);
+    const eventList = events.map((event, index) => ({
+        title: event.title,
+        start: event.date + 'T' + event.time
+    }));
+
+    const handleEventContent = (arg) => {
+        return (
+            <div className="custom-event">
+                <div className="event-title">{arg.event.title}</div>
+                <div className="event-time">{arg.timeText}</div>
+            </div>
+        );
     };
 
-    const handleClose = () => {
-        setShowAddEventForm(false);
-    };
-
-    const submit=(e)=>{
-        e.preventDefault();
-        addEvent(); 
-        setEventTitle('');
-        setEventDesc('');
-    }
-   
-    
-    
     
     return (
-        <div className='partition'>
-            <div className="event-list">
-                <h2 className='title'>Active Events</h2>
-                <ul>
-                    {filteredEvents.map((event) => (
-                        <li key={event.id} className='event-card'>
-                            <h3>{event.title}</h3>
-                            <p>Date: {event.date}</p>
-                            <p>Description: {event.desc}</p>
-                            {/* <p>Location: {event.location}</p> */}
-                        </li>
-                    ))}
-                </ul>
+        <div style={{paddingTop:"10vh", display: 'flex'  }}>
+            <div className='bar'>
+                <Card className='card'>
+                <FullCalendar
+                    ref={calendarRef}
+                    plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+                    initialView='dayGridMonth'
+                    headerToolbar={{
+                        start: "today prev,next",
+                        center: "title",
+                        end: ""
+                    }}
+                    height={"100vh"}
+                    dateClick={handleDateClick}
+                    eventClick={handleEventClick}
+                    eventContent={handleEventContent}
+                    events={eventList}
+                />
+                </Card>
+                
+            </div>
+            <div  className='sidebar'>
+                 
+                    <button onClick={handleAddEvent} className='addbutton'>Add Event</button>
+                    <h1 style={{ textAlign: 'center', fontWeight: 'bold', color: 'rgb(5, 5, 68)' }}>Upcoming Events</h1>
+
+                    <ul className="event-list">
+                {futureEvents.map((event, index) => (
+                    <li key={index} style={{ marginBottom: '10px', padding: '10px', backgroundColor: '#f7f7f7', borderRadius: '5px', boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)' }}>
+                        <span className="event-title" style={{ fontWeight: 'bold' }}>{event.title}</span>
+                        <span className="event-date" style={{ color: '#666', marginLeft: '10px' }}>{event.date}</span>
+                        <span className="event-time" style={{ color: '#666', marginLeft: '20px' }}>{event.time}</span>
+                    </li>
+                ))}
+            </ul>
+ 
             </div>
 
-            <div className="calendar">
-                <h2 className='title'>Calendar</h2>
-                <Calendar onChange={handleDateChange} value={selectedDate} className="custom-calendar"/>
-                <div className="events-for-date">
-                    <div className='row'>
-                        <h3 style={{padding:10}}>Events for {selectedDate.toDateString()}</h3>
-                        <i className="fas fa-plus" onClick={handlePlus}>+</i>
-                    </div>
-                    <ul>
-                        {filteredEvents.map((event) => (
-                            <li key={event.id} className='list'>
-                                {event.title} - {event.desc}
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            </div>
-
-            {showAddEventForm && (
-                <div className="add-event-form"> 
-                    <p className='title' style={{fontSize:16}}>{selectedDate.toDateString()}</p>
-                        <label>
-                            Event Title:
-                            <input type="text" value={eventTitle} onChange={handleEventTitleChange} />
-                        </label>
-                        <label>
-                            Event Description:
-                            <input type="text" value={eventDesc} onChange={handleEventDescChange} />
-                        </label>
-                        <button type="submit" onClick={submit}>Submit</button>
-                        <button type="button" onClick={handleClose}>Close</button>
-                   
+            {/* Modal for adding events */}
+            {showAddEventModal && (
+                <div className="add-event-form">
+                    <p className='title' style={{ fontSize: 16 }}>{selectedDate.toDateString()}</p>
+                    <label>
+                        Event Title
+                        <input type="text" value={eventTitle} onChange={handleEventTitleChange} />
+                    </label>
+                    <DateTimePicker selectedDate={selectedDate} setSelectedDate={setSelectedDate} selectedTime={selectedTime} setSelectedTime={setSelectedTime} />
+                    <button type="submit" onClick={submit}>Submit</button>
+                    <button type="button" onClick={handleClose}>Close</button>
                 </div>
             )}
         </div>
