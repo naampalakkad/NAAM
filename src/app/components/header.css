@@ -22,12 +22,13 @@
   top: 0;
   left: 0;
   width: 100%;
+  min-height: 10vh;
   z-index: 1000;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  color: white;
+  color: rgb(0, 105, 88);
   padding: 10px;
 }
 #logo {
