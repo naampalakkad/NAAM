@@ -115,7 +115,6 @@ export async function getpostsfromdb(){
   return get(userRef)
     .then((snapshot) => {
       if (snapshot.exists()) {
-        console.log("Document data:", snapshot.val());
         return snapshot.val();
       } else {
         console.log("No data available");
@@ -129,12 +128,10 @@ export async function getpostsfromdb(){
 }
 
   export async function getdatafromdb(location){
-    console.log("Fetching from Firebase. Location",location);
     const userRef = ref(db, location);
     return get(userRef)
       .then((snapshot) => {
         if (snapshot.exists()) {
-          console.log("Document data:", snapshot.val());
           return snapshot.val();
         } else {
           console.log("No data available");
