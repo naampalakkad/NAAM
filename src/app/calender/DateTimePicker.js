@@ -15,12 +15,12 @@ const DateTimePicker = ({ selectedDate, setSelectedDate, selectedTime, setSelect
     return (
         <div>
             <div>
-                <label>Date:</label>
+                <label>Date</label>
                 <input type="date" value={selectedDate.toISOString().split('T')[0]} onChange={handleDateChange} />
                 
             </div>
             <div>
-                <label>Time:</label>
+                <label>Time</label>
                 <input type="time" value={selectedTime} onChange={handleTimeChange} /> 
             </div>
         </div>

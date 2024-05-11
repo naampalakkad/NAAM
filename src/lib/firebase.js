@@ -80,7 +80,7 @@ if (auth.currentUser) {
 }
  
 
-export  function eventSave(data){
+export default function eventSave(data){
   if (auth.currentUser) {
         let dataRef = ref(db, "events/" + data.timestamp);
         set(dataRef, data)
@@ -93,9 +93,25 @@ export  function eventSave(data){
     }
   }
 
-  export function eventtsave(){
-    console.log(newEvent, "From firebase");
-  }
+  export async function fetchEventsFromDB() {
+    const eventsRef = ref(db, 'events');
+    try {
+        const snapshot = await get(eventsRef);
+        if (snapshot.exists()) {
+            const eventData = snapshot.val();
+            return Object.keys(eventData).map(key => ({
+                ...eventData[key],
+                id: key
+            }));
+        } else {
+            console.log("No events available");
+            return [];
+        }
+    } catch (error) {
+        console.error("Error fetching events:", error);
+        throw error;
+    }
+}
 
 export async function getpostsfromdb(){
   const userRef = ref(db, "posts");
