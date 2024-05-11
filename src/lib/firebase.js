@@ -1,8 +1,3 @@
-// Import the functions you need from the SDKs you need
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 'use client'
 
 import { initializeApp } from "firebase/app";
@@ -162,4 +157,21 @@ export async function getpostsfromdb(){
         resurls.push(url);
     }
     return resurls;
+  }
+
+  export async function getuserdetailfromdb(uid){
+    const userRef = ref(db, "users/" + uid);
+    return get(userRef)
+     .then((snapshot) => {
+        if (snapshot.exists()) {
+          return snapshot.val();
+        } else {
+          console.log("No data available");
+          return null;
+        }
+      })
+     .catch((error) => {
+        console.error("Error getting document: ", error);
+        throw error; // If you want to handle this error in the calling function
+      });
   }
