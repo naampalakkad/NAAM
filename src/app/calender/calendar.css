@@ -116,7 +116,7 @@
     color: white;
     padding: 10px;
     border-radius:5%;
-    margin-top: 10%;
+    margin-top: 5%;
     margin-bottom: 10px;
   }
   .event-list {
@@ -161,5 +161,18 @@
 .card{ 
   padding: 0%;
 }
-
-  
+.sidebar {
+  flex: 1;
+  border-color: transparent;
+  padding: 10px;
+  border-width: 1px;
+  box-shadow: 5px 5px 5px rgba(14, 33, 140, 0.5);
+  border-top: none; 
+}
+.bar{
+  flex: '0 0 calc(75vw)';
+  padding: '0vh';
+  margin: 1rem; 
+  border-width: 1px;  
+  border-color: #aab0ae;   
+} 

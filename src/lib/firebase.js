@@ -80,8 +80,10 @@ if (auth.currentUser) {
 }
  
 
-export default function eventSave(data){
+export function eventSave(data){
   if (auth.currentUser) {
+        data.userId = auth.currentUser.uid;
+        data.userName = auth.currentUser.displayName;
         let dataRef = ref(db, "events/" + data.timestamp);
         set(dataRef, data)
             .then(() => {

@@ -93,7 +93,7 @@ export default function CalendarComponent() {
     
     return (
         <div style={{paddingTop:"10vh", display: 'flex'  }}>
-            <div style={{ flex: '0 0 calc(75vw)', padding: '0vh', margin: '1rem' }}>
+            <div className='bar'>
                 <Card className='card'>
                 <FullCalendar
                     ref={calendarRef}
@@ -113,7 +113,7 @@ export default function CalendarComponent() {
                 </Card>
                 
             </div>
-            <div style={{ flex: '1',   }}>
+            <div  className='sidebar'>
                  
                     <button onClick={handleAddEvent} className='addbutton'>Add Event</button>
                     <h1 style={{ textAlign: 'center', fontWeight: 'bold', color: 'rgb(5, 5, 68)' }}>Upcoming Events</h1>
