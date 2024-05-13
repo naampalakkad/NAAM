@@ -1,13 +1,13 @@
 .gallerypanel{
     margin-bottom: 2vh;
     padding: 10px 50px;
-    margin-top: 10vh;
+    padding-top: 11vh;
 }
 
 .quote-container {
     width: 80vw;
     overflow: hidden;
-    position: relative;
+    margin: 12px;
 }
 
 .quotetext{

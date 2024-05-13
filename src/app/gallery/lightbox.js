@@ -5,13 +5,14 @@ import Slideshow from "yet-another-react-lightbox/plugins/slideshow";
 import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails";
 import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import "yet-another-react-lightbox/plugins/thumbnails.css";
+import "yet-another-react-lightbox/styles.css";
 
-const LightboxComponent = ({ images, isOpen, currentIndex, onClose }) => {
+const LightboxComponent = ({ images, isOpen, ind, onClose }) => {
   return (
     <Lightbox
       slides={images}
       open={isOpen}
-      index={currentIndex} // Set initial index if provided
+      index={ind} // Set initial index if provided
       close={onClose}
       plugins={[Fullscreen, Slideshow, Thumbnails, Zoom]}
     />

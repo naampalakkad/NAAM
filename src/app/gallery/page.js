@@ -4,7 +4,6 @@ import { SimpleGrid, Skeleton } from "@chakra-ui/react";
 import PhotoAlbum from "react-photo-album";
 import { getGalleryImageUrls } from '../homepage/data';
 import './gallery.css';
-import "yet-another-react-lightbox/styles.css";
 import LightboxComponent from './lightbox'; 
 import Quotebox from './quotesbox';
 
@@ -30,7 +29,7 @@ export default function GalleryPage() {
   }, []);
 
   const renderImages = () => (
-    <SimpleGrid columns={1} className="gallerypanel">
+    <SimpleGrid columns={1}>
       <PhotoAlbum
         layout="rows"
         photos={imgurls}
@@ -62,10 +61,10 @@ export default function GalleryPage() {
       <Quotebox />
       {renderContent()}
       <LightboxComponent
-        images={imgurls} // Pass images to Lightbox component
-        isOpen={selectedIndex >= 0} // Control Lightbox visibility
-        currentIndex={selectedIndex} // Set initial index (if needed)
-        onClose={() => setSelectedIndex(-1)} // Handler for Lightbox closing
+        images={imgurls}
+        isOpen={selectedIndex >= 0} 
+        ind={selectedIndex} 
+        onClose={() => setSelectedIndex(-1)} 
       />
     </div>
   );
