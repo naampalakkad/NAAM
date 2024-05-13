@@ -2,14 +2,14 @@
 import React, { useState, useEffect } from 'react';
 import { Button, SimpleGrid } from "@chakra-ui/react";
 import PhotoAlbum from "react-photo-album";
-import {getGalleryImageUrls, photogalleryurl} from './data';
+import {getGalleryImageUrls} from './data';
 import './gallerypanel.css';
 
 export default function Gallerypanel() {
     const [imgurls, setImgUrls] = useState([]);
 
     const goToLink = () => {
-        window.location.href = photogalleryurl;
+        window.location.href = "gallery";
     };
 
     useEffect(() => {
