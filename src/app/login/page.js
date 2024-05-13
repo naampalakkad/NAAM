@@ -8,17 +8,17 @@ import {
   uploadImageToStorage,
 } from "@/lib/firebase";
 import './login.css';
-import { Box, Heading, Image, Button,Switch, Text, Input, Card } from "@chakra-ui/react";
+import { Box, Heading, Image, Button, Switch, Text, Input, Card } from "@chakra-ui/react";
 import { onAuthStateChanged } from "firebase/auth";
 import { personaldetailsdata } from "../homepage/data";
 export default function signin() {
   const [user, setUser] = useState(null);
   const [profileImage, setProfileImage] = useState(null);
   let personaldetails = personaldetailsdata
-  const [permission, setPermission] = useState(false);
+  const [phonepermission, setPermission] = useState(false);
 
   const handlePermissionChange = () => {
-    setPermission(!permission);
+    setPermission(!phonepermission);
   };
 
   const handleSave = () => {
@@ -59,7 +59,7 @@ export default function signin() {
   function updatefirebaseuserdata() {
     let userdetails = {}
     userdetails["photo"] = profileImage;
-    console.log(profileImage);
+    userdetails["phoneperm"]= phonepermission;
     personaldetails.forEach(detail => {
       userdetails[detail.name] = document.getElementById("profile" + detail.name).value;
     });
@@ -73,17 +73,15 @@ export default function signin() {
     try {
       const imageUrl = await uploadImageToStorage(user.uid, file);
       setProfileImage(imageUrl);
-      updatefirebaseuserdata();
-
     } catch (error) {
       console.error("Error uploading image:", error);
-
+      alert("Error uploading image");
     }
   };
 
-  useEffect(() => {
-    console.log(`profile Image URL after update: ${profileImage}`);
-  }, [profileImage]);
+  // useEffect(() => {
+  //   console.log(`profile Image URL after update: ${profileImage}`);
+  // }, [profileImage]);
   useEffect(() => {
     if (profileImage) {
       updatefirebaseuserdata();
@@ -127,17 +125,12 @@ export default function signin() {
               />
             </div>
           ))}
-          <Card p={6} shadow="md" borderWidth="1px">
-            <Heading as="h4" size="sm" mb={4}>
-              Phone Number Permission
+          <Card direction={"row"} width={"90%"} align='center'>
+            <Heading as='h6' size='xs' >
+              Share your contact ? &nbsp; &nbsp;&nbsp; 
             </Heading>
-            <Text mb={6}>
-              Do you give permission for your phone number to be displayed on the website for others to contact you?
-            </Text>
-            <Box mb={2} display="flex" alignItems="center">
-              <Switch isChecked={permission} onChange={handlePermissionChange} mr={2} />
-              <Text>{permission ? "Yes, display my phone number" : "No, do not display my phone number"}</Text>
-            </Box>
+            <Switch isChecked={phonepermission} onChange={handlePermissionChange} mr={2} />
+            <Text>{phonepermission ? "Yes, display my phone number for others to see." : "No, I don't want to be contacted through phone."}</Text>
           </Card>
           <Button Button mt={4} colorScheme="blue" onClick={updatefirebaseuserdata}>Save</Button>
         </Box>
