@@ -8,27 +8,36 @@ import {
   uploadImageToStorage,
 } from "@/lib/firebase";
 import './login.css';
-import { Box, Heading, Image, Button, Input, Card } from "@chakra-ui/react";
+import { Box, Heading, Image, Button,Switch, Text, Input, Card } from "@chakra-ui/react";
 import { onAuthStateChanged } from "firebase/auth";
 import { personaldetailsdata } from "../homepage/data";
 export default function signin() {
   const [user, setUser] = useState(null);
   const [profileImage, setProfileImage] = useState(null);
   let personaldetails = personaldetailsdata
+  const [permission, setPermission] = useState(false);
+
+  const handlePermissionChange = () => {
+    setPermission(!permission);
+  };
+
+  const handleSave = () => {
+    onUpdate(permission);
+  };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         setUser(user);
         const userdata = await getuserdetailfromdb(user.uid);
-        setdatacolumns(userdata); 
+        setdatacolumns(userdata);
 
         const imageUrl = userdata.photo;
         console.log("profile pic url", imageUrl);
         setProfileImage(imageUrl);
       } else {
         setUser(null);
-        setProfileImage(null); 
+        setProfileImage(null);
       }
     });
 
@@ -63,12 +72,12 @@ export default function signin() {
 
     try {
       const imageUrl = await uploadImageToStorage(user.uid, file);
-      setProfileImage(imageUrl); 
-      updatefirebaseuserdata(); 
+      setProfileImage(imageUrl);
+      updatefirebaseuserdata();
 
     } catch (error) {
       console.error("Error uploading image:", error);
-      
+
     }
   };
 
@@ -118,7 +127,19 @@ export default function signin() {
               />
             </div>
           ))}
-          <Button onClick={updatefirebaseuserdata}>Save</Button>
+          <Card p={6} shadow="md" borderWidth="1px">
+            <Heading as="h4" size="sm" mb={4}>
+              Phone Number Permission
+            </Heading>
+            <Text mb={6}>
+              Do you give permission for your phone number to be displayed on the website for others to contact you?
+            </Text>
+            <Box mb={2} display="flex" alignItems="center">
+              <Switch isChecked={permission} onChange={handlePermissionChange} mr={2} />
+              <Text>{permission ? "Yes, display my phone number" : "No, do not display my phone number"}</Text>
+            </Box>
+          </Card>
+          <Button Button mt={4} colorScheme="blue" onClick={updatefirebaseuserdata}>Save</Button>
         </Box>
       </div>
     ) : (
