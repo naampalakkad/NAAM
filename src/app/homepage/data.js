@@ -193,12 +193,6 @@ export let personaldetailsdata = [
         type: "Number"
     },
     {
-        prop: "About",
-        name: "about",
-        default: "Enter about yourself",
-        type: "Text"
-    },
-    {
         prop: "LinkedIn",
         name: "linkedIn",
         default: "Enter your LinkedIn Profile",
