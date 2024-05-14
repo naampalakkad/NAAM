@@ -28,7 +28,7 @@ export default function Carousal() {
 
   return (
     <div className='carousalbox' >
-      <motion.img className='carousalimg' src={currentImg} key={currentImg} initial={{ opacity: 0, y: -100 }} animate={{ opacity: 0.5, y: 0 }} transition={{ duration: 1 }} />
+      <motion.img className='carousalimg' alt='carousal image' src={currentImg} key={currentImg} initial={{ opacity: 0, y: -100 }} animate={{ opacity: 0.5, y: 0 }} transition={{ duration: 1 }} />
       <div className='ctextbox'>
         <div className='heroText'>NAAM<br /> The Navodayan Family</div>
         <TypeAnimation

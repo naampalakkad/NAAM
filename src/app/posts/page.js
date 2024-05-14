@@ -1,12 +1,14 @@
 'use client'
 import { useState, useEffect } from 'react';
-import { Box, Heading } from "@chakra-ui/react";
+import { Box, Heading, Button } from "@chakra-ui/react";
 import { getpostsfromdb } from "@/lib/firebase";
 import { BlogPost } from './blogpage';
+import Link from 'next/link';
 
 const Blog = () => {
     const [posts, setPosts] = useState([]);
     const [filter, setFilter] = useState("all"); 
+
     useEffect(() => {
         const fetchPosts = async () => {
             const postsFromDb = await getpostsfromdb();
@@ -29,19 +31,30 @@ const Blog = () => {
                 px={['100px', '150px']}
                 mb="50px"
             >
-                <Heading mb="30px">NEWS AND UPDATES</Heading>
-                <Box mb="20px" width={['100%', 'auto']}>
-                <select
-                    onChange={(e) => setFilter(e.target.value)}
-                    style={{ width: '200px', padding: '10px' }}
+                <Box
+                    display="flex"
+                    flexDirection={['column', 'row']}
+                    alignItems={['start', 'center']}
+                    justifyContent={['center', 'space-between']}
+                    width="100%"
+                    mb="20px"
                 >
-                    <option value="all">All</option>
-                    <option value="EVENT">Events</option>
-                    <option value="JOB">Job Offers</option>
-                    <option value="anoun">Announcements</option>
-                    <option value="BLOG">Blog</option>
-                </select>
-
+                    <Box mb={['20px', '0px']} width={['100%', 'auto']}>
+                        <Heading mb="30px">NEWS AND UPDATES</Heading>
+                        <select
+                            onChange={(e) => setFilter(e.target.value)}
+                            style={{ width: '200px', padding: '10px' }}
+                        >
+                            <option value="all">All</option>
+                            <option value="EVENT">Events</option>
+                            <option value="JOB">Job Offers</option>
+                            <option value="anoun">Announcements</option>
+                            <option value="BLOG">Blog</option>
+                        </select>
+                    </Box>
+                    <Link href="/posts/addnew">
+                        <Button colorScheme="blue" style={{ backgroundColor: '#161a30', fontSize: 'medium' }}>Add Post</Button>
+                    </Link>
                 </Box>
                 <Box
                     display="grid"

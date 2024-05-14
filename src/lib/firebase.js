@@ -1,13 +1,8 @@
-// Import the functions you need from the SDKs you need
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 'use client'
 
 import { initializeApp } from "firebase/app";
 import {getAuth,  GoogleAuthProvider, signInWithPopup} from "firebase/auth";
-import { getStorage ,ref as sref, listAll, getDownloadURL} from "firebase/storage";
+import { getStorage ,ref as sref, uploadBytes, listAll, getDownloadURL } from "firebase/storage";
 import {getDatabase,set,get,ref} from "firebase/database"
 
 const firebaseConfig = {
@@ -53,7 +48,6 @@ export function signInoutWithGoogle(){
   }
 
   export function savedatatodb(location, data){
-    console.log("Saving to Firebase. Location", location, "Data", data);
     if (auth.currentUser) {
         let dataRef = ref(db, location);
         set(dataRef, data)
@@ -78,13 +72,48 @@ if (auth.currentUser) {
           });
   }
 }
+ 
+
+export function eventSave(data){
+  if (auth.currentUser) {
+        data.userId = auth.currentUser.uid;
+        data.userName = auth.currentUser.displayName;
+        let dataRef = ref(db, "events/" + data.timestamp);
+        set(dataRef, data)
+            .then(() => {
+                console.log("event successfully written!");
+            })
+            .catch((error) => {
+                console.error("Error writing event: ", error);
+            });
+    }
+  }
+
+  export async function fetchEventsFromDB() {
+    const eventsRef = ref(db, 'events');
+    try {
+        const snapshot = await get(eventsRef);
+        if (snapshot.exists()) {
+            const eventData = snapshot.val();
+            return Object.keys(eventData).map(key => ({
+                ...eventData[key],
+                id: key
+            }));
+        } else {
+            console.log("No events available");
+            return [];
+        }
+    } catch (error) {
+        console.error("Error fetching events:", error);
+        throw error;
+    }
+}
 
 export async function getpostsfromdb(){
   const userRef = ref(db, "posts");
   return get(userRef)
     .then((snapshot) => {
       if (snapshot.exists()) {
-        console.log("Document data:", snapshot.val());
         return snapshot.val();
       } else {
         console.log("No data available");
@@ -98,12 +127,10 @@ export async function getpostsfromdb(){
 }
 
   export async function getdatafromdb(location){
-    console.log("Fetching from Firebase. Location",location);
     const userRef = ref(db, location);
     return get(userRef)
       .then((snapshot) => {
         if (snapshot.exists()) {
-          console.log("Document data:", snapshot.val());
           return snapshot.val();
         } else {
           console.log("No data available");
@@ -126,4 +153,50 @@ export async function getpostsfromdb(){
         resurls.push(url);
     }
     return resurls;
+  }
+
+  export async function getuserdetailfromdb(uid){
+    const userRef = ref(db, "users/" + uid);
+    return get(userRef)
+     .then((snapshot) => {
+        if (snapshot.exists()) {
+          return snapshot.val();
+        } else {
+          console.log("No data available");
+          return null;
+        }
+      })
+     .catch((error) => {
+        console.error("Error getting document: ", error);
+        throw error; // If you want to handle this error in the calling function
+      });
+  }
+
+  export async function uploadImageToStorage(userId, imageFile) {
+    const storageRef = sref(storage, `profile_images/${userId}/${imageFile.name}`); // Create reference with user ID and filename
+    try {
+      await uploadBytes(storageRef, imageFile); // Upload the image file
+      const imageUrl = await getDownloadURL(storageRef); // Get download URL for the uploaded image
+      return imageUrl;
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      throw error; // Re-throw the error for handling in the `handleImageChange` function
+    }
+  }
+
+  export async function getImageUrlFromStorage(userId) {
+    const storageRef = sref(storage, `profile_images/${userId}`); // Create reference with user ID
+  
+    try {
+      const imageUrl = await getDownloadURL(storageRef); // Get download URL for the image file (if it exists)
+      return imageUrl;
+    } catch (error) {
+      if (error.code === 'storage/object-not-found') {
+        // Handle case where image doesn't exist
+        return null;  // Return null to indicate no image
+      } else {
+        console.error("Error getting image URL:", error);
+        throw error; // Re-throw the error for handling in the calling code (e.g., display notification)
+      }
+    }
   }

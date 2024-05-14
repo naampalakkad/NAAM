@@ -1,16 +1,41 @@
-.container{
-    background-color: rgb(204, 204, 216);
+.container {
+    background-color: rgb(233, 242, 250);
     height: 100%;
-    width: 100%;
+    width: 80%; 
     padding: 50px;
+    margin: 50px auto; 
+    border: 2px double black; 
 }
-h1{
+
+h1 {
     color: rgb(5, 5, 68);
     font-size: 50px;
     align-items: center;
     text-align: center;
     padding-bottom: 50px;
 }
-.editor{
-background-color: rgb(218, 223, 228);
+
+.editor {
+    background-color:white;
+    border: 2px solid black; 
+}
+
+input[type='text'],
+input[type='file'],
+select,
+textarea {
+    color: rgb(7, 7, 7);
+    background-color: rgb(252, 251, 251); 
+    border: 2px solid black; 
+    border-radius: 5px; 
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+input[type='text']::placeholder,
+input[type='file']::placeholder,
+select::placeholder,
+textarea::placeholder {
+    color: white; 
+    opacity: 0.5; 
 }
