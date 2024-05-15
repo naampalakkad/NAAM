@@ -108,12 +108,11 @@ a:hover {
   justify-content: center;
   width: 100%;
   height: 100%;
-  /* background-color: var(--bgcolor); */
   color: var(--txt_col);
 }
 
 #contentbody{
-  min-height: 75vh;
+  min-height: 90vh;
 }
 
 .cardcontainer {

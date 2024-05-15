@@ -1,30 +1,9 @@
-/* #header {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  z-index: 1000;
-  padding: 5px;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  background-color: rgb(0, 19, 59);
-  color: #ffffff;
-  font-weight: bold;
-  user-select: none;
-} */
-
-/* #header_space {
-  z-index: 0;
-  height: 10vh;
-  background-color: transparent;
-} */
 #header {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  min-height: 10vh;
+  height: 10vh;
   z-index: 1000;
   display: flex;
   flex-direction: row;
