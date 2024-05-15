@@ -4,6 +4,7 @@ import { initializeApp } from "firebase/app";
 import {getAuth,  GoogleAuthProvider, signInWithPopup} from "firebase/auth";
 import { getStorage ,ref as sref, uploadBytes,  getDownloadURL ,listAll, deleteObject } from "firebase/storage";
 import {getDatabase,set,get,ref} from "firebase/database"
+import imageCompression from 'image-compressor.js';
 
 const firebaseConfig = {
   apiKey: "AIzaSyC97WJwdO5012NyYyRMfjZYUehk6kTZTQI",
@@ -127,7 +128,7 @@ export async function getpostsfromdb(){
       })
       .catch((error) => {
         console.error("Error getting document: ", error);
-        throw error; // If you want to handle this error in the calling function
+        throw error; 
       });
   }
 
@@ -156,9 +157,11 @@ export async function getpostsfromdb(){
       })
      .catch((error) => {
         console.error("Error getting document: ", error);
-        throw error; // If you want to handle this error in the calling function
+        throw error;
       });
   }
+
+  import ImageCompressor from 'image-compressor.js';
 
   export async function uploadImageToStorage(userId, imageFile) {
     const folderPath = `profile_images/${userId}`;
@@ -167,30 +170,39 @@ export async function getpostsfromdb(){
     const deletePromises = files.items.map((fileRef) => deleteObject(fileRef));
     await Promise.all(deletePromises);
   
-    const storageRef = sref(storage, `profile_images/${userId}/${imageFile.name}`); 
     try {
-      await uploadBytes(storageRef, imageFile); 
+      const compressor = new ImageCompressor();
+      const compressedImage = await compressor.compress(imageFile, {
+        maxWidth: 720, 
+        maxHeight: 540, 
+        quality: 0.8, 
+        mimeType: 'image/webp', 
+      });
+  
+      const storageRef = sref(storage, `profile_images/${userId}/${compressedImage.name}`);
+      await uploadBytes(storageRef, compressedImage);
       const imageUrl = await getDownloadURL(storageRef);
       return imageUrl;
     } catch (error) {
       console.error("Error uploading image:", error);
-      throw error; 
+      throw error;
     }
   }
+  
+  
 
   export async function getImageUrlFromStorage(userId) {
-    const storageRef = sref(storage, `profile_images/${userId}`); // Create reference with user ID
+    const storageRef = sref(storage, `profile_images/${userId}`); 
   
     try {
-      const imageUrl = await getDownloadURL(storageRef); // Get download URL for the image file (if it exists)
+      const imageUrl = await getDownloadURL(storageRef); 
       return imageUrl;
     } catch (error) {
       if (error.code === 'storage/object-not-found') {
-        // Handle case where image doesn't exist
-        return null;  // Return null to indicate no image
+        return null;  
       } else {
         console.error("Error getting image URL:", error);
-        throw error; // Re-throw the error for handling in the calling code (e.g., display notification)
+        throw error; 
       }
     }
   }
