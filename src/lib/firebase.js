@@ -2,7 +2,7 @@
 
 import { initializeApp } from "firebase/app";
 import {getAuth,  GoogleAuthProvider, signInWithPopup} from "firebase/auth";
-import { getStorage ,ref as sref, uploadBytes, listAll, getDownloadURL } from "firebase/storage";
+import { getStorage ,ref as sref, uploadBytes,  getDownloadURL ,listAll, deleteObject } from "firebase/storage";
 import {getDatabase,set,get,ref} from "firebase/database"
 
 const firebaseConfig = {
@@ -173,14 +173,20 @@ export async function getpostsfromdb(){
   }
 
   export async function uploadImageToStorage(userId, imageFile) {
-    const storageRef = sref(storage, `profile_images/${userId}/${imageFile.name}`); // Create reference with user ID and filename
+    const folderPath = `profile_images/${userId}`;
+    const folderRef = sref(storage, folderPath);
+    const files = await listAll(folderRef);
+    const deletePromises = files.items.map((fileRef) => deleteObject(fileRef));
+    await Promise.all(deletePromises);
+  
+    const storageRef = sref(storage, `profile_images/${userId}/${imageFile.name}`); 
     try {
-      await uploadBytes(storageRef, imageFile); // Upload the image file
-      const imageUrl = await getDownloadURL(storageRef); // Get download URL for the uploaded image
+      await uploadBytes(storageRef, imageFile); 
+      const imageUrl = await getDownloadURL(storageRef);
       return imageUrl;
     } catch (error) {
       console.error("Error uploading image:", error);
-      throw error; // Re-throw the error for handling in the `handleImageChange` function
+      throw error; 
     }
   }
 
