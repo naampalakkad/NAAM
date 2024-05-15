@@ -11,6 +11,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import { personaldetailsdata } from "../homepage/data";
 import SigninBox from "./signin";
 import SignedInBox from "./profilepage";
+import { useToast } from "@chakra-ui/react";
 
 
 
@@ -20,6 +21,8 @@ export default function profilePage() {
   const [profileImage, setProfileImage] = useState(null);
   const [phonepermission, setPermission] = useState(false);
   const [about, setAbout] = useState('');
+  const toast = useToast();
+
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -68,22 +71,63 @@ export default function profilePage() {
       }
     });
     savedatatodb("users/" + user.uid, userdetails);
-    alert("Updated your profile information");
+    toast({
+      title: 'Success',
+      description: " Successfully updated your profile.",
+      status: 'success',
+      duration: 3000,
+      isClosable: true,
+    })
   }
 
   const handleImageChange = async (event) => {
     const file = event.target.files[0];
     console.log("new image: " + file)
     if (!file) return;
-
+  
     try {
+      // Upload the image to storage and get the image URL
       const imageUrl = await uploadImageToStorage(user.uid, file);
+      
+      // Get the existing user details from the Firebase database
+      const existingUserDetails = await getuserdetailfromdb(user.uid);
+      
+      // Merge the existing user details with the new photo URL
+      const updatedUserDetails = {
+        ...existingUserDetails,
+        photo: imageUrl
+      };
+  
+      // Update the user details in the Firebase database
+      await savedatatodb("users/" + user.uid, updatedUserDetails);
+  
+      // Update the profile image state
       setProfileImage(imageUrl);
+  
+      // Show success toast
+      toast({
+        title: "Success",
+        description: "Changed your profile image",
+        status: 'success',
+        duration: 3000,
+        isClosable: true,
+      });
+    
     } catch (error) {
       console.error("Error uploading image:", error);
-      alert("Error uploading image");
+  
+      // Show error toast
+      toast({
+        title: "Error",
+        description: "Couldn't upload image, try again",
+        status: 'error', // Changed status to 'error' to indicate failure
+        duration: 3000,
+        isClosable: true,
+      });
     }
   };
+  
+  
 
   const handlePermissionChange = () => {
     setPermission(!phonepermission);

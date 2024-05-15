@@ -122,7 +122,7 @@ export async function getpostsfromdb(){
     })
     .catch((error) => {
       console.error("Error getting document: ", error);
-      throw error; // If you want to handle this error in the calling function
+      throw error; 
     });
 }
 
