@@ -1,10 +1,8 @@
 'use client'
 import React, { useState, useEffect } from 'react'
-import { Box, Flex, Input, Text, InputLeftElement, InputGroup, Button, Heading, Image, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, useDisclosure } from "@chakra-ui/react";
+import { Box, Flex, Input, Text,Button, Heading, Image, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, useDisclosure } from "@chakra-ui/react";
 import { getdatafromdb } from "@/lib/firebase"
 import { SocialIcon } from 'react-social-icons/component'
-import { IconButton } from '@chakra-ui/react'
-import { SearchIcon } from '@chakra-ui/icons'
 import "./alumni.css"
 import 'react-social-icons/linkedin'
 import 'react-social-icons/facebook'
@@ -23,7 +21,6 @@ const SearchBox = ({ searchTerm, setSearchTerm }) => {
         margin={5}
         size={"lg"}
       />
-    
   );
 };
 

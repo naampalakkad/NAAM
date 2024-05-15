@@ -68,6 +68,7 @@ export default function profilePage() {
       }
     });
     savedatatodb("users/" + user.uid, userdetails);
+    alert("Updated your profile information");
   }
 
   const handleImageChange = async (event) => {
