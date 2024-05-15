@@ -27,79 +27,71 @@ const SearchBox = ({ searchTerm, setSearchTerm }) => {
   );
 };
 
-const ResultsBox = ({ filteredAlumni, handleMoreClick }) => {
+const SocialIcons = ({ alumni }) => {
+  const socialIconData = [
+    { network: "email", url: `https://mail.google.com/mail/?view=cm&fs=1&to=${alumni.email}` },
+    { network: "whatsapp", url: `https://wa.me/${alumni.number}`, condition: alumni.phoneperm && alumni.phoneperm === true && alumni.number },
+    { network: "linkedin", url: `https://www.linkedin.com/in/${alumni.linkedIn}`, condition: alumni.linkedIn },
+    { network: "facebook", url: `https://www.facebook.com/${alumni.facebook}`, condition: alumni.facebook }
+  ];
+
   return (
-    <SimpleGrid minChildWidth="200px" gridAutoColumns="200px" spacing="10px">
-    {filteredAlumni.map((alumni, index) => (
-      <Box key={index}  direction="column" align="center" margin={3} padding={1} overflow='hidden' variant='filled'>
-       <Card key={index} direction={"column"} align={"center"} margin={3} padding={1} overflow='hidden' variant='filled'>
-          <Image src={alumni.photo} alt={alumni.name} className="alumniimage" />
-          <Heading align={"Center"} as={"h5"} size={"md"} margin={1}>
-            {alumni.name}
-          </Heading >
-          <Spacer />
-          <Flex direction={"column"} width={"90%"} align={"left"} padding={2} >
-            <Text >
-              <span className="detailName">Batch: </span>
-              <span className="detailValue">{alumni.batch}</span>
-            </Text>
-            {alumni.phoneperm && alumni.phoneperm === true && alumni.number ? (
-              <Text>
-                <span className="detailName">Phone: </span>
-                <span className="detailValue">{alumni.number}</span>
-              </Text>
-            ) : (
-              <Text>
-                <span className="detailName">Phone: </span>
-                <span className="detailValue">Not Available</span>
-              </Text>
-            )}
+    <Flex justify="center" align="center" gap='2'>
+      {socialIconData.map(({ network, url, condition }, index) => (
+        condition && (
+          <a key={index} href={url} target="_blank" rel="noopener noreferrer">
+            <SocialIcon
+              padding={10}
+              network={network}
+              style={{ height: 25, width: 25 }}
+              href={url}
+              as="div"
+            />
+          </a>
+        )
+      ))}
+    </Flex>
+  );
+};
 
-          </Flex>
-          <Spacer />
-          <Flex justify="space-evenly" align="center" gap='2'>
-            {alumni.email && (
-              <SocialIcon
-                padding={10}
-                network="email"
-                style={{ height: 25, width: 25 }}
-                href={`https://mail.google.com/mail/?view=cm&fs=1&to=${alumni.email}`} />
-            )}
-            {alumni.phoneperm && alumni.phoneperm === true && alumni.number && (
-              <SocialIcon
-                padding={10}
-                network="whatsapp"
-                style={{ height: 25, width: 25 }}
-                href={`https://wa.me/${alumni.number}`}
-              />
-            )}
-            {alumni.linkedIn && (
-              <SocialIcon
-                padding={10}
-                network="linkedin"
-                style={{ height: 25, width: 25 }}
-                href={`https://www.linkedin.com/in/${alumni.linkedIn}`}
-              />
-            )}
-            {alumni.facebook && (
-              <SocialIcon
-                padding={10}
-                network="facebook"
-                style={{ height: 25, width: 25 }}
-                href={`https://www.facebook.com/${alumni.facebook}`}
-              />
-            )}
-            <Spacer />
-          </Flex>
+const ResultsBox = ({ filteredAlumni, handleMoreClick }) => {
 
-          <Spacer />
-          <CardFooter padding={1}>
-            <Button colorScheme='blue' onClick={() => handleMoreClick(alumni)}>More</Button>
-          </CardFooter>
-        </Card>
-      </Box>
-    ))}
-  </SimpleGrid>
+  return (
+<Flex
+  display="flex"
+  flexDirection="row"
+  flexWrap="wrap"
+  justifyContent="space-evenly"
+  alignItems="center"
+  gap="20px"
+  width="100%"
+  margin={"20px"}
+>
+  {filteredAlumni.map((alumni, index) => (
+    <AlumniCard key={index} alumni={alumni} handleMoreClick={handleMoreClick} />
+  ))}
+</Flex>
+  );
+};
+
+const AlumniCard = ({ alumni, handleMoreClick }) => {
+  return (
+    <Box width="300px" borderWidth="1px" borderRadius="lg" overflow="hidden" boxShadow="md" p={4} textAlign="center">
+      <Image src={alumni.photo} alt={alumni.name} className="alumniimage" mx="auto" />
+      <Heading as="h5" size="md" mt={4} mb={2}>
+        {alumni.name}
+      </Heading>
+      <Text fontSize="sm" color="gray.500" mb={2}>
+        Batch: {alumni.batch}
+      </Text>
+      <Text fontSize="sm" color="gray.500" mb={2}>
+        Phone: {alumni.phoneperm && alumni.phoneperm === true && alumni.number ? alumni.number : 'Not Available'}
+      </Text>
+      <SocialIcons alumni={alumni} />
+      <Button colorScheme="blue" mt={2} onClick={() => handleMoreClick(alumni)}>
+        More
+      </Button>
+    </Box>
   );
 };
 
@@ -117,26 +109,26 @@ const NoResultsBox = () => {
 const ModelBox = ({ isOpen, onClose, selectedAlumni }) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-    <ModalOverlay />
-    <ModalContent>
-      <ModalHeader>{selectedAlumni ? selectedAlumni.name : 'Alumni Name'}</ModalHeader>
-      <ModalCloseButton />
-      <ModalBody>
-        {selectedAlumni && (
-          <>
-            <Image src={selectedAlumni.photo} alt={selectedAlumni.name} className="alumniimage" />
-            <Flex direction="column">
-              <Text fontWeight="bold">About:</Text>
-              <Text>{selectedAlumni.about}</Text>
-            </Flex>
-          </>
-        )}
-      </ModalBody>
-      <ModalFooter>
-        <Button colorScheme="blue" onClick={onClose}>Close</Button>
-      </ModalFooter>
-    </ModalContent>
-  </Modal>
+      <ModalOverlay />
+      <ModalContent>
+        <ModalHeader>{selectedAlumni ? selectedAlumni.name : 'Alumni Name'}</ModalHeader>
+        <ModalCloseButton />
+        <ModalBody>
+          {selectedAlumni && (
+            <>
+              <Image src={selectedAlumni.photo} alt={selectedAlumni.name} className="alumniimage" />
+              <Flex direction="column">
+                <Text fontWeight="bold">About:</Text>
+                <Text>{selectedAlumni.about}</Text>
+              </Flex>
+            </>
+          )}
+        </ModalBody>
+        <ModalFooter>
+          <Button colorScheme="blue" onClick={onClose}>Close</Button>
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
   );
 };
 
@@ -173,14 +165,11 @@ export default function alumnilist() {
   return (
     <Box id="contentbox">
       <SearchBox searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-      
-      <Box width="100%" padding={1}>
       {filteredAlumni.length > 0 ? (
         <ResultsBox filteredAlumni={filteredAlumni} handleMoreClick={handleMoreClick} />
       ) : (
         <NoResultsBox />
       )}
-    </Box>
       <ModelBox isOpen={isOpen} onClose={onClose} selectedAlumni={selectedAlumni} />
     </Box>
   );
