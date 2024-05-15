@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from "react";
 import {signInoutWithGoogle} from "@/lib/firebase";
 import { Box, Heading, Textarea, Image, Button, Switch, Text, Input, Card } from "@chakra-ui/react";
 
@@ -9,10 +8,6 @@ function signInWithGoogle() {
 
 
 export default function SignedInBox({ user, about, profileImage, phonepermission, handlePermissionChange, updateFirebaseUserData, handleImageChange, handleAboutChange, personaldetailsdata }) {
-   
-  
-      
-   
     return (
       <div className="cardcontainer">
         <Card className="profilebox">
@@ -22,6 +17,7 @@ export default function SignedInBox({ user, about, profileImage, phonepermission
                 src={profileImage}
                 id="profileimagebox"
                 alt={user.displayName}
+                fallbackSrc='./assets/usericon.webp'
               />
               <span className="upload-icon">Upload</span>
             </label>

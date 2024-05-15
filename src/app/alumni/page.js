@@ -74,7 +74,7 @@ const ResultsBox = ({ filteredAlumni, handleMoreClick }) => {
 const AlumniCard = ({ alumni, handleMoreClick }) => {
   return (
     <Box width="300px" borderWidth="1px" borderRadius="lg" overflow="hidden" boxShadow="md" p={4} textAlign="center">
-      <Image src={alumni.photo} alt={alumni.name} className="alumniimage" mx="auto" />
+      <Image src={alumni.photo} alt={alumni.name} className="alumniimage" mx="auto" fallbackSrc='./assets/usericon.webp'/>
       <Heading as="h5" size="md" mt={4} mb={2}>
         {alumni.name}
       </Heading>
