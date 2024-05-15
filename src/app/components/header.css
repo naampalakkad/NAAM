@@ -1,3 +1,6 @@
+body{
+  overscroll-behavior: none;
+}
 #header {
   position: fixed;
   top: 0;
