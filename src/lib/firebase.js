@@ -24,7 +24,6 @@ export const db = getDatabase(app);
 export function signInoutWithGoogle(){
      if(auth.currentUser){
          auth.signOut();
-         console.log("signed out");
          return null;
      }
      else{
@@ -34,8 +33,6 @@ export function signInoutWithGoogle(){
         const credential = GoogleAuthProvider.credentialFromResult(result);
         const token = credential.accessToken;
         const user = result.user;
-        console.log(user);
-        console.log("signed in");
         return user;
       }).catch((error) => {
         console.log(error,"\n error Code:", error.code,"\n Error Message: ",error.message);
@@ -51,9 +48,6 @@ export function signInoutWithGoogle(){
     if (auth.currentUser) {
         let dataRef = ref(db, location);
         set(dataRef, data)
-            .then(() => {
-                console.log("Document successfully written!");
-            })
             .catch((error) => {
                 console.error("Error writing document: ", error);
             });
@@ -64,9 +58,6 @@ export function saveposttodb(data){
 if (auth.currentUser) {
       let dataRef = ref(db, "posts/" + data.time);
       set(dataRef, data)
-          .then(() => {
-              console.log("post successfully written!");
-          })
           .catch((error) => {
               console.error("Error writing post: ", error);
           });
@@ -80,9 +71,6 @@ export function eventSave(data){
         data.userName = auth.currentUser.displayName;
         let dataRef = ref(db, "events/" + data.timestamp);
         set(dataRef, data)
-            .then(() => {
-                console.log("event successfully written!");
-            })
             .catch((error) => {
                 console.error("Error writing event: ", error);
             });

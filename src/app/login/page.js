@@ -82,29 +82,17 @@ export default function profilePage() {
 
   const handleImageChange = async (event) => {
     const file = event.target.files[0];
-    console.log("new image: " + file)
     if (!file) return;
   
     try {
-      // Upload the image to storage and get the image URL
       const imageUrl = await uploadImageToStorage(user.uid, file);
-      
-      // Get the existing user details from the Firebase database
       const existingUserDetails = await getuserdetailfromdb(user.uid);
-      
-      // Merge the existing user details with the new photo URL
       const updatedUserDetails = {
         ...existingUserDetails,
         photo: imageUrl
       };
-  
-      // Update the user details in the Firebase database
       await savedatatodb("users/" + user.uid, updatedUserDetails);
-  
-      // Update the profile image state
       setProfileImage(imageUrl);
-  
-      // Show success toast
       toast({
         title: "Success",
         description: "Changed your profile image",
@@ -114,13 +102,10 @@ export default function profilePage() {
       });
     
     } catch (error) {
-      console.error("Error uploading image:", error);
-  
-      // Show error toast
       toast({
         title: "Error",
         description: "Couldn't upload image, try again",
-        status: 'error', // Changed status to 'error' to indicate failure
+        status: 'error', 
         duration: 3000,
         isClosable: true,
       });
