@@ -1,8 +1,10 @@
 'use client'
 import React, { useState, useEffect } from 'react'
-import { Box, Flex, Input, Text, CardFooter, Button, Heading, SimpleGrid, Card, Image, Stack, Divider, Spacer, Center, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, useDisclosure } from "@chakra-ui/react";
+import { Box, Flex, Input, Text, InputLeftElement, InputGroup, Button, Heading, Image, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, useDisclosure } from "@chakra-ui/react";
 import { getdatafromdb } from "@/lib/firebase"
 import { SocialIcon } from 'react-social-icons/component'
+import { IconButton } from '@chakra-ui/react'
+import { SearchIcon } from '@chakra-ui/icons'
 import "./alumni.css"
 import 'react-social-icons/linkedin'
 import 'react-social-icons/facebook'
@@ -12,18 +14,16 @@ import 'react-social-icons/email'
 const SearchBox = ({ searchTerm, setSearchTerm }) => {
   return (
     <Input
-      id="search_bar"
-      type="text"
-      variant="filled"
-      placeholder="Search with Name or batch..."
-      value={searchTerm}
-      onChange={(e) => setSearchTerm(e.target.value)}
-      width="70%"
-      padding={2}
-      paddingLeft={4}
-      fontWeight={"bold"}
-      margin={5}
-    />
+        placeholder="Search with Name or batch..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        variant={"filled"}
+        width="70%"
+        padding={4}
+        margin={5}
+        size={"lg"}
+      />
+    
   );
 };
 
@@ -57,20 +57,20 @@ const SocialIcons = ({ alumni }) => {
 const ResultsBox = ({ filteredAlumni, handleMoreClick }) => {
 
   return (
-<Flex
-  display="flex"
-  flexDirection="row"
-  flexWrap="wrap"
-  justifyContent="space-evenly"
-  alignItems="center"
-  gap="20px"
-  width="100%"
-  margin={"20px"}
->
-  {filteredAlumni.map((alumni, index) => (
-    <AlumniCard key={index} alumni={alumni} handleMoreClick={handleMoreClick} />
-  ))}
-</Flex>
+    <Flex
+      display="flex"
+      flexDirection="row"
+      flexWrap="wrap"
+      justifyContent="space-evenly"
+      alignItems="center"
+      gap="20px"
+      width="100%"
+      margin={"20px"}
+    >
+      {filteredAlumni.map((alumni, index) => (
+        <AlumniCard key={index} alumni={alumni} handleMoreClick={handleMoreClick} />
+      ))}
+    </Flex>
   );
 };
 
