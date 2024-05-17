@@ -1,22 +1,38 @@
+'use client'
 import { CardBody, CardHeader, Stack, Badge, Card, Button, SimpleGrid, CardFooter, Image } from '@chakra-ui/react';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './blogspanel.css';
 import { blogposts } from './data';
+import { getpostsfromdb } from "@/lib/firebase";
+const defaultImage = "https://source.unsplash.com/800x600/?letter,d";
 
 
 export default function Blogspanel() {
+    const [posts, setPosts] = useState([]);
+    
+    useEffect(() => {
+        const fetchPosts = async () => {
+            const postsFromDb = await getpostsfromdb();
+            const postsArray = Object.values(postsFromDb);
+            const slicedPosts = postsArray.length >= 4 ? postsArray.slice(0, 4) : postsArray;
+            setPosts(slicedPosts);
+        };
+
+        fetchPosts();
+    }, []);
+
 
 
     return (
         <SimpleGrid minChildWidth='260px'  spacing='10px' className='cardcontainer' >
-            {blogposts.posts.map((post, index) => {
+            {posts.map((post, index) => {
                 return (
                     <Card key={index} minBlockSize={300} variant={"elevated"} size={"sm"} className='card'>
-                        <Image src={post.image} alt={post.title} className='cardImage' />
+                        <Image src={post.thumbnail || defaultImage} alt={post.title} className='cardImage' />
                         <CardHeader className='cardTitle'>{post.title} </CardHeader>
-                        <CardBody className='cardText'>{post.content}</CardBody>
+                        <CardBody className='cardText'>{post.description}</CardBody>
                         <Stack direction='row'>
-                            <Badge colorScheme={"yellow"} > {post.author} </Badge>
+                            <Badge colorScheme={"yellow"} > {post.authorName} </Badge>
                             <Badge colorScheme={"blue"} >{post.type} </Badge>
                         </Stack>
                         <CardFooter >

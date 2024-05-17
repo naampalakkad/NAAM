@@ -1,159 +1,142 @@
-"use client"
-import { React, useEffect, useState } from "react";
-import { auth ,signInoutWithGoogle, savedatatodb,getuserdetailfromdb} from "@/lib/firebase";
+'use client'
+import React, { useEffect, useState } from "react";
+import {
+  auth,
+  savedatatodb,
+  getuserdetailfromdb,
+  uploadImageToStorage,
+} from "@/lib/firebase";
 import './login.css';
-import { Box, Heading, Image, Button, Input, Card } from "@chakra-ui/react";
 import { onAuthStateChanged } from "firebase/auth";
+import { personaldetailsdata } from "../homepage/data";
+import SigninBox from "./signin";
+import SignedInBox from "./profilepage";
+import { useToast } from "@chakra-ui/react";
 
 
-export default function signin() {
-    const [user, setUser] = useState(null);
-    let personaldetails = [
-        {
-            prop: "Name",
-            default: "Enter your name",
-            type: "text"
-        },
-        {
-            prop: "Email",
-            default: "Enter your email",
-            type: "email"
-        },
-        {
-            prop: "batch",
-            default: "Enter your batch,  eg: 25",
-            type: "Number"
-        },
-        {
-            prop: "number",
-            default: "Enter your Mobile number",
-            type: "Number"
-        },
-        {
-            prop: "Facebook Profile",
-            default: "Enter your Facebook Profile",
-            type: "text"
-        },
-        {
-            prop: "occupation",
-            default: "Enter your occupation",
-            type: "text"
-        },
-        {
-            prop: "JNV Roll No",
-            default: "Enter your JNV Roll No",
-            type: "Number"
-        },
-        {
-            prop: "About Me",
-            default: "Enter about yourself",
-            type: "Text"
-        },
-        {
-            prop: "LinkedIn Profile",
-            default: "Enter your LinkedIn Profile",
-            type: "text"
-        }
 
-    ]
-    const [userdata, setUserData] = useState(null)
+export default function profilePage() {
 
-    
+  const [user, setUser] = useState(null);
+  const [profileImage, setProfileImage] = useState(null);
+  const [phonepermission, setPermission] = useState(false);
+  const [about, setAbout] = useState('');
+  const toast = useToast();
 
- 
 
-useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-        if (user) {
-            setUser(user);
-            let udata = getuserdetailfromdb(user.uid);
-            udata.then((data) => {
-                setdatacolumns(data);
-            });
-        } else {
-            setUser(null);
-        }
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        setUser(user);
+        setProfileImage(user.photoURL);
+        const userdata = await getuserdetailfromdb(user.uid);
+        setdatacolumns(userdata);
+      } else {
+        setUser(null);
+      }
     });
-    return () => unsubscribe;
-}, [auth]);
 
-  function setdatacolumns(userdata){
-    document.querySelector(".detaillist:nth-child(1) input").value = userdata.name;
-    document.querySelector(".detaillist:nth-child(2) input").value = userdata.email;
-    document.querySelector(".detaillist:nth-child(3) input").value = userdata.batch;
-    document.querySelector(".detaillist:nth-child(4) input").value = userdata.number;
-    document.querySelector(".detaillist:nth-child(5) input").value = userdata.facebook;
-    document.querySelector(".detaillist:nth-child(6) input").value = userdata.occupation;
-    document.querySelector(".detaillist:nth-child(7) input").value = userdata.rollno;
-    document.querySelector(".detaillist:nth-child(8) input").value = userdata.about;
-    document.querySelector(".detaillist:nth-child(9) input").value = userdata.linkedIn;
+    return () => unsubscribe();
+  }, []);
+
+  function setdatacolumns(userdata) {
+    if (!userdata) {
+      console.error(' no userdata provided');
+      return;
+    }
+    setProfileImage(userdata.photo);
+    setPermission(userdata.phoneperm);
+    setAbout(userdata.about);
+
+    for (const { name, type } of personaldetailsdata) {
+      const input = document.getElementById(`profile${name}`);
+      if ((input) && userdata[name]) {
+        input.value = userdata[name] ? userdata[name] : null;
+        input.type = type;
+      } else {
+        console.warn(`No detaillist input found with ID: profile${name}`);
+      }
+    }
   }
 
-    function updatefirebaseuserdata() {
-        console.log("updating user data");
-        let name = document.querySelector(".detaillist:nth-child(1) input").value;
-        let email = document.querySelector(".detaillist:nth-child(2) input").value;
-        let batch = document.querySelector(".detaillist:nth-child(3) input").value;
-        let number = document.querySelector(".detaillist:nth-child(4) input").value;
-        let facebook = document.querySelector(".detaillist:nth-child(5) input").value;
-        let occupation = document.querySelector(".detaillist:nth-child(6) input").value;
-        let rollno = document.querySelector(".detaillist:nth-child(7) input").value;
-        let about = document.querySelector(".detaillist:nth-child(8) input").value;
-        let linkedIn = document.querySelector(".detaillist:nth-child(9) input").value;
+  function updateFirebaseUserData() {
+    let userdetails = {}
+    userdetails["photo"] = profileImage;
+    userdetails["phoneperm"] = phonepermission;
+    userdetails["about"] = about;
+    personaldetailsdata.forEach(detail => {
+      const input = document.getElementById("profile" + detail.name);
+      if ((input) && (input.value)) {
+        userdetails[detail.name] = input.value;
+      }
+    });
+    savedatatodb("users/" + user.uid, userdetails);
+    toast({
+      title: 'Success',
+      description: " Successfully updated your profile.",
+      status: 'success',
+      duration: 3000,
+      isClosable: true,
+    })
+  }
 
-        let photo = user.photoURL;
-        let userdetails = {
-            name: name,
-            email: email,
-            batch: batch,
-            number: number,
-            facebook: facebook,
-            occupation: occupation,
-            rollno: rollno,
-            photo: photo,
-            about: about,
-            linkedIn: linkedIn
-
-        }
-       savedatatodb("users/"+user.uid,userdetails);
+  const handleImageChange = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+  
+    try {
+      const imageUrl = await uploadImageToStorage(user.uid, file);
+      const existingUserDetails = await getuserdetailfromdb(user.uid);
+      const updatedUserDetails = {
+        ...existingUserDetails,
+        photo: imageUrl
+      };
+      await savedatatodb("users/" + user.uid, updatedUserDetails);
+      setProfileImage(imageUrl);
+      toast({
+        title: "Success",
+        description: "Changed your profile image",
+        status: 'success',
+        duration: 3000,
+        isClosable: true,
+      });
+    
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Couldn't upload image, try again",
+        status: 'error', 
+        duration: 3000,
+        isClosable: true,
+      });
     }
+  };
+  
+  
 
+  const handlePermissionChange = () => {
+    setPermission(!phonepermission);
+  };
 
-    return (
-        user ? (
-            <div className="cardcontainer">
-                <Card className="profilebox">
-                        <Image src={user.photoURL} className="profileimage" alt={user.displayName} />
-                        <p>{user.displayName}</p>
-                        <p>{user.email}</p>
-                        <Button onClick={signInoutWithGoogle}>Sign out</Button>
-                </Card>
-                <Box spacing={4} className="infobox">
-                    {personaldetails.map((detail, index) => (
-                        <div className="detaillist" key={index}>
-                            <label>{detail.prop}</label>
-                            <Input className="detailitem" variant={"filled"} type={detail.type} placeholder={detail.default} />
-                        </div>
-                    ))}
-                    <Button onClick={updatefirebaseuserdata}>Save</Button>
-                </Box>
-            </div>
-        ) :
-            (
-                <div className="cardcontainer">
-                    <Card className="profilebox">
-                        <Heading>Sign In to NAAM website</Heading>
-                        <Button onClick={signInoutWithGoogle}>Sign In</Button>
-                    </Card>
-                    <Card className="infobox">
-                        <Heading>Sign In to NAAM website</Heading>
-                        <p>
-                            Sign in with your google account to set your details so that other users can find you, or to view other's details.
-                            We will not share your details with anyone else, and we will not use your details for any other purpose.
-                            Google may collect your details as per their privacy policy.
-                        </p>
-                    </Card>
-                </div>
-            )
-    );
+  const handleAboutChange = (event) => {
+    setAbout(event.target.value);
+  };
+
+  return (
+    user ? (
+      <SignedInBox
+        user={user}
+        profileImage={profileImage}
+        phonepermission={phonepermission}
+        about={about}
+        handlePermissionChange={handlePermissionChange}
+        updateFirebaseUserData={updateFirebaseUserData}
+        handleImageChange={handleImageChange}
+        handleAboutChange={handleAboutChange}
+        personaldetailsdata={personaldetailsdata}
+      />
+    ) : (
+      <SigninBox/>
+    )
+  );
 }
