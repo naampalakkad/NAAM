@@ -6,15 +6,25 @@ import { getStorage ,ref as sref, uploadBytes,  getDownloadURL ,listAll, deleteO
 import {getDatabase,set,get,ref} from "firebase/database"
 import imageCompression from 'image-compressor.js';
 
+// const firebasecConfig = {
+//   apiKey: "AIzaSyC97WJwdO5012NyYyRMfjZYUehk6kTZTQI",
+//   authDomain: "naam-demo.firebaseapp.com",
+//   projectId: "naam-demo",
+//   storageBucket: "naam-demo.appspot.com",
+//   databaseURL:"https://naam-demo-default-rtdb.asia-southeast1.firebasedatabase.app",
+//   messagingSenderId: "608229011102",
+//   appId: "1:608229011102:web:a62c520e1e527f4c3b558f",
+//   measurementId: "G-NPX2H6Q43C"
+// };
 const firebaseConfig = {
-  apiKey: "AIzaSyC97WJwdO5012NyYyRMfjZYUehk6kTZTQI",
-  authDomain: "naam-demo.firebaseapp.com",
-  projectId: "naam-demo",
-  storageBucket: "naam-demo.appspot.com",
-  databaseURL:"https://naam-demo-default-rtdb.asia-southeast1.firebasedatabase.app",
-  messagingSenderId: "608229011102",
-  appId: "1:608229011102:web:a62c520e1e527f4c3b558f",
-  measurementId: "G-NPX2H6Q43C"
+  apiKey: "AIzaSyD3teEBN7Ai6JXlvtbGaE6r_NTLK0Kpm4A",
+  authDomain: "naam-751a5.firebaseapp.com",
+  projectId: "naam-751a5",
+  storageBucket: "naam-751a5.appspot.com",
+  messagingSenderId: "635247227682",
+  appId: "1:635247227682:web:01891d1adee715c4f7ab7b",
+  measurementId: "G-1DCGC388NY",
+  databaseURL:"https://naam-751a5-default-rtdb.asia-southeast1.firebasedatabase.app"
 };
 
 const app = initializeApp(firebaseConfig);
