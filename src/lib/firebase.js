@@ -2,8 +2,9 @@
 
 import { initializeApp } from "firebase/app";
 import {getAuth,  GoogleAuthProvider, signInWithPopup} from "firebase/auth";
-import { getStorage ,ref as sref, listAll, getDownloadURL} from "firebase/storage";
+import { getStorage ,ref as sref, uploadBytes,  getDownloadURL ,listAll, deleteObject } from "firebase/storage";
 import {getDatabase,set,get,ref} from "firebase/database"
+import imageCompression from 'image-compressor.js';
 
 const firebaseConfig = {
   apiKey: "AIzaSyC97WJwdO5012NyYyRMfjZYUehk6kTZTQI",
@@ -24,7 +25,6 @@ export const db = getDatabase(app);
 export function signInoutWithGoogle(){
      if(auth.currentUser){
          auth.signOut();
-         console.log("signed out");
          return null;
      }
      else{
@@ -34,8 +34,6 @@ export function signInoutWithGoogle(){
         const credential = GoogleAuthProvider.credentialFromResult(result);
         const token = credential.accessToken;
         const user = result.user;
-        console.log(user);
-        console.log("signed in");
         return user;
       }).catch((error) => {
         console.log(error,"\n error Code:", error.code,"\n Error Message: ",error.message);
@@ -48,13 +46,9 @@ export function signInoutWithGoogle(){
   }
 
   export function savedatatodb(location, data){
-    console.log("Saving to Firebase. Location", location, "Data", data);
     if (auth.currentUser) {
         let dataRef = ref(db, location);
         set(dataRef, data)
-            .then(() => {
-                console.log("Document successfully written!");
-            })
             .catch((error) => {
                 console.error("Error writing document: ", error);
             });
@@ -65,9 +59,6 @@ export function saveposttodb(data){
 if (auth.currentUser) {
       let dataRef = ref(db, "posts/" + data.time);
       set(dataRef, data)
-          .then(() => {
-              console.log("post successfully written!");
-          })
           .catch((error) => {
               console.error("Error writing post: ", error);
           });
@@ -81,9 +72,6 @@ export function eventSave(data){
         data.userName = auth.currentUser.displayName;
         let dataRef = ref(db, "events/" + data.timestamp);
         set(dataRef, data)
-            .then(() => {
-                console.log("event successfully written!");
-            })
             .catch((error) => {
                 console.error("Error writing event: ", error);
             });
@@ -115,7 +103,6 @@ export async function getpostsfromdb(){
   return get(userRef)
     .then((snapshot) => {
       if (snapshot.exists()) {
-        console.log("Document data:", snapshot.val());
         return snapshot.val();
       } else {
         console.log("No data available");
@@ -124,17 +111,15 @@ export async function getpostsfromdb(){
     })
     .catch((error) => {
       console.error("Error getting document: ", error);
-      throw error; // If you want to handle this error in the calling function
+      throw error; 
     });
 }
 
   export async function getdatafromdb(location){
-    console.log("Fetching from Firebase. Location",location);
     const userRef = ref(db, location);
     return get(userRef)
       .then((snapshot) => {
         if (snapshot.exists()) {
-          console.log("Document data:", snapshot.val());
           return snapshot.val();
         } else {
           console.log("No data available");
@@ -143,7 +128,7 @@ export async function getpostsfromdb(){
       })
       .catch((error) => {
         console.error("Error getting document: ", error);
-        throw error; // If you want to handle this error in the calling function
+        throw error; 
       });
   }
 
@@ -172,6 +157,52 @@ export async function getpostsfromdb(){
       })
      .catch((error) => {
         console.error("Error getting document: ", error);
-        throw error; // If you want to handle this error in the calling function
+        throw error;
       });
+  }
+
+  import ImageCompressor from 'image-compressor.js';
+
+  export async function uploadImageToStorage(userId, imageFile) {
+    const folderPath = `profile_images/${userId}`;
+    const folderRef = sref(storage, folderPath);
+    const files = await listAll(folderRef);
+    const deletePromises = files.items.map((fileRef) => deleteObject(fileRef));
+    await Promise.all(deletePromises);
+  
+    try {
+      const compressor = new ImageCompressor();
+      const compressedImage = await compressor.compress(imageFile, {
+        maxWidth: 720, 
+        maxHeight: 540, 
+        quality: 0.8, 
+        mimeType: 'image/webp', 
+      });
+  
+      const storageRef = sref(storage, `profile_images/${userId}/${compressedImage.name}`);
+      await uploadBytes(storageRef, compressedImage);
+      const imageUrl = await getDownloadURL(storageRef);
+      return imageUrl;
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      throw error;
+    }
+  }
+  
+  
+
+  export async function getImageUrlFromStorage(userId) {
+    const storageRef = sref(storage, `profile_images/${userId}`); 
+  
+    try {
+      const imageUrl = await getDownloadURL(storageRef); 
+      return imageUrl;
+    } catch (error) {
+      if (error.code === 'storage/object-not-found') {
+        return null;  
+      } else {
+        console.error("Error getting image URL:", error);
+        throw error; 
+      }
+    }
   }

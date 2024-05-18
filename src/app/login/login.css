@@ -14,7 +14,6 @@
     align-items: center;
     border-radius: 5px;
     padding: 10px;
-    background-color: white;
 }
 
 .profilebox p{
@@ -68,3 +67,39 @@
         margin: 2px;
     }
 }
+
+.profileimagecontainer {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .profileimagecontainer .profileimage {
+    border-radius: 50%;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+
+  #profileimagebox {
+    width: 170px;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+  }
+  
+  .upload-icon {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  .profileimagecontainer:hover .upload-icon {
+    opacity: 1;
+  }
+  

@@ -1,12 +1,9 @@
 //let photossrc ="https://photos.app.goo.gl/DAAhH2DiYoqy9ohP8";
 export const photogalleryurl = "https://photos.app.goo.gl/DAAhH2DiYoqy9ohP8";
-import {getdatafromStorage } from "@/lib/firebase";
-
+import {getdatafromStorage} from "@/lib/firebase";
 
 export async function getCarouselImageUrls() {
-
     const carouselImageUrls = getdatafromStorage('carousalimages');
-
     return carouselImageUrls;
 }
 
@@ -90,12 +87,12 @@ export const blogposts = {
 
 export const MenuItems = [
     { name: 'Gallery', link: 'gallery' },
-    { name: 'Alum', link: 'alumni' },
+    { name: 'Alumni', link: 'alumni' },
     { name: 'News', link: 'posts' },
     { name: 'Calender', link: 'calender' },
     { name: 'About Us', link: 'aboutus' },
     { name: 'Bye-Law', link: 'law' },
-    { name: 'Login', link: 'login' },
+    { name: 'Profile', link: 'login' },
 ];
 
 export const socialMediaUrls = [
@@ -151,3 +148,54 @@ export let aboutnaam = {
     about: " NAAM (Navodaya Alumni Association Malampuzha), unites Alumnis from Jawahar Navodaya Vidyalaya Palakkad. We celebrate shared experiences, fostering connections, and giving back to our alma mater and the community.",
     mission: "NAAM unites Jawahar Navodaya Vidyalaya Palakkad alumni, fostering lifelong connections and professional growth. Our mission is to celebrate shared experiences, give back to our alma mater, and engage in impactful community initiatives. NAAM stands for camaraderie, excellence, and service, embodying the values instilled by Jawahar Navodaya Vidyalaya Palakkad."
 }
+
+export let personaldetailsdata = [
+    {
+        prop: "Name",
+        name: "name",
+        default: "Enter your name",
+        type: "text"
+    },
+    {
+        prop: "Email",
+        name:"email",
+        default: "Enter your email",
+        type: "email"
+    },
+    {
+        prop: "Batch",
+        name: "batch",
+        default: "Enter your batch,  eg: 25",
+        type: "Number"
+    },
+    {
+        prop: "Number",
+        name:"number",
+        default: "Enter your Mobile number",
+        type: "Number"
+    },
+    {
+        prop: "Facebook",
+        name: "facebook",
+        default: "Enter your Facebook Profile",
+        type: "text"
+    },
+    {
+        prop: "Occupation",
+        name: "occupation",
+        default: "Enter your occupation",
+        type: "text"
+    },
+    {
+        prop: "JNV Roll No",
+        name: "rollno",
+        default: "Enter your JNV Roll No",
+        type: "Number"
+    },
+    {
+        prop: "LinkedIn",
+        name: "linkedIn",
+        default: "Enter your LinkedIn Profile",
+        type: "text"
+    }
+]
