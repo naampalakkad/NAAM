@@ -2,7 +2,6 @@
 import { CardBody, CardHeader, Stack, Badge, Card, Button, SimpleGrid, CardFooter, Image } from '@chakra-ui/react';
 import React, { useState, useEffect } from 'react';
 import './blogspanel.css';
-import { blogposts } from './data';
 import { getpostsfromdb } from "@/lib/firebase";
 const defaultImage = "https://source.unsplash.com/800x600/?letter,d";
 
@@ -13,9 +12,11 @@ export default function Blogspanel() {
     useEffect(() => {
         const fetchPosts = async () => {
             const postsFromDb = await getpostsfromdb();
+            if (postsFromDb){
             const postsArray = Object.values(postsFromDb);
             const slicedPosts = postsArray.length >= 4 ? postsArray.slice(0, 4) : postsArray;
             setPosts(slicedPosts);
+            }
         };
 
         fetchPosts();
