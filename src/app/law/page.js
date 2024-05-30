@@ -1,22 +1,18 @@
-import React from 'react';
+import PDFViewer from '../components/PDFViewer';
+import './page.css';
 
-const App = () => {
-    const pdfUrl = 'https://drive.google.com/file/d/1GNdgzwnpyBVJKcixNkPq7XkgywU3RUT9/view';
+const MyPage = () => {
+    const pdfUrl = './law.pdf';
 
     return (
-        <div>
-            <h1>PDF Viewer</h1>
-            <iframe
-                title="PDF Viewer"
-                src={`https://drive.google.com/viewerng/viewer?embedded=true&url=${encodeURIComponent(pdfUrl)}`}
-                width="100%"
-                height="500px"
-                frameBorder="0"
-            >
-                <p>It appears your web browser doesn't support PDF viewing. You can download the PDF file <a href={pdfUrl}>here</a>.</p>
-            </iframe>
+        
+        <div className="page">
+            <h1>BYELAW</h1>
+            <div className="pdf-viewer">
+            <PDFViewer pdfUrl={pdfUrl} />
+            </div>
         </div>
     );
 };
 
-export default App;
+export default MyPage;

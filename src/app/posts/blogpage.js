@@ -1,6 +1,7 @@
 'use client'
 import React, { useState, useEffect } from "react";
 import { Box, Heading, Button } from "@chakra-ui/react";
+import "./Modal.css";
 
 export const BlogPost = ({ post }) => {
     let postdata = post[1];
@@ -8,6 +9,20 @@ export const BlogPost = ({ post }) => {
     const defaultImage = "https://source.unsplash.com/800x600/?letter,d";
     const postDate = new Date(postdata.time);
     const formattedDate = postDate.toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' });
+
+
+    const [modal, setModal] = useState(false);
+
+  const toggleModal = () => {
+    setModal(!modal);
+  };
+
+  if(modal) {
+    document.body.classList.add('active-modal')
+  } else {
+    document.body.classList.remove('active-modal')
+  }
+
 
     return (
         <Box
@@ -43,13 +58,32 @@ export const BlogPost = ({ post }) => {
                     <p>{postdata.description}</p>
                 </Box>
                 <Box textAlign="right">
-                    <Button colorScheme="teal" size="sm" mt="2">
-                        <a href={"/"} target="_blank" rel="noopener noreferrer" style={{ color: 'white', textDecoration: 'none' }}>
+                    <Button colorScheme="teal" size="sm" mt="2" onClick={toggleModal} className="btn-modal">
                             Read more
-                        </a>
                     </Button>
                 </Box>
             </Box>
+            {modal && (
+        <div className="modal">
+          <div onClick={toggleModal} className="overlay"></div>
+          <div className="modal-content">
+            <h2>Hello Modal</h2>
+            <p>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Provident
+              perferendis suscipit officia recusandae, eveniet quaerat assumenda
+              id fugit, dignissimos maxime non natus placeat illo iusto!
+              Sapiente dolorum id maiores dolores? Illum pariatur possimus
+              quaerat ipsum quos molestiae rem aspernatur dicta tenetur. Sunt
+              placeat tempora vitae enim incidunt porro fuga ea.
+            </p>
+            <button className="close-modal" onClick={toggleModal}>
+              CLOSE
+            </button>
+          </div>
+        </div>
+      )}
         </Box>
+
+        
     );
 };
