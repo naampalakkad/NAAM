@@ -45,6 +45,7 @@ function Page() {
       title: '',
       description: '',
       thumbnail: '',
+      type:'',
     });
     // Reset the Quill editor
     if (quillRef.current) {
