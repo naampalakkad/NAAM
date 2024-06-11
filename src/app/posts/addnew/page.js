@@ -4,12 +4,14 @@ import { Input, Button, Select, FormControl, FormLabel, FormHelperText, Textarea
 import { ChevronDownIcon } from '@chakra-ui/icons';
 import './page.css';
 import dynamic from 'next/dynamic';
+import { saveposttodb } from '@/lib/firebase';
+import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+
 
 if (typeof window !== 'undefined') {
   var ReactQuill = require('react-quill');
   require('react-quill/dist/quill.snow.css');
 }
-import { saveposttodb } from '@/lib/firebase';
 
 function Page() {
   const [value, setValue] = useState('');
@@ -54,33 +56,62 @@ function Page() {
 
   };
 
-  const handleSubmit = (event) => {
+  // thumbnail handle
+  const [isfile, setFile] = useState(null);
+  const handleImageAsFile = (e) => {
+    setFile(e.target.files[0]);
+  }
+
+  const handleSubmit = async(event) => {
+    try{
     event.preventDefault();
     const quillContent = quillRef.current?.getEditor().getContents();
 
-    let postdata = {
-//authorName 
-      title: formData.title,
-      thumbnail: formData.thumbnail,
-      content: quillContent,
-      type: formData.type,
-      time: new Date().getTime(),
-    };
+    let file = isfile;
 
-    saveposttodb(postdata)
+      const storage = getStorage();
+      var storagePath = 'thumbnail/' + file.name;
+
+      const storageRef = ref(storage, storagePath);
+      const uploadTask=uploadBytesResumable(storageRef, file);
+
+      uploadTask.on('state_changed', (snapshot) => {
+        // progrss function ....
+        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log('Upload is ' + progress + '% done');
+      }, 
+      (error) => { 
+        // error function ....
+        console.log(error);
+      }, 
+      () => {
+        // complete function ....
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          console.log('File available at', downloadURL);
+          let postdata = {
+            title: formData.title,
+            thumbnail: downloadURL,
+            content: quillContent,
+            type: formData.type,
+            time: new Date().getTime(),
+          };
+          saveposttodb(postdata)
+
+        });
+      });
+
+    
+
     if (typeof window !== 'undefined') {
       window.alert("Form submitted");
     }
     resetForm(); // Reset the form after submission
+  }catch(error){
+      throw error;
+  }
   };
 
-  const processOp = (op) => {
-    if (typeof op.insert === 'object' && op.insert.image) {
-      return `Image: ${op.insert.image}`;
-    }
-
-    return op.insert;
-  };
+  
 
 
 
@@ -120,7 +151,7 @@ function Page() {
 
         <FormControl>
           <FormLabel>Thumbnail photo</FormLabel>
-          <input type='file' name='thumbnail' value={formData.thumbnail} onChange={onChangeHandler}></input>
+          <input type='file' name='thumbnail' accept='.png, .jpg, .jpeg' onChange={handleImageAsFile}></input>
           <FormHelperText></FormHelperText>
         </FormControl>
 
