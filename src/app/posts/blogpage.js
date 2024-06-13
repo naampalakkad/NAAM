@@ -68,15 +68,17 @@ export const BlogPost = ({ post }) => {
             </Box>
             {modal && (
         <div className="modal">
-          <div onClick={toggleModal} className="overlay"></div>
-          <div className="modal-content">
-            <h2>{postdata.title}</h2>
-            <img src={postdata.thumbnail} alt={"thumbnail"}></img>
+          <div onClick={toggleModal} className="overlay modal-overlay"></div>
+          <div className="modal-container">
+          <div className="modal-container-controls">
+              <button className="close-modal modal-container-close-button" onClick={toggleModal}>CLOSE</button>
+            </div>
+          <div className="modal-container-content">
+            <div><p><strong>{postdata.title}</strong></p></div>
             <ReactQuill value={postdata.content} readOnly={true} modules={{toolbar: false}}/>
-
-            <button className="close-modal" onClick={toggleModal}>
-              CLOSE
-            </button>
+          </div>
+            
+            
           </div>
         </div>
       )}
