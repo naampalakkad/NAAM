@@ -22,7 +22,10 @@ export const BlogPost = ({ post }) => {
   } else {
     document.body.classList.remove('active-modal')
   }
-
+  if (typeof window !== 'undefined') {
+    var ReactQuill = require('react-quill');
+    require('react-quill/dist/quill.snow.css');
+  }
 
     return (
         <Box
@@ -69,6 +72,8 @@ export const BlogPost = ({ post }) => {
           <div className="modal-content">
             <h2>{postdata.title}</h2>
             <img src={postdata.thumbnail} alt={"thumbnail"}></img>
+            <ReactQuill value={postdata.content} readOnly={true} modules={{toolbar: false}}/>
+
             <button className="close-modal" onClick={toggleModal}>
               CLOSE
             </button>
