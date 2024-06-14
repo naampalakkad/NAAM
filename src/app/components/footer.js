@@ -1,7 +1,6 @@
 import React from "react";
 import "./footer.css";
 import { SocialIcon } from 'react-social-icons/component'
-import { FaPhoneSquareAlt } from 'react-icons/fa';
 import { socialMediaUrls } from '../homepage/data'
 import 'react-social-icons/linkedin'
 import 'react-social-icons/facebook'
@@ -9,7 +8,7 @@ import 'react-social-icons/twitter'
 import 'react-social-icons/instagram'
 import 'react-social-icons/youtube'
 import Image from 'next/image'
-import { MenuItems } from "../homepage/data";
+import { FooterMenuItems } from "@/lib/data";
 const MenuItem = ({ item }) => (
   <a href={item.link}>
     <div className="footer-menu-item">{item.name}</div>
@@ -35,7 +34,7 @@ const Footer = () => {
           </div>
         </div>
         <div id="footer_links">
-          {MenuItems.map(item => <MenuItem key={item.name} item={item} />)}
+          {FooterMenuItems.map(item => <MenuItem key={item.name} item={item} />)}
         </div>
         <div id="social">
           {socialMediaUrls.map(url => (

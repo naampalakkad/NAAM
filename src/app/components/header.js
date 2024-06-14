@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image'
 import "./header.css";
-import { MenuItems } from "../homepage/data";
+import { MenuItems } from "@/lib/data";
 
 
 export default function Header() {
