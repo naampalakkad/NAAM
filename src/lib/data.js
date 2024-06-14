@@ -99,11 +99,11 @@ export const FooterMenuItems = [
 ];
 
 export const socialMediaUrls = [
-    "www.linkedin.com",
-    "www.facebook.com",
-    "www.twitter.com",
-    "www.instagram.com",
-    "www.youtube.com"
+    "https://www.linkedin.com",
+    "https://www.facebook.com",
+    "https://www.twitter.com",
+    "https://www.instagram.com",
+    "https://www.youtube.com"
 ];
 
 export const galleryphotos = [
