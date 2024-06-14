@@ -1,5 +1,3 @@
-//let photossrc ="https://photos.app.goo.gl/DAAhH2DiYoqy9ohP8";
-
 export const photogalleryurl = "https://photos.app.goo.gl/DAAhH2DiYoqy9ohP8";
 import {getdatafromStorage} from "@/lib/firebase";
 
@@ -45,8 +43,6 @@ export const statistics = [
         "title": "branches",
         "text": "10+",
     }
-
-
 ]
 
 export const blogposts = {
@@ -79,9 +75,7 @@ export const blogposts = {
             type: "blog",
             author: "Anjitha J",
         },
-
     ]
-
 }
 
 export const MenuItems = [
@@ -202,3 +196,31 @@ export let personaldetailsdata = [
         type: "text"
     }
 ]
+
+export const phototilesData = [
+    {
+      imageUrl: 'https://firebasestorage.googleapis.com/v0/b/naam-751a5.appspot.com/o/galleryimgs%2F1-small.webp?alt=media&token=507d4913-9500-4b92-9c30-1cd68891383f',
+      text: 'Get Together 2021',
+      link: 'https://photos.app.goo.gl/DAAhH2DiYoqy9ohP8'
+    },
+    {
+      imageUrl: 'https://firebasestorage.googleapis.com/v0/b/naam-751a5.appspot.com/o/galleryimgs%2F4-small.webp?alt=media&token=6b9b0e06-0328-441a-91e1-1c3c79213ce8',
+      text: 'Get Together 2022',
+      link: 'https://photos.app.goo.gl/DAAhH2DiYoqy9ohP8'
+    },
+    {
+        imageUrl: 'https://firebasestorage.googleapis.com/v0/b/naam-751a5.appspot.com/o/galleryimgs%2F3-small.webp?alt=media&token=7e7f50c9-e73c-46a5-8452-894446ba998e',
+        text: 'Milan',
+        link: 'https://photos.app.goo.gl/DAAhH2DiYoqy9ohP8'
+      },
+      {
+        imageUrl: 'https://firebasestorage.googleapis.com/v0/b/naam-751a5.appspot.com/o/galleryimgs%2F2-small.webp?alt=media&token=bbb56e27-5a4a-4850-92bd-bc248634ad42',
+        text: 'Dubhai section',
+        link: 'https://photos.app.goo.gl/DAAhH2DiYoqy9ohP8'
+      },
+      {
+        imageUrl: 'https://firebasestorage.googleapis.com/v0/b/naam-751a5.appspot.com/o/galleryimgs%2F5-small.webp?alt=media&token=10953dcc-ff8a-4449-aec9-d3e8e4b2954f',
+        text: 'Navodaya Malampuzha',
+        link: 'https://photos.app.goo.gl/DAAhH2DiYoqy9ohP8'
+      },
+  ];
