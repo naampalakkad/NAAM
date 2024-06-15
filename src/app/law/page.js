@@ -1,5 +1,5 @@
 import PDFViewer from '../components/PDFViewer';
-
+import './page.css';
 const MyPage = () => {
     const pdfUrl = './law.pdf';
 
