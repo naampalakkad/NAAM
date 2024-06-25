@@ -1,19 +1,14 @@
-import { signInoutWithGoogle } from "@/lib/firebase";
-import { Box, Heading, Flex, Textarea, Image, Button, Switch, Text, Input, Card ,Select} from "@chakra-ui/react";
 import React from 'react';
-import {
-  auth,
-  savedatatodb,
-  getuserdetailfromdb,
-  uploadImageToStorage,
-} from "@/lib/firebase";
+import { signInoutWithGoogle } from "@/lib/firebase";
+import { Box, Heading, Textarea, Image, Button, Switch, Text, Input, Card, Select } from "@chakra-ui/react";
+import { personaldetailsdata } from '@/lib/data'
+import { savedatatodb, } from "@/lib/firebase";
 import { useToast } from "@chakra-ui/react";
-const ProfileSection = ({ user, profileImage, handleImageChange }) => {
 
+const ProfileSection = ({ user, profileImage, handleImageChange }) => {
   const toast = useToast();
-  // Function to handle sign out
   const handleSignOut = () => {
-    signInoutWithGoogle(); // Assuming this function signs the user out
+    signInoutWithGoogle();
   };
 
   return (
@@ -42,7 +37,6 @@ const ProfileSection = ({ user, profileImage, handleImageChange }) => {
   );
 };
 
-
 const DetailsSection = ({ personaldetailsdata, about, handleAboutChange, phonepermission, handlePermissionChange, updateFirebaseUserData }) => {
 
   const renderInput = (detail) => (
@@ -64,7 +58,7 @@ const DetailsSection = ({ personaldetailsdata, about, handleAboutChange, phonepe
       placeholder="Tell us about yourself..."
       borderRadius="md"
       resize="vertical"
-      height="180px" 
+      height="180px"
     />
   );
 
@@ -93,139 +87,31 @@ const DetailsSection = ({ personaldetailsdata, about, handleAboutChange, phonepe
       {personaldetailsdata.map((detail, index) => (
         <div className="detaillist" key={index}>
           <label htmlFor={"profile" + detail.name}>{detail.prop}</label>
-          {detail.name === "About" ? renderTextarea() :
-           detail.name === "phone" ? renderSwitch() :
-           detail.name === "location" || detail.name === "profession" || detail.name === "specialization" ? renderDropdown(detail) :
-           renderInput(detail)}
+          {detail.name === "about" ? renderTextarea() :
+            detail.name === "phone" ? renderSwitch() :
+              detail.name === "location" || detail.name === "profession" || detail.name === "specialization" || detail.name === "location2" ? renderDropdown(detail) :
+                renderInput(detail)}
         </div>
       ))}
+       {renderSwitch()}
       <Button mt={4} colorScheme="blue" onClick={updateFirebaseUserData}>Save</Button>
+      
     </Box>
   );
 };
 
-
-// export default function SignedInBox(props) {
-//   return (
-//     <div className="cardcontainer">
-//       <ProfileSection {...props} />
-//       <DetailsSection {...props} />
-//     </div>
-//   );
-// }
-export default function SignedInBox  ({ user, profileImage, handleImageChange })  {
-    const toast = useToast();
-  // Mock profile data
-  const personaldetailsdata = [
-    
-    {
-      prop: "Name",
-      name: "name",
-      default: "Enter your name",
-      type: "text"
-    },
-    {
-      prop: "Email",
-      name:"email",
-      default: "Enter your email",
-      type: "email"
-    },
-    {
-      prop: "Batch",
-      name: "batch",
-      default: "Enter your batch,  eg: 25",
-      type: "Number"
-    },
-    {
-      prop: "Number",
-      name:"number",
-      default: "Enter your Mobile number",
-      type: "Number"
-    },
-    {
-      prop: "Alternate Number",
-      name:"Alternate number",
-      default: "Enter your Alternate number",
-      type: "Number"
-    },
-    {
-      prop: "Location",
-      name: "location",
-      default: "Select your location",
-      type: "select",
-      options: ["Location1", "Location2", "Location3"]  
-    },
-    {
-      prop: "Profession",
-      name: "profession",
-      default: "Select your profession",
-      type: "select",
-      options: ["Profession1", "Profession2", "Profession3"]  
-    },
-    {
-      prop: "Specialization",
-      name: "specialization",
-      default: "Select your specialization",
-      type: "select",
-      options: ["Specialization1", "Specialization2", "Specialization3"]  
-    },
-    {
-      prop: "JNV Roll No",
-      name: "rollno",
-      default: "Enter your JNV Roll No",
-      type: "Number"
-    },
-    {
-      prop: "LinkedIn",
-      name: "linkedIn",
-      default: "Enter your LinkedIn Profile",
-      type: "text"
-    },
-    {
-      prop: "Facebook",
-      name: "facebook",
-      default: "Enter your Facebook Profile",
-      type: "text"
-    }
-  ];
- 
+export default function SignedInBox({ user, profileImage, handleImageChange,updateFirebaseUserData, }) {
+  const toast = useToast();
   const [about, setAbout] = React.useState("");
   const [phonepermission, setPhonePermission] = React.useState(false);
- 
+
   const handleAboutChange = (e) => {
     setAbout(e.target.value);
   };
- 
+
   const handlePermissionChange = () => {
     setPhonePermission(!phonepermission);
   };
- 
-  // const updateFirebaseUserData = () => {
-  //   console.log("Updating user data...");
-  //   // Implement logic to update user data in Firebase
-  // };
-
-  function updateFirebaseUserData() {
-    
-    let userdetails = {}
-    userdetails["photo"] = profileImage;
-    userdetails["phoneperm"] = phonepermission;
-    userdetails["about"] = about;
-    personaldetailsdata.forEach(detail => {
-      const input = document.getElementById("profile" + detail.name);
-      if ((input) && (input.value)) {
-        userdetails[detail.name] = input.value;
-      }
-    });
-    savedatatodb("users/" + user.uid, userdetails);
-    toast({
-      title: 'Success',
-      description: " Successfully updated your profile.",
-      status: 'success',
-      duration: 3000,
-      isClosable: true,
-    })
-  }
 
   return (
     <Box className="cardcontainer">

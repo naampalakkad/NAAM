@@ -152,49 +152,83 @@ export let personaldetailsdata = [
         name: "name",
         default: "Enter your name",
         type: "text"
-    },
-    {
+      },
+      {
         prop: "Email",
         name:"email",
         default: "Enter your email",
         type: "email"
-    },
-    {
+      },
+      {
         prop: "Batch",
         name: "batch",
         default: "Enter your batch,  eg: 25",
         type: "Number"
-    },
-    {
+      },
+      {
         prop: "Number",
         name:"number",
         default: "Enter your Mobile number",
         type: "Number"
-    },
-    {
-        prop: "Facebook",
-        name: "facebook",
-        default: "Enter your Facebook Profile",
-        type: "text"
-    },
-    {
-        prop: "Occupation",
-        name: "occupation",
-        default: "Enter your occupation",
-        type: "text"
-    },
-    {
+      },
+      {
+        prop: "Alternate Number",
+        name:"Alternate number",
+        default: "Enter your Alternate number",
+        type: "Number"
+      },
+      {
+        prop: "Current Location",
+        name: "location",
+        default: "Select your current location",
+        type: "select",
+        options: ["Location1", "Location2", "Location3"]  
+      },
+      {
+        prop: "Native Location",
+        name: "location2",
+        default: "Select your native location",
+        type: "select",
+        options: ["Location4", "Location5", "Location6"]  
+      },
+      {
+        prop: "Profession",
+        name: "profession",
+        default: "Select your profession",
+        type: "select",
+        options: ["Profession1", "Profession2", "Profession3"]  
+      },
+      {
+        prop: "Specialization",
+        name: "specialization",
+        default: "Select your specialization",
+        type: "select",
+        options: ["Specialization1", "Specialization2", "Specialization3"]  
+      },
+      {
         prop: "JNV Roll No",
         name: "rollno",
         default: "Enter your JNV Roll No",
         type: "Number"
-    },
-    {
+      },
+      {
         prop: "LinkedIn",
         name: "linkedIn",
         default: "Enter your LinkedIn Profile",
         type: "text"
-    }
+      },
+      {
+        prop: "Facebook",
+        name: "facebook",
+        default: "Enter your Facebook Profile",
+        type: "text"
+      },
+      {
+        prop: "About",
+        name: "about",
+        default: "tell us about you",
+        type: "textarea"
+      }
 ]
 
 export const phototilesData = [
