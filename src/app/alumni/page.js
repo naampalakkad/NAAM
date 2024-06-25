@@ -1,26 +1,43 @@
 'use client'
-import React, { useState, useEffect } from 'react'
-import { Box, Flex, Input, Text,Button, Heading, Image, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, useDisclosure } from "@chakra-ui/react";
-import { getdatafromdb } from "@/lib/firebase"
-import { SocialIcon } from 'react-social-icons/component'
-import "./alumni.css"
-import 'react-social-icons/linkedin'
-import 'react-social-icons/facebook'
-import 'react-social-icons/whatsapp'
-import 'react-social-icons/email'
+import React, { useState, useEffect } from 'react';
+import { Box, Flex, Input, Text, Button, Heading, Image, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, useDisclosure, Select } from "@chakra-ui/react";
+import { getdatafromdb } from "@/lib/firebase";
+import { SocialIcon } from 'react-social-icons/component';
+import "./alumni.css";
+import 'react-social-icons/linkedin';
+import 'react-social-icons/facebook';
+import 'react-social-icons/whatsapp';
+import 'react-social-icons/email';
 
-const SearchBox = ({ searchTerm, setSearchTerm }) => {
+const SearchBox = ({ searchTerm, setSearchTerm, location, setLocation, profession, setProfession, specialization, setSpecialization }) => {
   return (
-    <Input
-        placeholder="Search with Name or batch..."
+    <Box display="flex" flexDirection="row" alignItems="center" gap={3}>
+      <Input
+        placeholder="Search with Name or Batch..."
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
-        variant={"filled"}
+        variant="filled"
         width="70%"
         padding={4}
         margin={5}
-        size={"lg"}
+        size="lg"
       />
+      <Select placeholder="Select Location" value={location} onChange={(e) => setLocation(e.target.value)} width="70%" margin={2}>
+        <option value="Location1">Location1</option>
+        <option value="Location2">Location2</option>
+        <option value="Location3">Location3</option>
+      </Select>
+      <Select placeholder="Select Profession" value={profession} onChange={(e) => setProfession(e.target.value)} width="70%" margin={2}>
+        <option value="Profession1">Profession1</option>
+        <option value="Profession2">Profession2</option>
+        <option value="Profession2">Profession3</option>
+      </Select>
+      <Select placeholder="Select Specialization" value={specialization} onChange={(e) => setSpecialization(e.target.value)} width="70%" margin={2}>
+        <option value="Specialization1">Specialization1</option>
+        <option value="Specialization2">Specialization2</option>
+        <option value="Specialization2">Specialization3</option>
+      </Select>
+    </Box>
   );
 };
 
@@ -52,7 +69,6 @@ const SocialIcons = ({ alumni }) => {
 };
 
 const ResultsBox = ({ filteredAlumni, handleMoreClick }) => {
-
   return (
     <Flex
       display="flex"
@@ -133,6 +149,9 @@ export default function alumnilist() {
   const [alumnidata, setAlumnidata] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedAlumni, setSelectedAlumni] = useState(null);
+  const [location, setLocation] = useState("");
+  const [profession, setProfession] = useState("");
+  const [specialization, setSpecialization] = useState("");
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   useEffect(() => {
@@ -149,19 +168,36 @@ export default function alumnilist() {
 
   const filteredAlumni = alumnidata.filter((alumni) => {
     const searchTermLower = searchTerm.toLowerCase();
-    return searchTerm === "" ||
-      alumni.name.toLowerCase().includes(searchTermLower) ||
-      alumni.batch.toLowerCase().includes(searchTermLower);
+    
+    const matchesSearchTerm =
+      searchTerm === "" ||
+      (alumni.name && alumni.name.toLowerCase().includes(searchTermLower)) ||
+      (alumni.batch !== undefined && alumni.batch.toString().toLowerCase().includes(searchTermLower));
+
+    const matchesLocation = location === "" || (alumni.location && alumni.location === location);
+    const matchesProfession = profession === "" || (alumni.profession && alumni.profession === profession);
+    const matchesSpecialization = specialization === "" || (alumni.specialization && alumni.specialization === specialization);
+
+    return matchesSearchTerm && matchesLocation && matchesProfession && matchesSpecialization;
   });
 
   const handleMoreClick = (alumni) => {
     setSelectedAlumni(alumni);
     onOpen();
-  }
+  };
 
   return (
     <Box id="contentbox">
-      <SearchBox searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+      <SearchBox
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+        location={location}
+        setLocation={setLocation}
+        profession={profession}
+        setProfession={setProfession}
+        specialization={specialization}
+        setSpecialization={setSpecialization}
+      />
       {filteredAlumni.length > 0 ? (
         <ResultsBox filteredAlumni={filteredAlumni} handleMoreClick={handleMoreClick} />
       ) : (
