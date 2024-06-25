@@ -228,7 +228,15 @@ export let personaldetailsdata = [
         name: "about",
         default: "tell us about you",
         type: "textarea"
+      },
+      {
+        prop: "Phone permission",
+        name: "Phone",
+        default: "true",
+        type: "switch"
       }
+      
+
 ]
 
 export const phototilesData = [

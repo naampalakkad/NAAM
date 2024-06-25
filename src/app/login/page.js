@@ -8,13 +8,12 @@ import {
 } from "@/lib/firebase";
 import './login.css';
 import { onAuthStateChanged } from "firebase/auth";
-import { personaldetailsdata } from "../homepage/data";
+import { personaldetailsdata } from "@/lib//data";
 import SigninBox from "./signin";
 import SignedInBox from "./profilepage";
 import { useToast } from "@chakra-ui/react";
 
-export default function profilePage() {
-
+export default function ProfilePage() {
   const [user, setUser] = useState(null);
   const [profileImage, setProfileImage] = useState(null);
   const [phonepermission, setPermission] = useState(false);
@@ -48,11 +47,7 @@ export default function profilePage() {
     for (const { name, type } of personaldetailsdata) {
       const input = document.getElementById(`profile${name}`);
       if (input && userdata[name]) {
-        if (type === "select") {
-          input.value = userdata[name];
-        } else {
-          input.value = userdata[name];
-        }
+        input.value = userdata[name];
       } else {
         console.warn(`No detaillist input found with ID: profile${name}`);
       }
@@ -121,7 +116,7 @@ export default function profilePage() {
   };
 
   return (
-    user ? (
+    user ? ( 
       <SignedInBox
         user={user}
         profileImage={profileImage}
@@ -131,7 +126,7 @@ export default function profilePage() {
         updateFirebaseUserData={updateFirebaseUserData}
         handleImageChange={handleImageChange}
         handleAboutChange={handleAboutChange}
-        personaldetailsdata={personaldetailsdata}
+        personaldetailsdata={personaldetailsdata} 
       />
     ) : (
       <SigninBox/>
