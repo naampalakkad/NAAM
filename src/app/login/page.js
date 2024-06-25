@@ -13,8 +13,6 @@ import SigninBox from "./signin";
 import SignedInBox from "./profilepage";
 import { useToast } from "@chakra-ui/react";
 
-
-
 export default function profilePage() {
 
   const [user, setUser] = useState(null);
@@ -22,7 +20,6 @@ export default function profilePage() {
   const [phonepermission, setPermission] = useState(false);
   const [about, setAbout] = useState('');
   const toast = useToast();
-
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -41,7 +38,7 @@ export default function profilePage() {
 
   function setdatacolumns(userdata) {
     if (!userdata) {
-      console.error(' no userdata provided');
+      console.error('No userdata provided');
       return;
     }
     setProfileImage(userdata.photo);
@@ -50,9 +47,12 @@ export default function profilePage() {
 
     for (const { name, type } of personaldetailsdata) {
       const input = document.getElementById(`profile${name}`);
-      if ((input) && userdata[name]) {
-        input.value = userdata[name] ? userdata[name] : null;
-        input.type = type;
+      if (input && userdata[name]) {
+        if (type === "select") {
+          input.value = userdata[name];
+        } else {
+          input.value = userdata[name];
+        }
       } else {
         console.warn(`No detaillist input found with ID: profile${name}`);
       }
@@ -60,30 +60,30 @@ export default function profilePage() {
   }
 
   function updateFirebaseUserData() {
-    let userdetails = {}
+    let userdetails = {};
     userdetails["photo"] = profileImage;
     userdetails["phoneperm"] = phonepermission;
     userdetails["about"] = about;
     personaldetailsdata.forEach(detail => {
       const input = document.getElementById("profile" + detail.name);
-      if ((input) && (input.value)) {
+      if (input && input.value) {
         userdetails[detail.name] = input.value;
       }
     });
     savedatatodb("users/" + user.uid, userdetails);
     toast({
       title: 'Success',
-      description: " Successfully updated your profile.",
+      description: "Successfully updated your profile.",
       status: 'success',
       duration: 3000,
       isClosable: true,
-    })
+    });
   }
 
   const handleImageChange = async (event) => {
     const file = event.target.files[0];
     if (!file) return;
-  
+
     try {
       const imageUrl = await uploadImageToStorage(user.uid, file);
       const existingUserDetails = await getuserdetailfromdb(user.uid);
@@ -100,7 +100,7 @@ export default function profilePage() {
         duration: 3000,
         isClosable: true,
       });
-    
+
     } catch (error) {
       toast({
         title: "Error",
@@ -111,8 +111,6 @@ export default function profilePage() {
       });
     }
   };
-  
-  
 
   const handlePermissionChange = () => {
     setPermission(!phonepermission);
