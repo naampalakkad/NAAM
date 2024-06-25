@@ -33,7 +33,7 @@ const ProfileSection = ({ user, profileImage, handleImageChange }) => {
   );
 };
 
-const DetailsSection = ({ personaldetailsdata, about, handleAboutChange, phonepermission, handlePermissionChange, updateFirebaseUserData }) => {
+const DetailsSection = ({ personaldetailsdata, updateFirebaseUserData }) => {
   const renderInput = (detail) => (
     <Input
       className="detailitem"
@@ -46,10 +46,8 @@ const DetailsSection = ({ personaldetailsdata, about, handleAboutChange, phonepe
 
   const renderTextarea = (detail) => (
     <Textarea
-      value={about}
       className="detailitem"
       variant="filled"
-      onChange={handleAboutChange}
       placeholder="Tell us about yourself..."
       borderRadius="md"
       resize="vertical"
@@ -59,10 +57,7 @@ const DetailsSection = ({ personaldetailsdata, about, handleAboutChange, phonepe
   );
 
   const renderSwitch = (detail) => (
-    <div align="left" className="detailitem">
-      <Switch isChecked={phonepermission} onChange={handlePermissionChange} size='lg' mr={2} id={'profile'+detail.name} />
-      <Text fontSize="sm" color="gray.600"> {phonepermission ? "Display my phone number for others to see" : "I don't want to be contacted through phone"}</Text>
-    </div>
+      <input type='checkbox'  id={'profile'+detail.name} />
   );
 
   const renderDropdown = (detail) => (
@@ -96,7 +91,8 @@ const DetailsSection = ({ personaldetailsdata, about, handleAboutChange, phonepe
   );
 };
 
-export default function SignedInBox({ user, profileImage, handleImageChange, personaldetailsdata, about, handleAboutChange, phonepermission, handlePermissionChange, updateFirebaseUserData }) {
+
+export default function SignedInBox({ user, profileImage, handleImageChange, personaldetailsdata,updateFirebaseUserData}) {
   return (
     <Box className="cardcontainer">
       <ProfileSection
@@ -106,10 +102,6 @@ export default function SignedInBox({ user, profileImage, handleImageChange, per
       />
       <DetailsSection
         personaldetailsdata={personaldetailsdata}
-        about={about}
-        handleAboutChange={handleAboutChange}
-        phonepermission={phonepermission}
-        handlePermissionChange={handlePermissionChange}
         updateFirebaseUserData={updateFirebaseUserData}
       />
     </Box>

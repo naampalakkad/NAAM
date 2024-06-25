@@ -231,8 +231,8 @@ export let personaldetailsdata = [
       },
       {
         prop: "Phone permission",
-        name: "Phone",
-        default: "true",
+        name: "phoneperm",
+        default: true,
         type: "switch"
       }
       

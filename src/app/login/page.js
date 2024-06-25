@@ -14,10 +14,10 @@ import SignedInBox from "./profilepage";
 import { useToast } from "@chakra-ui/react";
 
 export default function ProfilePage() {
+
   const [user, setUser] = useState(null);
+  const [userdata, setUserdata] = useState(null);
   const [profileImage, setProfileImage] = useState(null);
-  const [phonepermission, setPermission] = useState(false);
-  const [about, setAbout] = useState('');
   const toast = useToast();
 
   useEffect(() => {
@@ -25,8 +25,9 @@ export default function ProfilePage() {
       if (user) {
         setUser(user);
         setProfileImage(user.photoURL);
-        const userdata = await getuserdetailfromdb(user.uid);
-        setdatacolumns(userdata);
+        const userdataa = await getuserdetailfromdb(user.uid);
+        setUserdata(userdataa);
+        setdatacolumns(userdataa);
       } else {
         setUser(null);
       }
@@ -36,17 +37,19 @@ export default function ProfilePage() {
   }, []);
 
   function setdatacolumns(userdata) {
+    
     if (!userdata) {
       console.error('No userdata provided');
       return;
     }
+    console.log(userdata)
     setProfileImage(userdata.photo);
-    setPermission(userdata.phoneperm);
-    setAbout(userdata.about);
 
     for (const { name, type } of personaldetailsdata) {
       const input = document.getElementById(`profile${name}`);
+      console.log(input)
       if (input && userdata[name]) {
+        
         input.value = userdata[name];
       } else {
         console.warn(`No detaillist input found with ID: profile${name}`);
@@ -57,14 +60,14 @@ export default function ProfilePage() {
   function updateFirebaseUserData() {
     let userdetails = {};
     userdetails["photo"] = profileImage;
-    userdetails["phoneperm"] = phonepermission;
-    userdetails["about"] = about;
     personaldetailsdata.forEach(detail => {
       const input = document.getElementById("profile" + detail.name);
       if (input && input.value) {
         userdetails[detail.name] = input.value;
       }
     });
+    console.log(userdetails);
+    
     savedatatodb("users/" + user.uid, userdetails);
     toast({
       title: 'Success',
@@ -107,25 +110,13 @@ export default function ProfilePage() {
     }
   };
 
-  const handlePermissionChange = () => {
-    setPermission(!phonepermission);
-  };
-
-  const handleAboutChange = (event) => {
-    setAbout(event.target.value);
-  };
-
   return (
     user ? ( 
       <SignedInBox
         user={user}
         profileImage={profileImage}
-        phonepermission={phonepermission}
-        about={about}
-        handlePermissionChange={handlePermissionChange}
         updateFirebaseUserData={updateFirebaseUserData}
         handleImageChange={handleImageChange}
-        handleAboutChange={handleAboutChange}
         personaldetailsdata={personaldetailsdata} 
       />
     ) : (
