@@ -230,11 +230,11 @@ export let personaldetailsdata = [
         type: "textarea"
       },
       {
-        prop: "Phone permission",
+        prop: "Share Phone Number",
         name: "phoneperm",
         default: true,
-        type: "switch"
-      }
+        type: "checkbox"
+      },
       
 
 ]

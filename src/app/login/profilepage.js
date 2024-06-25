@@ -1,6 +1,6 @@
 import React from 'react';
 import { signInoutWithGoogle } from "@/lib/firebase";
-import { Box, Heading, Textarea, Image, Button, Switch, Text, Input, Card, Select, useToast } from "@chakra-ui/react";
+import { Box, Heading, Textarea, Image, Button,  Input, Card, Select} from "@chakra-ui/react";
 
 const ProfileSection = ({ user, profileImage, handleImageChange }) => {
   const handleSignOut = () => {
@@ -57,7 +57,10 @@ const DetailsSection = ({ personaldetailsdata, updateFirebaseUserData }) => {
   );
 
   const renderSwitch = (detail) => (
-      <input type='checkbox'  id={'profile'+detail.name} />
+      
+      <label className='switchlabel'>
+        <input type='checkbox' id={"profile" + detail.name} />
+    </label>
   );
 
   const renderDropdown = (detail) => (
@@ -81,7 +84,7 @@ const DetailsSection = ({ personaldetailsdata, updateFirebaseUserData }) => {
           {
           detail.type === "textarea" ? renderTextarea(detail) :
           detail.type === "select" ? renderDropdown(detail) : 
-          detail.type === "switch" ? renderSwitch(detail) : 
+          detail.type === "checkbox" ? renderSwitch(detail) : 
           renderInput(detail)
           }
         </div>

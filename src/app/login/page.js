@@ -16,7 +16,6 @@ import { useToast } from "@chakra-ui/react";
 export default function ProfilePage() {
 
   const [user, setUser] = useState(null);
-  const [userdata, setUserdata] = useState(null);
   const [profileImage, setProfileImage] = useState(null);
   const toast = useToast();
 
@@ -26,7 +25,6 @@ export default function ProfilePage() {
         setUser(user);
         setProfileImage(user.photoURL);
         const userdataa = await getuserdetailfromdb(user.uid);
-        setUserdata(userdataa);
         setdatacolumns(userdataa);
       } else {
         setUser(null);
@@ -42,14 +40,13 @@ export default function ProfilePage() {
       console.error('No userdata provided');
       return;
     }
-    console.log(userdata)
     setProfileImage(userdata.photo);
 
     for (const { name, type } of personaldetailsdata) {
       const input = document.getElementById(`profile${name}`);
-      console.log(input)
-      if (input && userdata[name]) {
-        
+      if (input && userdata[name] && input.type =="checkbox") {
+        input.checked = userdata[name];
+      } else if (input && userdata[name]) {
         input.value = userdata[name];
       } else {
         console.warn(`No detaillist input found with ID: profile${name}`);
@@ -62,11 +59,12 @@ export default function ProfilePage() {
     userdetails["photo"] = profileImage;
     personaldetailsdata.forEach(detail => {
       const input = document.getElementById("profile" + detail.name);
-      if (input && input.value) {
+      if (input && input.value && input.type == "checkbox") {
+        userdetails[detail.name] = input.checked;
+      } else if(input && input.value) {
         userdetails[detail.name] = input.value;
       }
     });
-    console.log(userdetails);
     
     savedatatodb("users/" + user.uid, userdetails);
     toast({
@@ -89,7 +87,7 @@ export default function ProfilePage() {
         ...existingUserDetails,
         photo: imageUrl
       };
-      await savedatatodb("users/" + user.uid, updatedUserDetails);
+      savedatatodb("users/" + user.uid, updatedUserDetails);
       setProfileImage(imageUrl);
       toast({
         title: "Success",
