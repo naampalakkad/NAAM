@@ -25,7 +25,6 @@
     overflow-y: auto;
     border-right: 1px solid #ccc; 
     height: 100vh; 
-    height: 100vh; 
   }
   .event-card {
     border: 1px solid #ccc;
@@ -74,13 +73,13 @@
   .add-event-form {
     position: fixed;
     top: 50%;
-    right: 0%;
+    left: 88%;
     transform: translate(-50%, -50%);
     background-color: white;
     border-radius: 8px;
     padding: 20px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 15%;
+    width: 23%;
   }
   
   .add-event-form label {
@@ -113,10 +112,12 @@
     margin-right: 10px;
   }
   .addbutton{
-    background-color:  rgb(21, 21, 90);
+    background-color:   rgb(5, 5, 68);
     color: white;
     padding: 10px;
     border-radius:5%;
+    margin-top: 5%;
+    margin-bottom: 10px;
   }
   .event-list {
     list-style-type: none;
@@ -142,10 +143,11 @@
 .custom-event {
   display: flex;
   justify-content: space-between;  
-  background-color: #f0f0f0;
-  padding: 5px;
+  background-color: rgba(235, 233, 170, 0.793);
+  padding: 1px;
   border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgba(235, 233, 170, 0.793);
+  width: 100%;
 }
 
 .event-title {
@@ -156,6 +158,21 @@
   font-style: italic;
   margin-left: 15%;
 }
-
-
-  
+.card{ 
+  padding: 0%;
+}
+.sidebar {
+  flex: 1;
+  border-color: transparent;
+  padding: 10px;
+  border-width: 1px;
+  box-shadow: 5px 5px 5px rgba(14, 33, 140, 0.5);
+  border-top: none; 
+}
+.bar{
+  flex: '0 0 calc(75vw)';
+  padding: '0vh';
+  margin: 1rem; 
+  border-width: 1px;  
+  border-color: #aab0ae;   
+} 

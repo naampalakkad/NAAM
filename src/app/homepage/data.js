@@ -95,7 +95,7 @@ export const MenuItems = [
 export const FooterMenuItems = [
     { name: 'About Us', link: 'aboutus' },
     { name: 'Bye-Law', link: 'law' },
-    { name: 'Login', link: 'login' },
+    { name: 'Profile', link: 'login' },
 ];
 
 export const socialMediaUrls = [

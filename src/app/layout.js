@@ -12,11 +12,9 @@ export default function RootLayout({ children }) {
       <body>
         <Header />
         < div id="contentbody">
-        < div id="contentbody">
         <ChakraProvider>
           {children}
         </ChakraProvider>
-        </div>
         </div>
         <Footer />
       </body>
