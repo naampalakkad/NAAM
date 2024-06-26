@@ -1,22 +1,30 @@
+// app/layout.js
 import Header from "./components/header";
 import Footer from "./components/footer";
-import { ChakraProvider } from '@chakra-ui/react';
-import "./globals.css"
-import Dochead from "@/lib/docheader"
+import { ChakraProvider, extendTheme, ColorModeScript } from "@chakra-ui/react";
+import "./globals.css";
+import Dochead from "@/lib/docheader";
 
+const config = {
+  initialColorMode: "light",
+  useSystemColorMode: false,
+};
+
+const theme = extendTheme({ config });
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-       <Dochead/>
+      <Dochead />
       <body>
-        <Header />
-        < div id="contentbody">
         <ChakraProvider>
-          {children}
+          <ColorModeScript initialColorMode={theme.config.initialColorMode} />
+          <Header />
+          <div id="contentbody">
+            {children}
+          </div>
+          <Footer />
         </ChakraProvider>
-        </div>
-        <Footer />
       </body>
     </html>
   );

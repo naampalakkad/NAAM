@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image'
 import "./header.css";
 import { MenuItems } from "@/lib/data";
+import { ThemeToggleButton } from "./themetoggle"
 
 
 export default function Header() {
@@ -23,6 +24,7 @@ export default function Header() {
   }
 
 
+  
   useEffect(() => {
     function handleResize() {
       setIsMobile(window.innerWidth < 850);
@@ -67,6 +69,7 @@ export default function Header() {
         ) : (
           <div id="main_menu">
             {MenuItems.map(item => <MenuItem key={item.name} item={item} />)}
+           <ThemeToggleButton/>
           </div>
         )}
       </div>

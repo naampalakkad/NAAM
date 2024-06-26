@@ -1,6 +1,8 @@
 export const photogalleryurl = "https://photos.app.goo.gl/DAAhH2DiYoqy9ohP8";
 import {getdatafromStorage} from "@/lib/firebase";
 
+export let thememode = 'dark';
+
 export async function getCarouselImageUrls() {
     const carouselImageUrls = getdatafromStorage('carousalimages');
     return carouselImageUrls;
