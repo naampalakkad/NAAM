@@ -58,6 +58,7 @@ export function savedatatodb(location, data) {
       });
   }
 }
+
 export function saveposttodb(data) {
   if (auth.currentUser) {
     let dataRef = ref(db, "posts/" + data.time);
