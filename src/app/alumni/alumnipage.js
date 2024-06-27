@@ -37,12 +37,15 @@ const SearchBox = ({ searchTerm, setSearchTerm, formData, setFormData }) => {
           variant="filled"
           flex="1"
           padding={4}
+          marginTop={2}
           size="lg"
         />
         <Button 
           colorScheme="red" 
           onClick={handleReset} 
           padding={4}
+          marginTop={2}
+
           size="lg"
         >
           Clear
