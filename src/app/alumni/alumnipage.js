@@ -60,7 +60,7 @@ const SearchBox = ({ searchTerm, setSearchTerm, formData, setFormData }) => {
         width="30%" 
         margin={2}
       >
-        Reset
+        Clear
       </Button>
     </Box>
   );
