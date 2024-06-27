@@ -1,24 +1,40 @@
-'use client';
+'use client'
 import React, { useState, useEffect } from 'react';
-import {SimpleGrid } from "@chakra-ui/react";
-import PhotoAlbum from "react-photo-album";
-import {getGalleryImageUrls} from '../homepage/data';
-import './gallery.css';
+import { Flex, Heading, Button } from "@chakra-ui/react";
+import { checkIfUserSignedIn } from "@/lib/firebase";
+import GalleryPage from './gallerypage';
 
-export default function gallerypage() {
-    const [imgurls, setImgUrls] = useState([]);
+export default function gallerylistPage (){
+  const [userSignedIn, setUserSignedIn] = useState(false);
 
+  useEffect(() => {
+    const checkSignIn = async () => {
+      const user = await checkIfUserSignedIn();
+      if (user) {
+        console.log('User is signed in:', user);
+        setUserSignedIn(true);
+      } else {
+        console.log('No user signed in');
+        setUserSignedIn(false);
+      }
+    };
+    checkSignIn();
+  }, []);
 
-    useEffect(() => {
-        getGalleryImageUrls().then((urls) => {
-            
-            setImgUrls(urls);
-        });
-    }, []);
+  const signInRedirect = () => {
+    window.location.href = '/login';
+  };
 
-    return (
-        <SimpleGrid column={1} className="gallerypanel" >
-            <PhotoAlbum layout="rows" photos={imgurls} />
-        </SimpleGrid>
-    );
-}
+  return (
+    <Flex flexDirection="column" alignItems="center">
+      {!userSignedIn ? (
+        <Flex justifyContent="center" alignItems="center" h="60vh" flexDirection="column">
+          <Heading fontSize="4xl" color="gray.600" textAlign="center">You need to sign in first</Heading>
+          <Button colorScheme="blue" mt={4} onClick={signInRedirect}>Sign In</Button>
+        </Flex>
+      ) : (
+        <GalleryPage/>
+      )}
+    </Flex>
+  );
+};

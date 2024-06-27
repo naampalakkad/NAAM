@@ -1,12 +1,11 @@
-//let photossrc ="https://photos.app.goo.gl/DAAhH2DiYoqy9ohP8";
-
-export const photogalleryurl = "https://photos.app.goo.gl/DAAhH2DiYoqy9ohP8";
 import {getdatafromStorage} from "@/lib/firebase";
+
+export let thememode = 'dark';
 
 export async function getCarouselImageUrls() {
     const carouselImageUrls = getdatafromStorage('carousalimages');
     return carouselImageUrls;
-}
+} 
 
 export async function getGalleryImageUrls() {
     const galleryImageUrls = [];
@@ -45,8 +44,6 @@ export const statistics = [
         "title": "branches",
         "text": "10+",
     }
-
-
 ]
 
 export const blogposts = {
@@ -79,9 +76,7 @@ export const blogposts = {
             type: "blog",
             author: "Anjitha J",
         },
-
     ]
-
 }
 
 export const MenuItems = [
@@ -99,11 +94,11 @@ export const FooterMenuItems = [
 ];
 
 export const socialMediaUrls = [
-    "www.linkedin.com",
-    "www.facebook.com",
-    "www.twitter.com",
-    "www.instagram.com",
-    "www.youtube.com"
+    "https://www.linkedin.com",
+    "https://www.facebook.com",
+    "https://www.twitter.com",
+    "https://www.instagram.com",
+    "https://www.youtube.com"
 ];
 
 export const galleryphotos = [
@@ -152,76 +147,123 @@ export let aboutnaam = {
     mission: "NAAM unites Jawahar Navodaya Vidyalaya Palakkad alumni, fostering lifelong connections and professional growth. Our mission is to celebrate shared experiences, give back to our alma mater, and engage in impactful community initiatives. NAAM stands for camaraderie, excellence, and service, embodying the values instilled by Jawahar Navodaya Vidyalaya Palakkad."
 }
 
-export let   personaldetailsdata = [
-    
+export let personaldetailsdata = [
     {
-      prop: "Name",
-      name: "name",
-      default: "Enter your name",
-      type: "text"
+        prop: "Name",
+        name: "name",
+        default: "Enter your name",
+        type: "text"
+      },
+      {
+        prop: "Email",
+        name:"email",
+        default: "Enter your email",
+        type: "email"
+      },
+      {
+        prop: "Batch",
+        name: "batch",
+        default: "Enter your batch,  eg: 25",
+        type: "Number"
+      },
+      {
+        prop: "Number",
+        name:"number",
+        default: "Enter your Mobile number",
+        type: "Number"
+      },
+      {
+        prop: "Alternate Number",
+        name:"Alternate number",
+        default: "Enter your Alternate number",
+        type: "Number"
+      },
+      {
+        prop: "Current Location",
+        name: "location",
+        default: "Select your current location",
+        type: "select",
+        options: ["Location1", "Location2", "Location3"]  
+      },
+      {
+        prop: "Native Location",
+        name: "location2",
+        default: "Select your native location",
+        type: "select",
+        options: ["Location4", "Location5", "Location6"]  
+      },
+      {
+        prop: "Profession",
+        name: "profession",
+        default: "Select your profession",
+        type: "select",
+        options: ["Profession1", "Profession2", "Profession3"]  
+      },
+      {
+        prop: "Specialization",
+        name: "specialization",
+        default: "Select your specialization",
+        type: "select",
+        options: ["Specialization1", "Specialization2", "Specialization3"]  
+      },
+      {
+        prop: "JNV Roll No",
+        name: "rollno",
+        default: "Enter your JNV Roll No",
+        type: "Number"
+      },
+      {
+        prop: "LinkedIn",
+        name: "linkedIn",
+        default: "Enter your LinkedIn Profile",
+        type: "text"
+      },
+      {
+        prop: "Facebook",
+        name: "facebook",
+        default: "Enter your Facebook Profile",
+        type: "text"
+      },
+      {
+        prop: "About",
+        name: "about",
+        default: "tell us about you",
+        type: "textarea"
+      },
+      {
+        prop: "Share Phone Number",
+        name: "phoneperm",
+        default: true,
+        type: "checkbox"
+      },
+      
+
+]
+
+export const phototilesData = [
+    {
+      imageUrl: 'https://firebasestorage.googleapis.com/v0/b/naam-751a5.appspot.com/o/galleryimgs%2F1-small.webp?alt=media&token=507d4913-9500-4b92-9c30-1cd68891383f',
+      text: 'Get Together 2021',
+      link: 'https://photos.app.goo.gl/DAAhH2DiYoqy9ohP8'
     },
     {
-      prop: "Email",
-      name:"email",
-      default: "Enter your email",
-      type: "email"
+      imageUrl: 'https://firebasestorage.googleapis.com/v0/b/naam-751a5.appspot.com/o/galleryimgs%2F4-small.webp?alt=media&token=6b9b0e06-0328-441a-91e1-1c3c79213ce8',
+      text: 'Get Together 2022',
+      link: 'https://photos.app.goo.gl/DAAhH2DiYoqy9ohP8'
     },
     {
-      prop: "Batch",
-      name: "batch",
-      default: "Enter your batch,  eg: 25",
-      type: "Number"
-    },
-    {
-      prop: "Number",
-      name:"number",
-      default: "Enter your Mobile number",
-      type: "Number"
-    },
-    {
-      prop: "Alternate Number",
-      name:"Alternate number",
-      default: "Enter your Alternate number",
-      type: "Number"
-    },
-    {
-      prop: "Location",
-      name: "location",
-      default: "Select your location",
-      type: "select",
-      options: ["Location1", "Location2", "Location3"]  
-    },
-    {
-      prop: "Profession",
-      name: "profession",
-      default: "Select your profession",
-      type: "select",
-      options: ["Profession1", "Profession2", "Profession3"]  
-    },
-    {
-      prop: "Specialization",
-      name: "specialization",
-      default: "Select your specialization",
-      type: "select",
-      options: ["Specialization1", "Specialization2", "Specialization3"]  
-    },
-    {
-      prop: "JNV Roll No",
-      name: "rollno",
-      default: "Enter your JNV Roll No",
-      type: "Number"
-    },
-    {
-      prop: "LinkedIn",
-      name: "linkedIn",
-      default: "Enter your LinkedIn Profile",
-      type: "text"
-    },
-    {
-      prop: "Facebook",
-      name: "facebook",
-      default: "Enter your Facebook Profile",
-      type: "text"
-    }
+        imageUrl: 'https://firebasestorage.googleapis.com/v0/b/naam-751a5.appspot.com/o/galleryimgs%2F3-small.webp?alt=media&token=7e7f50c9-e73c-46a5-8452-894446ba998e',
+        text: 'Milan',
+        link: 'https://photos.app.goo.gl/DAAhH2DiYoqy9ohP8'
+      },
+      {
+        imageUrl: 'https://firebasestorage.googleapis.com/v0/b/naam-751a5.appspot.com/o/galleryimgs%2F2-small.webp?alt=media&token=bbb56e27-5a4a-4850-92bd-bc248634ad42',
+        text: 'Dubhai section',
+        link: 'https://photos.app.goo.gl/DAAhH2DiYoqy9ohP8'
+      },
+      {
+        imageUrl: 'https://firebasestorage.googleapis.com/v0/b/naam-751a5.appspot.com/o/galleryimgs%2F5-small.webp?alt=media&token=10953dcc-ff8a-4449-aec9-d3e8e4b2954f',
+        text: 'Navodaya Malampuzha',
+        link: 'https://photos.app.goo.gl/DAAhH2DiYoqy9ohP8'
+      },
   ];
- 

@@ -1,8 +1,9 @@
 'use client'
 import { initializeApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { getAuth, GoogleAuthProvider, signInWithPopup,onAuthStateChanged } from "firebase/auth";
 import { getStorage, ref as sref, uploadBytes, getDownloadURL, listAll, deleteObject } from "firebase/storage";
 import { getDatabase, set, get, ref } from "firebase/database"
+import { useEffect, useState } from 'react';
 let ImageCompressor = null
 if (typeof window !== "undefined") {
   import('image-compressor.js')
@@ -46,9 +47,51 @@ export function signInoutWithGoogle() {
     });
   }
 }
-export function issignedin() {
-  return auth.currentUser;
+
+export const checkIfUserSignedIn = () => {
+  return new Promise((resolve, reject) => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      unsubscribe(); 
+      if (user) {
+        resolve(user); 
+      } else {
+        resolve(null); 
+      }
+    }, reject); 
+  });
+};
+
+
+export async function checkuserrole(role) {
+  return new Promise((resolve, reject) => {
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        const userEmail = user.email.replace('.', '_');
+        const adminRef = ref(db, 'userroles/' + role);
+
+        try {
+          const snapshot = await get(adminRef);
+
+          if (snapshot.exists()) {
+            const admins = snapshot.val();
+            resolve(admins[userEmail] ? true : false);
+          } else {
+            console.log("No data available");
+            resolve(false);
+          }
+        } catch (error) {
+          console.error("Error getting document: ", error);
+          reject(false);
+        }
+      } else {
+        console.log("No user signed in");
+        resolve(false);
+      }
+      unsubscribe(); // Clean up the listener
+    });
+  });
 }
+
 export function savedatatodb(location, data) {
   if (auth.currentUser) {
     let dataRef = ref(db, location);
@@ -58,6 +101,22 @@ export function savedatatodb(location, data) {
       });
   }
 }
+const emails = [
+  'sreejithksgupta2255@gmail.com',
+  'ssuneebvishnu@gmail.com',
+  'unnimayat01@gmail.com',
+  'niranjanasunilkumar2003@gmail.com'
+];
+export const saveEmails = () => {
+  if (auth.currentUser) {
+    const emailData = emails.reduce((acc, email) => {
+      acc[email.replace('.', '_')] = true;
+      return acc;
+    }, {});
+    savedatatodb('userroles/blogger', emailData);
+  }
+};
+
 export function saveposttodb(data) {
   if (auth.currentUser) {
     let dataRef = ref(db, "posts/" + data.time);
@@ -67,23 +126,37 @@ export function saveposttodb(data) {
       });
   }
 }
- 
-
-export function eventSave(data){
+export function eventSave(data) {
   if (auth.currentUser) {
-        let dataRef = ref(db, "events/" + data.timestamp);
-        set(dataRef, data)
-            .then(() => {
-                console.log("event successfully written!");
-            })
-            .catch((error) => {
-                console.error("Error writing event: ", error);
-            });
-    }
+    data.userId = auth.currentUser.uid;
+    data.userName = auth.currentUser.displayName;
+    let dataRef = ref(db, "events/" + data.timestamp);
+    set(dataRef, data)
+      .catch((error) => {
+        console.error("Error writing event: ", error);
+      });
   }
-
-
-export async function getpostsfromdb(){
+}
+export async function fetchEventsFromDB() {
+  const eventsRef = ref(db, 'events');
+  try {
+    const snapshot = await get(eventsRef);
+    if (snapshot.exists()) {
+      const eventData = snapshot.val();
+      return Object.keys(eventData).map(key => ({
+        ...eventData[key],
+        id: key
+      }));
+    } else {
+      console.log("No events available");
+      return [];
+    }
+  } catch (error) {
+    console.error("Error fetching events:", error);
+    throw error;
+  }
+}
+export async function getpostsfromdb() {
   const userRef = ref(db, "posts");
   return get(userRef)
     .then((snapshot) => {
@@ -116,7 +189,6 @@ export async function getdatafromdb(location) {
     });
 }
 export async function getdatafromStorage(location) {
-  console.log("Fetching from Firebase Storage. Location", location);
   const storageRef = sref(storage, location);
   const res = await listAll(storageRef);
   const resurls = [];

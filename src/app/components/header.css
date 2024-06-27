@@ -1,6 +1,4 @@
-body{
-  overscroll-behavior: none;
-}
+
 #header {
   position: fixed;
   top: 0;
@@ -13,7 +11,7 @@ body{
   justify-content: space-between;
   align-items: center;
   color: rgb(0, 105, 88);
-  padding: 10px;
+  padding: 2px 10px;
 }
 #logo {
   border-radius: 50%;
@@ -180,8 +178,6 @@ a:hover {
   }
 
   #menuToggle {
-    position: absolute;
-    top: 25px;
     z-index: 1;
   }
 

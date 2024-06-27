@@ -1,9 +1,10 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image'
 import "./header.css";
-import { MenuItems } from "../homepage/data";
+import { MenuItems } from "@/lib/data";
+import { ThemeToggleButton } from "./themetoggle"
 
 
 export default function Header() {
@@ -14,15 +15,16 @@ export default function Header() {
       if (window.pageYOffset > 0) {
         header.style.backgroundColor = 'rgb(0, 19, 59)';
         header.style.color = 'rgb(255, 255, 255)';
+        header.style.boxShadow = '0px 0px 10px rgb(0, 0, 0, 0.3)';
       } else {
         header.style.backgroundColor = 'transparent';
-        header.style.color = 'rgb(23, 110, 81)';
         header.style.color = 'rgb(23, 110, 81)';
 }
 });
   }
 
 
+  
   useEffect(() => {
     function handleResize() {
       setIsMobile(window.innerWidth < 850);
@@ -55,6 +57,7 @@ export default function Header() {
         </div>
 
         {isMobile ? (
+          <div>
           <div id="menuToggle">
             <input type="checkbox" />
             <span></span>
@@ -62,15 +65,18 @@ export default function Header() {
             <span></span>
             <ul id="menu">
               {MenuItems.map(item => <li key={item.name}><MenuItem item={item} /></li>)}
-            </ul>
+              <div><ThemeToggleButton/></div>
+            </ul>   
+            </div>
+           
           </div>
         ) : (
           <div id="main_menu">
             {MenuItems.map(item => <MenuItem key={item.name} item={item} />)}
+            <ThemeToggleButton/>
           </div>
         )}
       </div>
-      {/* <div id="header_space"></div> */}
     </header>
   );
 };

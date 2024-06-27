@@ -85,6 +85,7 @@
 html,
 body {
   max-width: 100vw;
+  overscroll-behavior: none;
 }
 
 body {
@@ -107,13 +108,11 @@ a:hover {
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: 100%;
-  /* background-color: var(--bgcolor); */
   color: var(--txt_col);
 }
 
 #contentbody{
-  min-height: 80vh;
+  min-height: 100vh;
 }
 
 .cardcontainer {
