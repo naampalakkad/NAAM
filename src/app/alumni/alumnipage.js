@@ -28,40 +28,44 @@ const SearchBox = ({ searchTerm, setSearchTerm, formData, setFormData }) => {
   const selectFields = personaldetailsdata.filter(field => field.type === 'select');
 
   return (
-    <Box display="flex" flexDirection="row" alignItems="center" gap={3}>
-      <Input
-        placeholder="Search with Name or Batch..."
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        variant="filled"
-        width="70%"
-        padding={4}
-        margin={5}
-        size="lg"
-      />
-      {selectFields.map((field) => (
-        <Select
-          key={field.name}
-          placeholder={field.default}
-          value={formData[field.name]}
-          name={field.name}
-          onChange={handleChange}
-          width="70%"
-          margin={2}
+    <Box>
+      <Flex flexDirection="row" alignItems="center" gap={3} wrap="wrap" mb={4}>
+        <Input
+          placeholder="Search with Name or Batch..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          variant="filled"
+          flex="1"
+          padding={4}
+          size="lg"
+        />
+        <Button 
+          colorScheme="red" 
+          onClick={handleReset} 
+          padding={4}
+          size="lg"
         >
-          {field.options.map(option => (
-            <option key={option} value={option}>{option}</option>
-          ))}
-        </Select>
-      ))}
-      <Button 
-        colorScheme="red" 
-        onClick={handleReset} 
-        width="30%" 
-        margin={2}
-      >
-        Clear
-      </Button>
+          Clear
+        </Button>
+      </Flex>
+      <Flex flexDirection="row" alignItems="center" gap={3} wrap="wrap">
+        {selectFields.map((field, index) => (
+          <Select
+            key={field.name}
+            placeholder={field.default}
+            value={formData[field.name]}
+            name={field.name}
+            onChange={handleChange}
+            flex="1"
+            minWidth="200px"
+            marginY={2}
+          >
+            {field.options.map(option => (
+              <option key={option} value={option}>{option}</option>
+            ))}
+          </Select>
+        ))}
+      </Flex>
     </Box>
   );
 };
