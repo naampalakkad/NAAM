@@ -131,7 +131,6 @@ export async function getdatafromdb(location) {
     });
 }
 export async function getdatafromStorage(location) {
-  console.log("Fetching from Firebase Storage. Location", location);
   const storageRef = sref(storage, location);
   const res = await listAll(storageRef);
   const resurls = [];

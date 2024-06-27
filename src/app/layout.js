@@ -18,7 +18,6 @@ export default function RootLayout({ children }) {
       <Dochead />
       <body>
         <ChakraProvider>
-          <ColorModeScript initialColorMode={theme.config.initialColorMode} />
           <Header />
           <div id="contentbody">
             {children}
