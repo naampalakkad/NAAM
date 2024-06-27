@@ -15,6 +15,9 @@ export const ThemeToggleButton = () => {
         size="lg"
         display="flex"
         alignItems="center"
+        id="themeToggleButton"
+        cursor="pointer"
+        name="theme toggle Button"
       >
         <Icon as={SwitchIcon} color={colorMode === "light" ? "yellow.500" : "gray.500"} />
       </Switch>

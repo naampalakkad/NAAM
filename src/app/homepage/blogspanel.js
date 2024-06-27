@@ -3,7 +3,7 @@ import { CardBody, CardHeader, Stack, Badge, Card, Button, SimpleGrid, CardFoote
 import React, { useState, useEffect } from 'react';
 import './blogspanel.css';
 import { getpostsfromdb } from "@/lib/firebase";
-const defaultImage = "https://source.unsplash.com/800x600/?letter,d";
+const defaultImage = "./assets/logo.webp";
 
 
 export default function Blogspanel() {
