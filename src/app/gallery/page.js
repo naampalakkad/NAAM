@@ -1,73 +1,40 @@
 'use client'
 import React, { useState, useEffect } from 'react';
-import { SimpleGrid, Skeleton } from "@chakra-ui/react";
-import PhotoAlbum from "react-photo-album";
-import { getGalleryImageUrls } from '../homepage/data';
-import './gallery.css';
-import LightboxComponent from './lightbox'; 
-import Quotebox from './quotesbox';
-import GalleryTiles from './photobox';
+import { Flex, Heading, Button } from "@chakra-ui/react";
+import { checkIfUserSignedIn } from "@/lib/firebase";
+import GalleryPage from './gallerypage';
 
-export default function GalleryPage() {
-  const [imgurls, setImgUrls] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [selectedIndex, setSelectedIndex] = useState(-1); 
+export default function gallerylistPage (){
+  const [userSignedIn, setUserSignedIn] = useState(false);
 
   useEffect(() => {
-    const fetchImages = async () => {
-      try {
-        const urls = await getGalleryImageUrls();
-        setImgUrls(urls);
-      } catch (err) {
-        setError(err);
-      } finally {
-        setIsLoading(false);
+    const checkSignIn = async () => {
+      const user = await checkIfUserSignedIn();
+      if (user) {
+        console.log('User is signed in:', user);
+        setUserSignedIn(true);
+      } else {
+        console.log('No user signed in');
+        setUserSignedIn(false);
       }
     };
-
-    fetchImages();
+    checkSignIn();
   }, []);
 
-  const renderImages = () => (
-    <SimpleGrid columns={1}>
-      <PhotoAlbum
-        layout="rows"
-        photos={imgurls}
-        onClick={({ index }) => setSelectedIndex(index)} // Update state on click
-      />
-    </SimpleGrid>
-  );
-
-  const renderContent = () => {
-    if (isLoading) {
-      return (
-        <SimpleGrid columns={1}>
-          {Array.from({ length: 10 }).map((_, index) => (
-            <Skeleton key={index} height="200px" width="100%" padding="10px" />
-          ))}
-        </SimpleGrid>
-      );
-    }
-
-    if (error) {
-      return <div>Error fetching images: {error.message}</div>;
-    }
-
-    return renderImages();
+  const signInRedirect = () => {
+    window.location.href = '/login';
   };
 
   return (
-    <div className="gallerypanel">
-      <Quotebox />
-      <GalleryTiles />
-      {renderContent()}
-      <LightboxComponent
-        images={imgurls}
-        isOpen={selectedIndex >= 0} 
-        ind={selectedIndex} 
-        onClose={() => setSelectedIndex(-1)} 
-      />
-    </div>
+    <Flex flexDirection="column" alignItems="center">
+      {!userSignedIn ? (
+        <Flex justifyContent="center" alignItems="center" h="60vh" flexDirection="column">
+          <Heading fontSize="4xl" color="gray.600" textAlign="center">You need to sign in first</Heading>
+          <Button colorScheme="blue" mt={4} onClick={signInRedirect}>Sign In</Button>
+        </Flex>
+      ) : (
+        <GalleryPage/>
+      )}
+    </Flex>
   );
-}
+};

@@ -1,8 +1,9 @@
 'use client'
 import { initializeApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { getAuth, GoogleAuthProvider, signInWithPopup,onAuthStateChanged } from "firebase/auth";
 import { getStorage, ref as sref, uploadBytes, getDownloadURL, listAll, deleteObject } from "firebase/storage";
 import { getDatabase, set, get, ref } from "firebase/database"
+import { useEffect, useState } from 'react';
 let ImageCompressor = null
 if (typeof window !== "undefined") {
   import('image-compressor.js')
@@ -46,9 +47,19 @@ export function signInoutWithGoogle() {
     });
   }
 }
-export function issignedin() {
-  return auth.currentUser;
-}
+
+export const checkIfUserSignedIn = () => {
+  return new Promise((resolve, reject) => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      unsubscribe(); // Unsubscribe after first invocation to avoid memory leaks
+      if (user) {
+        resolve(user); // Resolve with user object if user is signed in
+      } else {
+        resolve(null); // Resolve with null if no user is signed in
+      }
+    }, reject); // Reject with error if there's an authentication error
+  });
+};
 export function savedatatodb(location, data) {
   if (auth.currentUser) {
     let dataRef = ref(db, location);
