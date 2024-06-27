@@ -1,7 +1,7 @@
 'use client'
 import React, { useState, useEffect } from "react";
 import { Box, Heading, Button } from "@chakra-ui/react";
-import "./Modal.css";
+import "./Modal.css"; 
 
 export const BlogPost = ({ post }) => {
     let postdata = post[1];
@@ -32,16 +32,17 @@ export const BlogPost = ({ post }) => {
             boxShadow="md"
             style={{ flex: '0 0 auto', maxWidth: ['100%', '50%'] }}
         >
-
-            <Box p="20px" borderBottom="1px solid" backgroundColor="#161a30">
+            <Box p="20px" borderBottom="px solid" backgroundColor="#161a30" width={"400px"}>
                 <img
                     src={postdata.thumbnail || defaultImage}
                     alt={postdata.title}
                     style={{ width: '100%', height: 'auto', objectFit: 'cover', borderRadius: '8px', marginBottom: '10px' }}
                 />
                 <Box display="flex" justifyContent="space-between" alignItems="baseline" mb="2">
-                    <p style={{ textAlign: 'left', marginBottom: '5px' }}>Author: {postdata.authorName}</p>
-                    <p style={{ textAlign: 'right', fontSize: '0.6em'}}>{formattedDate}</p>
+                <p style={{ flex: '1', textAlign: 'left', marginBottom: '5px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    Author: {postdata.authorName || 'Unknown Author'}
+                </p>
+                <p style={{ textAlign: 'right', fontSize: '0.6em',paddingLeft:'2em' }}>{formattedDate}</p>
                 </Box>
                 <Heading fontSize={['xl', '2xl']} mb="2" textAlign="center" color="yellow">{postdata.title}</Heading>
                 <Box
