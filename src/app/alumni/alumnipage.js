@@ -15,38 +15,61 @@ const SearchBox = ({ searchTerm, setSearchTerm, formData, setFormData }) => {
     });
   };
 
+  const handleReset = () => {
+    setSearchTerm("");
+    setFormData({
+      location: '',
+      location2: '',
+      profession: '',
+      specialization: '',
+    });
+  };
+
   const selectFields = personaldetailsdata.filter(field => field.type === 'select');
 
   return (
-    <Box display="flex" flexDirection="row" alignItems="center" gap={3}>
-      <Input
-        placeholder="Search with Name or Batch..."
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        variant="filled"
-        width="70%"
-        padding={4}
-        margin={5}
-        size="lg"
-      />
-      {selectFields.map((field) => (
-        <Select
-          key={field.name}
-          placeholder={field.default}
-          value={formData[field.name]}
-          name={field.name}
-          onChange={handleChange}
-          width="70%"
-          margin={2}
+    <Box>
+      <Flex flexDirection="row" alignItems="center" gap={3} wrap="wrap" mb={4}>
+        <Input
+          placeholder="Search with Name or Batch..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          variant="filled"
+          flex="1"
+          padding={4}
+          size="lg"
+        />
+        <Button 
+          colorScheme="red" 
+          onClick={handleReset} 
+          padding={4}
+          size="lg"
         >
-          {field.options.map(option => (
-            <option key={option} value={option}>{option}</option>
-          ))}
-        </Select>
-      ))}
+          Clear
+        </Button>
+      </Flex>
+      <Flex flexDirection="row" alignItems="center" gap={3} wrap="wrap">
+        {selectFields.map((field, index) => (
+          <Select
+            key={field.name}
+            placeholder={field.default}
+            value={formData[field.name]}
+            name={field.name}
+            onChange={handleChange}
+            flex="1"
+            minWidth="200px"
+            marginY={2}
+          >
+            {field.options.map(option => (
+              <option key={option} value={option}>{option}</option>
+            ))}
+          </Select>
+        ))}
+      </Flex>
     </Box>
   );
 };
+
 
 const SocialIcons = ({ alumni }) => {
   const socialIconData = [
@@ -127,71 +150,70 @@ const ModelBox = ({ isOpen, onClose, selectedAlumni }) => (
   </Modal>
 );
 
-export default function AlumniList  () {
-    
-    const [alumnidata, setAlumnidata] = useState([]);
-    const [searchTerm, setSearchTerm] = useState("");
-    const [selectedAlumni, setSelectedAlumni] = useState(null);
-    const { isOpen, onOpen, onClose } = useDisclosure();
-    const [formData, setFormData] = useState({
-      location: '',
-      location2: '',
-      profession: '',
-      specialization: '',
-    });
-    useEffect(() => {
-        const fetchData = async () => {
-          // Fetch alumni data from database
-          const data = await getdatafromdb('users');
-          if (data) {
-            setAlumnidata(Object.values(data));
-          } else {
-            console.error('Failed to fetch data');
-          }
-        };
-        fetchData();
-        }, []);
+export default function AlumniList() {
+  const [alumnidata, setAlumnidata] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedAlumni, setSelectedAlumni] = useState(null);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [formData, setFormData] = useState({
+    location: '',
+    location2: '',
+    profession: '',
+    specialization: '',
+  });
 
-        const filteredAlumni = alumnidata.filter((alumni) => {
-            const searchTermLower = searchTerm.toLowerCase();
-            const matchesSearchTerm = searchTerm === "" ||
-              (alumni.name && alumni.name.toLowerCase().includes(searchTermLower)) ||
-              (alumni.batch !== undefined && alumni.batch.toString().toLowerCase().includes(searchTermLower));
-        
-            const matchesLocation = formData.location === "" || (alumni.location && alumni.location === formData.location);
-            const matchesLocation2 = formData.location2 === "" || (alumni.location2 && alumni.location2 === formData.location2);
-            const matchesProfession = formData.profession === "" || (alumni.profession && alumni.profession === formData.profession);
-            const matchesSpecialization = formData.specialization === "" || (alumni.specialization && alumni.specialization === formData.specialization);
-        
-            return matchesSearchTerm && matchesLocation && matchesLocation2 && matchesProfession && matchesSpecialization;
-          });
+  useEffect(() => {
+    const fetchData = async () => {
+      // Fetch alumni data from database
+      const data = await getdatafromdb('users');
+      if (data) {
+        setAlumnidata(Object.values(data));
+      } else {
+        console.error('Failed to fetch data');
+      }
+    };
+    fetchData();
+  }, []);
 
-          const handleMoreClick = (alumni) => {
-            setSelectedAlumni(alumni);
-            onOpen();
-          };
-        
+  const filteredAlumni = alumnidata.filter((alumni) => {
+    const searchTermLower = searchTerm.toLowerCase();
+    const matchesSearchTerm = searchTerm === "" ||
+      (alumni.name && alumni.name.toLowerCase().includes(searchTermLower)) ||
+      (alumni.batch !== undefined && alumni.batch.toString().toLowerCase().includes(searchTermLower));
 
-        return (
-  <Box id="contentbox">
-    <SearchBox
-      searchTerm={searchTerm}
-      setSearchTerm={setSearchTerm}
-      formData={formData}
-      setFormData={setFormData}
-    />
-    {alumnidata.length > 0 ? (
-      filteredAlumni.length > 0 ? (
-        <ResultsBox filteredAlumni={filteredAlumni} handleMoreClick={handleMoreClick} />
-      ) : (
-        <NoResultsBox />
-      )
-    ) : (
-      <Box textAlign="center" mt={8}>
-        <Heading fontSize="xl">Loading...</Heading>
-      </Box>
-    )}
-    <ModelBox isOpen={isOpen} onClose={onClose} selectedAlumni={selectedAlumni} />
-  </Box>
+    const matchesLocation = formData.location === "" || (alumni.location && alumni.location === formData.location);
+    const matchesLocation2 = formData.location2 === "" || (alumni.location2 && alumni.location2 === formData.location2);
+    const matchesProfession = formData.profession === "" || (alumni.profession && alumni.profession === formData.profession);
+    const matchesSpecialization = formData.specialization === "" || (alumni.specialization && alumni.specialization === formData.specialization);
+
+    return matchesSearchTerm && matchesLocation && matchesLocation2 && matchesProfession && matchesSpecialization;
+  });
+
+  const handleMoreClick = (alumni) => {
+    setSelectedAlumni(alumni);
+    onOpen();
+  };
+
+  return (
+    <Box id="contentbox">
+      <SearchBox
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+        formData={formData}
+        setFormData={setFormData}
+      />
+      {alumnidata.length > 0 ? (
+        filteredAlumni.length > 0 ? (
+          <ResultsBox filteredAlumni={filteredAlumni} handleMoreClick={handleMoreClick} />
+        ) : (
+          <NoResultsBox />
         )
-};
+      ) : (
+        <Box textAlign="center" mt={8}>
+          <Heading fontSize="xl">Loading...</Heading>
+        </Box>
+      )}
+      <ModelBox isOpen={isOpen} onClose={onClose} selectedAlumni={selectedAlumni} />
+    </Box>
+  );
+}
