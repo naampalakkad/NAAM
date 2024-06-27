@@ -6,6 +6,7 @@ import { getGalleryImageUrls } from '../homepage/data';
 import './gallery.css';
 import LightboxComponent from './lightbox'; 
 import Quotebox from './quotesbox';
+import GalleryTiles from './photobox';
 
 export default function GalleryPage() {
   const [imgurls, setImgUrls] = useState([]);
@@ -59,6 +60,7 @@ export default function GalleryPage() {
   return (
     <div className="gallerypanel">
       <Quotebox />
+      <GalleryTiles />
       {renderContent()}
       <LightboxComponent
         images={imgurls}

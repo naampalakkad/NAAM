@@ -1,69 +1,112 @@
-import React, { useEffect, useState } from "react";
-import {signInoutWithGoogle} from "@/lib/firebase";
-import { Box, Heading, Textarea, Image, Button, Switch, Text, Input, Card } from "@chakra-ui/react";
+import React from 'react';
+import { signInoutWithGoogle } from "@/lib/firebase";
+import { Box, Heading, Textarea, Image, Button,  Input, Card, Select} from "@chakra-ui/react";
 
-function signInWithGoogle() {
+const ProfileSection = ({ user, profileImage, handleImageChange }) => {
+  const handleSignOut = () => {
     signInoutWithGoogle();
-  }
+  };
 
+  return (
+    <Card className="profilebox">
+      <label htmlFor="profileImageInput" className="profileimage">
+        <Image
+          src={profileImage}
+          id="profileimagebox"
+          alt={user.displayName}
+          fallbackSrc="./assets/usericon.webp"
+        />
+        <span className="upload-icon">Upload</span>
+      </label>
+      <input
+        type="file"
+        id="profileImageInput"
+        onChange={handleImageChange}
+        style={{ display: "none" }}
+      />
+      <Box>
+        <Heading as="h3" size="md" mt={2} mb={1}>{user.displayName}</Heading>
+        <Box fontSize="sm" color="gray.600" mb={2}>{user.email}</Box>
+      </Box>
+      <Button onClick={handleSignOut} colorScheme="blue">Sign out</Button>
+    </Card>
+  );
+};
 
+const DetailsSection = ({ personaldetailsdata, updateFirebaseUserData }) => {
+  const renderInput = (detail) => (
+    <Input
+      className="detailitem"
+      variant="filled"
+      type={detail.type}
+      placeholder={detail.default}
+      id={"profile" + detail.name}
+    />
+  );
 
-export default function SignedInBox({ user, about, profileImage, phonepermission, handlePermissionChange, updateFirebaseUserData, handleImageChange, handleAboutChange, personaldetailsdata }) {
-   
-  
+  const renderTextarea = (detail) => (
+    <Textarea
+      className="detailitem"
+      variant="filled"
+      placeholder="Tell us about yourself..."
+      borderRadius="md"
+      resize="vertical"
+      height="180px"
+      id={"profile" + detail.name}
+    />
+  );
+
+  const renderSwitch = (detail) => (
       
-   
-    return (
-      <div className="cardcontainer">
-        <Card className="profilebox">
-          <div className="profileimagecontainer">
-            <label htmlFor="profileImageInput" className="profileimage">
-              <Image
-                src={profileImage}
-                id="profileimagebox"
-                alt={user.displayName}
-              />
-              <span className="upload-icon">Upload</span>
-            </label>
-            <input
-              type="file"
-              id="profileImageInput"
-              onChange={handleImageChange}
-              style={{ display: "none" }}
-            />
-          </div>
-          <p>{user.displayName}</p>
-          <p>{user.email}</p>
-          <Button onClick={()=>signInWithGoogle()}>Sign out</Button>
-        </Card>
-        <Box spacing={4} className="infobox">
-          {personaldetailsdata.map((detail, index) => (
-            <div className="detaillist" key={index}>
-              <label>{detail.prop}</label>
-              <Input
-                className="detailitem"
-                variant={"filled"}
-                type={detail.type}
-                placeholder={detail.default}
-                id={"profile" + detail.name}
-              />
-            </div>
-          ))}
-          <Textarea
-            value={about}
-            onChange={handleAboutChange}
-            placeholder="Tell us about yourself..."
-            size="lg"
-          />
-          <Card padding={1} margin={2} direction={"row"} width={"100%"} align='center'>
-            <Heading as='h6' size='xs' >
-              Share your contact ? &nbsp; &nbsp;&nbsp;
-            </Heading>
-            <Switch isChecked={phonepermission} onChange={handlePermissionChange} mr={2} />
-            <Text>{phonepermission ? "Yes, display my phone number for others to see." : "No, I don't want to be contacted through phone."}</Text>
-          </Card>
-          <Button mt={4} colorScheme="blue" onClick={updateFirebaseUserData}>Save</Button>
-        </Box>
-      </div>
-    );
-  }
+      <label className='switchlabel'>
+        <input type='checkbox' id={"profile" + detail.name} />
+    </label>
+  );
+
+  const renderDropdown = (detail) => (
+    <Select
+      className="detailitem"
+      variant="filled"
+      placeholder={detail.default}
+      id={"profile" + detail.name}
+    >
+      {detail.options.map((option, index) => (
+        <option key={index} value={option}>{option}</option>
+      ))}
+    </Select>
+  );
+
+  return (
+    <Box spacing={4} className="infobox">
+      {personaldetailsdata.map((detail, index) => (
+        <div className="detaillist" key={index}>
+          <label htmlFor={"profile" + detail.name}>{detail.prop}</label>
+          {
+          detail.type === "textarea" ? renderTextarea(detail) :
+          detail.type === "select" ? renderDropdown(detail) : 
+          detail.type === "checkbox" ? renderSwitch(detail) : 
+          renderInput(detail)
+          }
+        </div>
+      ))}
+      <Button mt={4} colorScheme="blue" onClick={updateFirebaseUserData}>Save</Button>
+    </Box>
+  );
+};
+
+
+export default function SignedInBox({ user, profileImage, handleImageChange, personaldetailsdata,updateFirebaseUserData}) {
+  return (
+    <Box className="cardcontainer">
+      <ProfileSection
+        user={user}
+        profileImage={profileImage}
+        handleImageChange={handleImageChange}
+      />
+      <DetailsSection
+        personaldetailsdata={personaldetailsdata}
+        updateFirebaseUserData={updateFirebaseUserData}
+      />
+    </Box>
+  );
+}
