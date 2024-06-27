@@ -6,9 +6,11 @@ import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
-import { eventSave, fetchEventsFromDB, auth, signInoutWithGoogle, issignedin } from "@/lib/firebase";
+import { eventSave, fetchEventsFromDB, auth,checkuserrole} from "@/lib/firebase";
 import { Card } from "@chakra-ui/react";
 import { onAuthStateChanged } from "firebase/auth";
+
+
 
 export default function Calendar() {
     const calendarRef = useRef(null);
@@ -19,6 +21,21 @@ export default function Calendar() {
     const [eventDesc,setEventDesc]=useState('');
     const [events, setEvents] = useState([]);
     const [user, setUser] = useState(null);
+    const [isAdmin, setIsAdmin] = useState(false);
+
+useEffect(() => {
+  const fetchUserRole = async () => {
+    if (user) {
+      const isUserAdmin = await checkuserrole('admin'); 
+      setIsAdmin(isUserAdmin);
+
+    } else {
+      setIsAdmin(false);
+    }
+  };
+
+  fetchUserRole();
+}, [user]);
 
     useEffect(() => {
         loadEventsFromFirebase();
@@ -131,7 +148,7 @@ export default function Calendar() {
                 </Card>
             </div>
             <div className='sidebar'>
-                <button onClick={handleAddEvent} className='addbutton'>Add Event</button>
+            {isAdmin &&  <button onClick={handleAddEvent} className='addbutton'>Add Event</button> }
                 <h1 style={{ textAlign: 'center', fontWeight: 'bold', color: 'rgb(5, 5, 68)' }}>Upcoming Events</h1>
 
                 <ul className="event-list">
@@ -147,7 +164,7 @@ export default function Calendar() {
                 </ul>
             </div>
 
-            {showAddEventModal && (
+            {showAddEventModal &&  isAdmin && (
                 <div className="add-event-form">
                     <p className='title' style={{ fontSize: 16 }}>{selectedDate.toDateString()}</p>
                     <label>

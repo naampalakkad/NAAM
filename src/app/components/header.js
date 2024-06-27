@@ -57,6 +57,7 @@ export default function Header() {
         </div>
 
         {isMobile ? (
+          <div>
           <div id="menuToggle">
             <input type="checkbox" />
             <span></span>
@@ -64,16 +65,18 @@ export default function Header() {
             <span></span>
             <ul id="menu">
               {MenuItems.map(item => <li key={item.name}><MenuItem item={item} /></li>)}
-            </ul>
+              <div><ThemeToggleButton/></div>
+            </ul>   
+            </div>
+           
           </div>
         ) : (
           <div id="main_menu">
             {MenuItems.map(item => <MenuItem key={item.name} item={item} />)}
-           <ThemeToggleButton/>
+            <ThemeToggleButton/>
           </div>
         )}
       </div>
-      {/* <div id="header_space"></div> */}
     </header>
   );
 };

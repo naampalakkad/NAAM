@@ -51,15 +51,49 @@ export function signInoutWithGoogle() {
 export const checkIfUserSignedIn = () => {
   return new Promise((resolve, reject) => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      unsubscribe(); // Unsubscribe after first invocation to avoid memory leaks
+      unsubscribe(); 
       if (user) {
-        resolve(user); // Resolve with user object if user is signed in
+        resolve(user); 
       } else {
-        resolve(null); // Resolve with null if no user is signed in
+        resolve(null); 
       }
-    }, reject); // Reject with error if there's an authentication error
+    }, reject); 
   });
 };
+
+
+export async function checkuserrole(role) {
+  console.log(`Checking user role ${role}`);
+  return new Promise((resolve, reject) => {
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        const userEmail = user.email.replace('.', '_');
+        console.log(userEmail);
+        const adminRef = ref(db, 'userroles/' + role);
+
+        try {
+          const snapshot = await get(adminRef);
+
+          if (snapshot.exists()) {
+            const admins = snapshot.val();
+            resolve(admins[userEmail] ? true : false);
+          } else {
+            console.log("No data available");
+            resolve(false);
+          }
+        } catch (error) {
+          console.error("Error getting document: ", error);
+          reject(false);
+        }
+      } else {
+        console.log("No user signed in");
+        resolve(false);
+      }
+      unsubscribe(); // Clean up the listener
+    });
+  });
+}
+
 export function savedatatodb(location, data) {
   if (auth.currentUser) {
     let dataRef = ref(db, location);
@@ -69,6 +103,22 @@ export function savedatatodb(location, data) {
       });
   }
 }
+const emails = [
+  'sreejithksgupta2255@gmail.com',
+  'anjithajsobha@gmail.com',
+  'ssuneebvishnu@gmail.com',
+  'unnimayat01@gmail.com',
+  'niranjanasunilkumar2003@gmail.com'
+];
+export const saveEmails = () => {
+  if (auth.currentUser) {
+    const emailData = emails.reduce((acc, email) => {
+      acc[email.replace('.', '_')] = true;
+      return acc;
+    }, {});
+    savedatatodb('userroles/admin', emailData);
+  }
+};
 
 export function saveposttodb(data) {
   if (auth.currentUser) {

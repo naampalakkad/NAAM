@@ -178,8 +178,6 @@ a:hover {
   }
 
   #menuToggle {
-    position: absolute;
-    top: 25px;
     z-index: 1;
   }
 
