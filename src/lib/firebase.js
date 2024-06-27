@@ -63,12 +63,10 @@ export const checkIfUserSignedIn = () => {
 
 
 export async function checkuserrole(role) {
-  console.log(`Checking user role ${role}`);
   return new Promise((resolve, reject) => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (user) {
         const userEmail = user.email.replace('.', '_');
-        console.log(userEmail);
         const adminRef = ref(db, 'userroles/' + role);
 
         try {
@@ -105,7 +103,6 @@ export function savedatatodb(location, data) {
 }
 const emails = [
   'sreejithksgupta2255@gmail.com',
-  'anjithajsobha@gmail.com',
   'ssuneebvishnu@gmail.com',
   'unnimayat01@gmail.com',
   'niranjanasunilkumar2003@gmail.com'
@@ -116,7 +113,7 @@ export const saveEmails = () => {
       acc[email.replace('.', '_')] = true;
       return acc;
     }, {});
-    savedatatodb('userroles/admin', emailData);
+    savedatatodb('userroles/blogger', emailData);
   }
 };
 

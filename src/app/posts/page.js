@@ -1,13 +1,23 @@
 'use client'
 import { useState, useEffect } from 'react';
 import { Box, Heading, Button } from "@chakra-ui/react";
-import { getpostsfromdb } from "@/lib/firebase";
+import { getpostsfromdb , checkuserrole} from "@/lib/firebase";
 import { BlogPost } from './blogpage';
 import Link from 'next/link';
 
 const Blog = () => {
     const [posts, setPosts] = useState([]);
     const [filter, setFilter] = useState("all"); 
+    const [isAdmin, setIsAdmin] = useState(false);
+    
+    useEffect(() => {
+        const fetchUserRole = async () => {
+            const isUserAdmin = await checkuserrole('blogger');
+            setIsAdmin(isUserAdmin);
+        };
+    
+        fetchUserRole();
+      }, []);
 
     useEffect(() => {
         const fetchPosts = async () => {
@@ -52,9 +62,9 @@ const Blog = () => {
                             <option value="BLOG">Blog</option>
                         </select>
                     </Box>
-                    <Link href="/posts/addnew">
-                        <Button colorScheme="blue" style={{ backgroundColor: '#161a30', fontSize: 'medium' }}>Add Post</Button>
-                    </Link>
+                    {isAdmin &&  <Link href="/posts/addnew">
+                        <Button colorScheme="blue">Add Post</Button>
+                    </Link>}
                 </Box>
                 <Box
                     display="grid"

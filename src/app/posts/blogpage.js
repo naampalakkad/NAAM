@@ -5,11 +5,9 @@ import "./Modal.css";
 
 export const BlogPost = ({ post }) => {
     let postdata = post[1];
-    console.log(postdata);
-    const defaultImage = "https://source.unsplash.com/800x600/?letter,d";
+    const defaultImage = "./assets/logo.webp";
     const postDate = new Date(postdata.time);
     const formattedDate = postDate.toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' });
-
 
     const [modal, setModal] = useState(false);
 
@@ -24,14 +22,14 @@ export const BlogPost = ({ post }) => {
   }
 
 
+
+
     return (
         <Box
             mb={['20px', '0']}
             borderRadius="8px"
             overflow="hidden"
             boxShadow="md"
-            bg="#161a30"
-            color="white"
             style={{ flex: '0 0 auto', maxWidth: ['100%', '50%'] }}
         >
 
