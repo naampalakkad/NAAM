@@ -181,7 +181,7 @@
   border-color: #aab0ae; 
   width:75%
 } 
-@media (min-width: 1000px){
+@media (max-width: 1000px){
   .container{
     flex-direction: column;
   }
