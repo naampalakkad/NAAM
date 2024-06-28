@@ -1,6 +1,3 @@
-//let photossrc ="https://photos.app.goo.gl/DAAhH2DiYoqy9ohP8";
-
-export const photogalleryurl = "https://photos.app.goo.gl/DAAhH2DiYoqy9ohP8";
 import {getdatafromStorage} from "@/lib/firebase";
 
 export async function getCarouselImageUrls() {
