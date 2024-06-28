@@ -38,7 +38,7 @@ const Blog = () => {
                 flexDirection="column"
                 alignItems="center"
                 mt="50px"
-                px={['100px', '150px']}
+                // px={['100px', '150px']}
                 mb="50px"
             >
                 <Box
@@ -48,6 +48,7 @@ const Blog = () => {
                     justifyContent={['center', 'space-between']}
                     width="100%"
                     mb="20px"
+                    px={['50px', '100px']}
                 >
                     <Box mb={['20px', '0px']} width={['100%', 'auto']}>
                         <Heading mb="30px">NEWS AND UPDATES</Heading>
@@ -67,11 +68,15 @@ const Blog = () => {
                     </Link>}
                 </Box>
                 <Box
-                    display="grid"
-                    gridTemplateColumns={['1fr', '1fr 1fr 1fr']}
-                    gap={['20px', '20px']}
+                    display="flex"
+                    flexDirection="row"
+                    flexWrap="wrap"
+                    justifyContent="space-evenly"
+                    alignItems="center"
+                    gap="20px"
                     width="100%"
-                >
+                    margin={"20px"}
+    >
                     {filteredPosts.map((post, index) => (
                         <BlogPost key={index} post={post} />
                     ))}
