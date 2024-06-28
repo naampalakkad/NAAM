@@ -9,7 +9,7 @@
   --prim_col: rgb(255, 255, 255);
   --btncol: rgb(253, 253, 253);
   --bgcolor: rgb(243, 243, 243);
-  --cardcol: rgb(0, 40, 58);
+  --cardcol: rgb(0, 131, 192);
   --txt_col: black;
 
   --foreground-rgb: 0, 0, 0;
@@ -43,11 +43,7 @@
 
 @media (prefers-color-scheme: dark) {
 
-  html {
-    color-scheme: dark;
-  }
-
-  :root {
+ :root {
     --foreground-rgb: 255, 255, 255;
     --background-start-rgb: 0, 0, 0;
     --background-end-rgb: 0, 0, 0;
@@ -88,9 +84,6 @@ body {
   overscroll-behavior: none;
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-}
 
 a {
   color: inherit;
@@ -108,7 +101,6 @@ a:hover {
   align-items: center;
   justify-content: center;
   width: 100%;
-  color: var(--txt_col);
 }
 
 #contentbody{
@@ -126,8 +118,6 @@ a:hover {
 }
 
 .card {
-  background-color: var(--cardcol);
-  color: var(--txt_col);
   margin: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   padding: 10px;
