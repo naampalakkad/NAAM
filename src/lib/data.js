@@ -80,17 +80,17 @@ export const blogposts = {
 }
 
 export const MenuItems = [
-    { name: 'Gallery', link: 'gallery' },
-    { name: 'Alumni', link: 'alumni' },
-    { name: 'News', link: 'posts' },
-    { name: 'Calender', link: 'calender' },
-    { name: 'Profile', link: 'login' },
+  { name: 'Gallery', link: '/gallery' },
+  { name: 'Alumni', link: '/alumni' },
+  { name: 'News', link: '/posts' },
+  { name: 'Calendar', link: '/calendar' },
+  { name: 'Profile', link: '/login' },
 ];
 
 export const FooterMenuItems = [
-    { name: 'About Us', link: 'aboutus' },
-    { name: 'Bye-Law', link: 'law' },
-    { name: 'Profile', link: 'login' },
+  { name: 'About Us', link: '/aboutus' },
+  { name: 'Bye-Law', link: '/law' },
+  { name: 'Profile', link: '/login' },
 ];
 
 export const socialMediaUrls = [
