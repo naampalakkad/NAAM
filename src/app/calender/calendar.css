@@ -168,11 +168,12 @@
   border-width: 1px;
   box-shadow: 5px 5px 5px rgba(14, 33, 140, 0.5);
   border-top: none; 
+  width: 25%;
 }
 .bar{
   flex: '0 0 calc(75vw)';
-  padding: '0vh';
-  margin: 1rem; 
+  padding: '5px';
   border-width: 1px;  
-  border-color: #aab0ae;   
+  border-color: #aab0ae; 
+  width: 75%;
 } 
