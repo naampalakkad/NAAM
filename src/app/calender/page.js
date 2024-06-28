@@ -1,20 +1,16 @@
 'use client'
 import React, { useState, useEffect } from 'react';
-import { Flex, Heading, Button } from "@chakra-ui/react";
+import { Flex, Heading, Button, Spinner } from "@chakra-ui/react";
 import { checkIfUserSignedIn } from "@/lib/firebase";
 import Calendar from "./calenderpage";
 
-export default function CalenderPage (){
-  const [userSignedIn, setUserSignedIn] = useState(false);
+export default function CalenderPage() {
+  const [userSignedIn, setUserSignedIn] = useState(null);
 
   useEffect(() => {
     const checkSignIn = async () => {
       const user = await checkIfUserSignedIn();
-      if (user) {
-        setUserSignedIn(true);
-      } else {
-        setUserSignedIn(false);
-      }
+      setUserSignedIn(!!user);
     };
     checkSignIn();
   }, []);
@@ -24,14 +20,17 @@ export default function CalenderPage (){
   };
 
   return (
-    <>
-      {!userSignedIn ? (
+    <> {userSignedIn==null? 
+      <Flex justifyContent="center" alignItems="center" h="60vh">
+      <Spinner size="xl" />
+    </Flex>
+    :!userSignedIn ? (
         <Flex justifyContent="center" alignItems="center" h="60vh" flexDirection="column">
           <Heading fontSize="4xl" color="gray.600" textAlign="center">You need to sign in first</Heading>
           <Button colorScheme="blue" mt={4} onClick={signInRedirect}>Sign In</Button>
         </Flex>
       ) : (
-        <Calendar/>
+        <Calendar />
       )}
     </>
   );
