@@ -116,63 +116,65 @@ export default function Calendar() {
   );
 
   return (
-    <div style={{ paddingTop: "10vh", display: 'flex' }}>
-      <div className='bar'>
-        <Card className='card'>
-          <FullCalendar
-            ref={calendarRef}
-            plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-            initialView='dayGridMonth'
-            headerToolbar={{
-              start: "today prev,next",
-              center: "title",
-              end: ""
-            }}
-            height={"100vh"}
-            dateClick={handleDateClick}
-            eventClick={handleEventClick}
-            eventContent={handleEventContent}
-            events={eventList}
-          />
-        </Card>
-      </div>
-      <div className='sidebar'>
-        {isAdmin && <button onClick={handleAddEvent} className='addbutton'>Add Event</button>}
-        <h1 style={{ textAlign: 'center', fontWeight: 'bold', color: 'rgb(5, 5, 68)' }}>Upcoming Events</h1>
-        <ul className="event-list">
-          {futureEvents.map((event, index) => (
-            <li key={index} style={{ marginBottom: '10px', padding: '10px', backgroundColor: '#f7f7f7', borderRadius: '5px', boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)' }}>
-              <span className="event-title" style={{ fontWeight: 'bold', marginLeft: '10px' }}>{event.title}</span>
-              <span className="event-date" style={{ color: '#666', marginLeft: '10px' }}>{event.date}</span>
-              <br />
-              <span className="event-date" style={{ color: 'grey', marginLeft: '10px' }}>{event.description}</span>
-              <span className="event-time" style={{ color: '#666', marginLeft: '10px' }}>{event.time}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      {showAddEventModal && isAdmin && (
-        <div className="add-event-form">
-          <p className='title' style={{ fontSize: 16 }}>{selectedDate.toDateString()}</p>
-          <label>
-            Event Title
-            <input type="text" value={eventTitle} onChange={handleEventTitleChange} />
-          </label>
-          <label>
-            Event Description
-            <input type="text" value={eventDesc} onChange={handleEventDescChange} />
-          </label>
-          <DateTimePicker
-            selectedDate={selectedDate}
-            setSelectedDate={setSelectedDate}
-            selectedTime={selectedTime}
-            setSelectedTime={setSelectedTime}
-          />
-          <button type="submit" onClick={submit}>Submit</button>
-          <button type="button" onClick={handleClose}>Close</button>
+    <div style={{ paddingTop: "10vh" }}>
+      <div className='container'>
+        <div className='bar'>
+          <Card className='card'>
+            <FullCalendar
+              ref={calendarRef}
+              plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+              initialView='dayGridMonth'
+              headerToolbar={{
+                start: "today prev,next",
+                center: "title",
+                end: ""
+              }}
+              height={"100vh"}
+              dateClick={handleDateClick}
+              eventClick={handleEventClick}
+              eventContent={handleEventContent}
+              events={eventList}
+            />
+          </Card>
         </div>
-      )}
+        <div className='sidebar'>
+          {isAdmin && <button onClick={handleAddEvent} className='addbutton'>Add Event</button>}
+          <h1 style={{ textAlign: 'center', fontWeight: 'bold', color: 'rgb(5, 5, 68)' }}>Upcoming Events</h1>
+          <ul className="event-list">
+            {futureEvents.map((event, index) => (
+              <li key={index} style={{ marginBottom: '10px', padding: '10px', backgroundColor: '#f7f7f7', borderRadius: '5px', boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)' }}>
+                <span className="event-title" style={{ fontWeight: 'bold', marginLeft: '10px' }}>{event.title}</span>
+                <span className="event-date" style={{ color: '#666', marginLeft: '10px' }}>{event.date}</span>
+                <br />
+                <span className="event-date" style={{ color: 'grey', marginLeft: '10px' }}>{event.description}</span>
+                <span className="event-time" style={{ color: '#666', marginLeft: '10px' }}>{event.time}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {showAddEventModal && isAdmin && (
+          <div className="add-event-form">
+            <p className='title' style={{ fontSize: 16 }}>{selectedDate.toDateString()}</p>
+            <label>
+              Event Title
+              <input type="text" value={eventTitle} onChange={handleEventTitleChange} />
+            </label>
+            <label>
+              Event Description
+              <input type="text" value={eventDesc} onChange={handleEventDescChange} />
+            </label>
+            <DateTimePicker
+              selectedDate={selectedDate}
+              setSelectedDate={setSelectedDate}
+              selectedTime={selectedTime}
+              setSelectedTime={setSelectedTime}
+            />
+            <button type="submit" onClick={submit}>Submit</button>
+            <button type="button" onClick={handleClose}>Close</button>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
