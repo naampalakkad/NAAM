@@ -11,10 +11,8 @@ export default function AlumniListPage() {
     const checkSignIn = async () => {
       const user = await checkIfUserSignedIn();
       if (user) {
-        console.log('User is signed in:', user);
         setUserSignedIn(true);
       } else {
-        console.log('No user signed in');
         setUserSignedIn(false);
       }
     };
