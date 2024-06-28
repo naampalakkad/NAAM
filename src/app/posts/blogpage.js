@@ -35,7 +35,7 @@ export const BlogPost = ({ post }) => {
             color="white"
             style={{ flex: '0 0 auto', maxWidth: ['100%', '50%'] }}
         >
-            <Box p="20px" borderBottom="px solid" backgroundColor="#161a30">
+            <Box p="20px" borderBottom="px solid" backgroundColor="#161a30" width={"400px"}>
                 <img
                     src={postdata.thumbnail }
                     className="post-thumbnail" 
