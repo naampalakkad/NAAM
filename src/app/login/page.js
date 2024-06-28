@@ -12,6 +12,7 @@ import { personaldetailsdata } from "@/lib//data";
 import SigninBox from "./signin";
 import SignedInBox from "./profilepage";
 import { useToast } from "@chakra-ui/react";
+import { Flex, Heading, Spinner } from "@chakra-ui/react";
 
 export default function ProfilePage() {
 
@@ -109,7 +110,13 @@ export default function ProfilePage() {
   };
 
   return (
-    user ? ( 
+    <Flex flexDirection="column" alignItems="center">
+      {user === null ? ( 
+            <Flex justifyContent="center" alignItems="center" h="60vh" flexDirection="column">
+            <Spinner size="xl" color="blue.500" />
+            <Heading mt={4} fontSize="xl" color="gray.600" textAlign="center">Loading...</Heading>
+          </Flex>
+      ): user? (
       <SignedInBox
         user={user}
         profileImage={profileImage}
@@ -119,6 +126,7 @@ export default function ProfilePage() {
       />
     ) : (
       <SigninBox/>
-    )
-  );
+    ) }
+    </Flex>
+  ) 
 }
