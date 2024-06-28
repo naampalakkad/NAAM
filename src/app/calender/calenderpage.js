@@ -61,7 +61,7 @@ export default function Calendar() {
   }, [user]);
 
   const handleDateClick = (arg) => {
-    if (user) {
+    if (user && isAdmin) {
       setSelectedDate(arg.date);
       setShowAddEventModal(true);
     } else {
