@@ -9,7 +9,7 @@ const ProfileSection = ({ user, profileImage, handleImageChange }) => {
 
   return (
     <Card className="profilebox">
-      <label htmlFor="profileImageInput" className="profileimage">
+      <label For="profileImageInput" className="profileimage">
         <Image
           src={profileImage}
           id="profileimagebox"

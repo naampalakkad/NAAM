@@ -175,6 +175,7 @@
         rgba(var(--background-start-rgb), 1),
         rgba(var(--callout-rgb), 0.5));
     background-clip: padding-box;
+    -webkit-backdrop-filter: blur(24px);
     backdrop-filter: blur(24px);
   }
 
@@ -199,10 +200,6 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  .vercelLogo {
-    filter: invert(1);
-  }
-
   .logo {
     filter: invert(1) drop-shadow(0 0 0.3rem #ffffff70);
   }
