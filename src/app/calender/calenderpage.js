@@ -120,7 +120,7 @@ export default function Calendar() {
   }
 
   return (
-    <Box pt={{ base: "5vh", md: "10vh" }}>
+    <Box pt={{ base: "10vh",  md: "10vh" }}>
       <Flex direction={{ base: "column", md: "row" }} className='container'>
         <Box className='bar' flex={{ base: "1", md: "3" }} mb={{ base: 4, md: 0 }}>
           <Card className='card'>
