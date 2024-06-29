@@ -177,8 +177,8 @@ function Page() {
           }
           <FormHelperText></FormHelperText>
         </FormControl>
-        <FormControl>
-          <Button colorScheme='yellow' type='submit' className='submit-button' mt={4}>
+        <FormControl style={{ paddingTop: '25px' }}>
+          <Button colorScheme='yellow' type='submit' className='submit-button' mt={4}  >
             Submit
           </Button>
         </FormControl>
