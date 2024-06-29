@@ -1,12 +1,12 @@
 .container {
-    background-color:#eafaf2;
+    background-color: rgb(195, 209, 221);
     height: 100%;
     width: 80%; 
     padding: 50px;
     margin: 50px auto; 
     border: 2px double black; 
     margin-top: 10em;
-    color:black;
+    color: #000;
 }
 
 h1 {

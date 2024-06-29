@@ -6,6 +6,7 @@ import './page.css';
 import dynamic from 'next/dynamic';
 import { saveposttodb, auth } from '@/lib/firebase';
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { useRouter } from 'next/navigation';
 
 if (typeof window !== 'undefined') {
   var ReactQuill = require('react-quill');
@@ -21,7 +22,7 @@ function Page() {
 
   const quillRef = useRef();
   const fileInputRef = useRef(); // Add a ref for the file input
-
+  const router= useRouter();
   const modules = {
     toolbar: [
       [{ header: [1, 2, 3, 4, 5, 6, false] }],
@@ -109,6 +110,7 @@ function Page() {
         window.alert("Form submitted");
       }
       resetForm();
+      router.push("/posts");
     } catch (error) {
       throw error;
     }
@@ -121,7 +123,7 @@ function Page() {
       <form onSubmit={handleSubmit}>
         <FormControl isRequired>
           <FormLabel>Title</FormLabel>
-          <Input variant='filled' placeholder='Enter the title' type='text' name='title' value={formData.title} onChange={onChangeHandler} />
+          <Input variant='filled' placeholder='Enter the title' type='text' name='title' value={formData.title} onChange={onChangeHandler} required/>
           <FormHelperText></FormHelperText>
         </FormControl>
         <FormControl isRequired>
@@ -134,6 +136,7 @@ function Page() {
             value={formData.type}
             onChange={onChangeHandler}
             style={{ border: '2px solid black' }}
+            required
           >
             <option value='EVENT'>Event</option>
             <option value='JOB'>Job</option>
@@ -149,7 +152,8 @@ function Page() {
             name='thumbnail'
             accept='.png, .jpg, .jpeg'
             onChange={handleImageAsFile}
-            ref={fileInputRef} // Add the ref here
+            ref={fileInputRef} 
+            required
           />
           <FormHelperText></FormHelperText>
         </FormControl>
