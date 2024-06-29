@@ -32,6 +32,9 @@ function Page() {
       [{ list: 'ordered' }, { list: 'bullet' }],
       ['link', 'image', 'video'],
     ],
+    clipboard: {
+      matchVisual: false, // for link
+    },
   };
 
   const onChangeHandler = (e) => {
@@ -67,6 +70,10 @@ function Page() {
   const handleSubmit = async (event) => {
     try {
       event.preventDefault();
+      if (!isfile) {
+        window.alert("Please select a thumbnail photo.");
+        return;
+      }
       const quillContent = quillRef.current?.getEditor().getContents();
 
       let file = isfile;
@@ -114,12 +121,12 @@ function Page() {
       <h1>Upload Your Post<hr /></h1>
 
       <form onSubmit={handleSubmit}>
-        <FormControl>
+        <FormControl isRequired>
           <FormLabel>Title</FormLabel>
           <Input variant='filled' placeholder='Enter the title' type='text' name='title' value={formData.title} onChange={onChangeHandler} required/>
           <FormHelperText></FormHelperText>
         </FormControl>
-        <FormControl>
+        <FormControl isRequired>
           <FormLabel>Type of post</FormLabel>
           <Select
             variant='filled'
@@ -138,7 +145,7 @@ function Page() {
           </Select>
           <FormHelperText></FormHelperText>
         </FormControl>
-        <FormControl>
+        <FormControl isRequired>
           <FormLabel>Thumbnail photo</FormLabel>
           <input
             type='file'
