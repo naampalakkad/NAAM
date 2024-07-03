@@ -79,7 +79,7 @@ const Blog = () => {
     >
                     {filteredPosts.map((post, index) => (
                         <BlogPost key={index} post={post} />
-                    ))}
+                    )).reverse()}
                 </Box>
             </Box>
         </Box>
