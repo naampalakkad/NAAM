@@ -1,6 +1,8 @@
 import React from 'react';
 import { signInoutWithGoogle } from "@/lib/firebase";
-import { Box, Heading, Textarea, Image, Button,  Input, Card, Select} from "@chakra-ui/react";
+import { Box, Heading, Textarea, Image, Button, Input, Card, Select } from "@chakra-ui/react";
+import RenderDropdown from './dropdown';
+
 
 const ProfileSection = ({ user, profileImage, handleImageChange }) => {
   const handleSignOut = () => {
@@ -9,7 +11,7 @@ const ProfileSection = ({ user, profileImage, handleImageChange }) => {
 
   return (
     <Card className="profilebox">
-      <label For="profileImageInput" className="profileimage">
+      <label htmlFor="profileImageInput" className="profileimage">
         <Image
           src={profileImage}
           id="profileimagebox"
@@ -57,24 +59,27 @@ const DetailsSection = ({ personaldetailsdata, updateFirebaseUserData }) => {
   );
 
   const renderSwitch = (detail) => (
-      
-      <label className='switchlabel'>
-        <input type='checkbox' id={"profile" + detail.name} />
+
+    <label className='switchlabel'>
+      <input type='checkbox' id={"profile" + detail.name} />
     </label>
   );
 
   const renderDropdown = (detail) => (
-    <Select
-      className="detailitem"
-      variant="filled"
-      placeholder={detail.default}
-      id={"profile" + detail.name}
-    >
-      {detail.options.map((option, index) => (
-        <option key={index} value={option}>{option}</option>
-      ))}
-    </Select>
-  );
+   <RenderDropdown detail={detail} onChange={ console.log("value changed") } />
+)
+const renderSelect = (detail) => (
+  <Select
+    className="detailitem"
+    variant="filled"
+    placeholder={detail.default}
+    id={"profile" + detail.name}
+  >
+    {detail.options.map((option, index) => (
+      <option key={index} value={option}>{option}</option>
+    ))}
+  </Select>
+);
 
   return (
     <Box spacing={4} className="infobox">
@@ -82,10 +87,11 @@ const DetailsSection = ({ personaldetailsdata, updateFirebaseUserData }) => {
         <div className="detaillist" key={index}>
           <label htmlFor={"profile" + detail.name}>{detail.prop}</label>
           {
-          detail.type === "textarea" ? renderTextarea(detail) :
-          detail.type === "select" ? renderDropdown(detail) : 
-          detail.type === "checkbox" ? renderSwitch(detail) : 
-          renderInput(detail)
+            detail.type === "textarea" ? renderTextarea(detail) :
+              detail.type === "selectable" ? renderDropdown(detail) :
+              detail.type === "select" ? renderSelect(detail) :
+                detail.type === "checkbox" ? renderSwitch(detail) :
+                  renderInput(detail)
           }
         </div>
       ))}
@@ -95,7 +101,7 @@ const DetailsSection = ({ personaldetailsdata, updateFirebaseUserData }) => {
 };
 
 
-export default function SignedInBox({ user, profileImage, handleImageChange, personaldetailsdata,updateFirebaseUserData}) {
+export default function SignedInBox({ user, profileImage, handleImageChange, personaldetailsdata, updateFirebaseUserData }) {
   return (
     <Box className="cardcontainer">
       <ProfileSection
