@@ -66,7 +66,7 @@ const DetailsSection = ({ personaldetailsdata, updateFirebaseUserData }) => {
   );
 
   const renderDropdown = (detail) => (
-   <RenderDropdown detail={detail} onChange={ console.log("value changed") } />
+   <RenderDropdown detail={detail} />
 )
 const renderSelect = (detail) => (
   <Select
