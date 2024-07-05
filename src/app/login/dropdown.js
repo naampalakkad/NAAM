@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import CreatableSelect from 'react-select/creatable';
-import { components } from 'react-select';
 import { savedatatodb, getdatafromdb } from '@/lib/firebase';
 import { useColorMode, useTheme } from '@chakra-ui/react';
 
@@ -23,14 +22,10 @@ function RenderDropdown({ detail, userdata, handleChange }) {
       const data = await getdatafromdb('otherdata/locationdata');
       if (data) {
         const fetchedOptions = createOptionsFromArray(
-          data[optionname === 'location' ? 'locationlist' : 
-               optionname === 'nativelocation' ? 'nativelocationlist' :
-               optionname === 'profession' ? 'professionlist' :
-               'specializationlist']
+          data[optionname+"list"]
         );
         setOptions(fetchedOptions);
       } else {
-        // Initialize the data if not present
         const initialData = {
           locationlist: [],
           nativelocationlist: [],
@@ -59,10 +54,7 @@ function RenderDropdown({ detail, userdata, handleChange }) {
           const newOptions = [...prev, newOption];
           printUpdatedLocations(newOptions);
           const updatedData = newOptions.map((option) => option.label);
-          const dataKey = optionname === 'location' ? 'locationlist' :
-                          optionname === 'nativelocation' ? 'nativelocationlist' :
-                          optionname === 'profession' ? 'professionlist' :
-                          'specializationlist';
+          const dataKey = optionname+"list";
           getdatafromdb('otherdata/locationdata').then((data) => {
             const newData = { ...data, [dataKey]: updatedData };
             savedatatodb('otherdata/locationdata', newData);
@@ -85,35 +77,33 @@ function RenderDropdown({ detail, userdata, handleChange }) {
       ...provided,
       background: colorMode === 'dark' ? theme.colors.gray[700] : theme.colors.white,
       borderColor: colorMode === 'dark' ? theme.colors.gray[600] : theme.colors.gray[300],
-      color: colorMode === 'dark' ? theme.colors.white : theme.colors.gray[900],
+      color: colorMode === 'dark' ? theme.colors.white : theme.colors.black,
     }),
     menu: (provided) => ({
       ...provided,
       background: colorMode === 'dark' ? theme.colors.gray[700] : theme.colors.white,
-      color: colorMode === 'dark' ? theme.colors.white : theme.colors.gray[900],
+      color: colorMode === 'dark' ? theme.colors.white : theme.colors.black,
     }),
     input: (provided) => ({
       ...provided,
-      color: colorMode === 'dark' ? theme.colors.white : theme.colors.gray[900],
+      color: colorMode === 'dark' ? theme.colors.white : theme.colors.black,
     }),
     singleValue: (provided) => ({
       ...provided,
-      color: colorMode === 'dark' ? theme.colors.white : theme.colors.gray[900],
+      color: colorMode === 'dark' ? theme.colors.white : theme.colors.black,
     }),
     placeholder: (provided) => ({
       ...provided,
       color: colorMode === 'dark' ? theme.colors.gray[400] : theme.colors.gray[500],
     }),
+    option: (provided, state) => ({
+      ...provided,
+      backgroundColor: state.isFocused ? (colorMode === 'dark' ? theme.colors.gray[600] : theme.colors.gray[200]) : 'transparent',
+      color: colorMode === 'dark' ? theme.colors.white : theme.colors.black,
+    }),
   };
+  
 
-  const customComponents = {
-    Input: (props) => (
-      <components.Input
-        {...props}
-        id={'profile' + detail.name}
-      />
-    ),
-  };
 
   return (
     <CreatableSelect
@@ -125,7 +115,6 @@ function RenderDropdown({ detail, userdata, handleChange }) {
       onChange={handleSelectChange}
       onCreateOption={handleCreate}
       options={options}
-      components={customComponents}
       placeholder={userdata[detail.name]}
     />
   );

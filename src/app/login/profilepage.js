@@ -5,7 +5,6 @@ import RenderDropdown from './dropdown';
 import { personaldetailsdata } from "@/lib/data";
 
 const ProfileSection = ({ user, profileImage, handleImageChange }) => {
-  console.log(profileImage);
   const handleSignOut = useCallback(() => {
     signInoutWithGoogle();
   }, []);
