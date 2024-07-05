@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Flex, Input, Text, Button, Heading, Image, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, useDisclosure, Select } from "@chakra-ui/react";
+import {
+  Box, Flex, Input, Text, Button, Heading, Image, Modal, ModalOverlay,
+  ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton,
+  useDisclosure, Select
+} from "@chakra-ui/react";
 import { getdatafromdb } from "@/lib/firebase";
 import { personaldetailsdata } from "@/lib/data";
 import { SocialIcon } from 'react-social-icons';
 import "./alumni.css";
 
-
-const SearchBox = ({ searchTerm, setSearchTerm, formData, setFormData }) => {
+const SearchBox = ({ searchTerm, setSearchTerm, formData, setFormData, optionsData }) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -19,13 +22,13 @@ const SearchBox = ({ searchTerm, setSearchTerm, formData, setFormData }) => {
     setSearchTerm("");
     setFormData({
       location: '',
-      location2: '',
+      nativelocation: '',
       profession: '',
       specialization: '',
     });
   };
 
-  const selectFields = personaldetailsdata.filter(field => field.type === 'select');
+  const selectFields = personaldetailsdata.filter(field => field.type === 'selectable');
 
   return (
     <Box>
@@ -45,7 +48,6 @@ const SearchBox = ({ searchTerm, setSearchTerm, formData, setFormData }) => {
           onClick={handleReset} 
           padding={4}
           marginTop={2}
-
           size="lg"
         >
           Clear
@@ -63,7 +65,7 @@ const SearchBox = ({ searchTerm, setSearchTerm, formData, setFormData }) => {
             minWidth="200px"
             marginY={2}
           >
-            {field.options.map(option => (
+            {optionsData[field.options]?.map(option => (
               <option key={option} value={option}>{option}</option>
             ))}
           </Select>
@@ -72,7 +74,6 @@ const SearchBox = ({ searchTerm, setSearchTerm, formData, setFormData }) => {
     </Box>
   );
 };
-
 
 const SocialIcons = ({ alumni }) => {
   const socialIconData = [
@@ -160,14 +161,14 @@ export default function AlumniList() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [formData, setFormData] = useState({
     location: '',
-    location2: '',
+    nativelocation: '',
     profession: '',
     specialization: '',
   });
+  const [optionsData, setOptionsData] = useState({});
 
   useEffect(() => {
     const fetchData = async () => {
-      // Fetch alumni data from database
       const data = await getdatafromdb('users');
       if (data) {
         setAlumnidata(Object.values(data));
@@ -175,7 +176,18 @@ export default function AlumniList() {
         console.error('Failed to fetch data');
       }
     };
+
+    const fetchOptionsData = async () => {
+      const data = await getdatafromdb('otherdata/locationdata');
+      if (data) {
+        setOptionsData(data);
+      } else {
+        console.error('Failed to fetch options data');
+      }
+    };
+
     fetchData();
+    fetchOptionsData();
   }, []);
 
   const filteredAlumni = alumnidata.filter((alumni) => {
@@ -185,11 +197,11 @@ export default function AlumniList() {
       (alumni.batch !== undefined && alumni.batch.toString().toLowerCase().includes(searchTermLower));
 
     const matchesLocation = formData.location === "" || (alumni.location && alumni.location === formData.location);
-    const matchesLocation2 = formData.location2 === "" || (alumni.location2 && alumni.location2 === formData.location2);
+    const matchesnativelocation = formData.nativelocation === "" || (alumni.nativelocation && alumni.nativelocation === formData.nativelocation);
     const matchesProfession = formData.profession === "" || (alumni.profession && alumni.profession === formData.profession);
     const matchesSpecialization = formData.specialization === "" || (alumni.specialization && alumni.specialization === formData.specialization);
 
-    return matchesSearchTerm && matchesLocation && matchesLocation2 && matchesProfession && matchesSpecialization;
+    return matchesSearchTerm && matchesLocation && matchesnativelocation && matchesProfession && matchesSpecialization;
   });
 
   const handleMoreClick = (alumni) => {
@@ -204,6 +216,7 @@ export default function AlumniList() {
         setSearchTerm={setSearchTerm}
         formData={formData}
         setFormData={setFormData}
+        optionsData={optionsData}
       />
       {alumnidata.length > 0 ? (
         filteredAlumni.length > 0 ? (
