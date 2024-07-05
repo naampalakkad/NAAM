@@ -1,10 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { signInoutWithGoogle, getuserdetailfromdb, savedatatodb } from "@/lib/firebase";
+import { signInoutWithGoogle, getuserdetailfromdb, savedatatodb ,uploadImageToStorage} from "@/lib/firebase";
 import { Box, Heading, Textarea, Image, Button, Input, Card, useToast } from "@chakra-ui/react";
 import RenderDropdown from './dropdown';
 import { personaldetailsdata } from "@/lib/data";
 
 const ProfileSection = ({ user, profileImage, handleImageChange }) => {
+  console.log(profileImage);
   const handleSignOut = useCallback(() => {
     signInoutWithGoogle();
   }, []);
@@ -102,9 +103,12 @@ const SignedInBox = ({ user }) => {
   useEffect(() => {
     const setuserdetails = async () => {
       if (user) {
-        setProfileImage(user.photoURL);
+        setProfileImage(user.photoURL); 
         const userdataa = await getuserdetailfromdb(user.uid);
         setUserdata(userdataa);
+        console.log(userdataa);
+        setProfileImage(userdataa.photo);
+        console.log("profileImage: " + profileImage);
       } else {
         console.log("user not available");
       }
@@ -124,13 +128,33 @@ const SignedInBox = ({ user }) => {
   const handleImageChange = async (event) => {
     const file = event.target.files[0];
     if (file) {
-      const newImageUrl = await uploadImageToStorage(file, user.uid);
+      try {
+      const newImageUrl = await uploadImageToStorage( user.uid,file);
       setProfileImage(newImageUrl);
       setUserdata((prevUserdata) => ({
         ...prevUserdata,
         photoURL: newImageUrl,
       }));
-      savedatatodb("users/" + user.uid, { photoURL: newImageUrl });
+      savedatatodb("users/" + user.uid, userdata);
+      toast({
+                title: "Success",
+                description: "Changed your profile image",
+                status: 'success',
+                duration: 3000,
+                isClosable: true,
+              });
+        
+    }
+    catch {
+      toast({
+                title: "Success",
+                description: "Changed your profile image",
+                status: 'success',
+                duration: 3000,
+                isClosable: true,
+              });
+        
+    }
     }
   };
 

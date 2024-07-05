@@ -8,7 +8,7 @@ import SigninBox from "./signin";
 import SignedInBox from "./profilepage";
 
 export default function ProfilePage() {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState("loading");
 
 
   useEffect(() => {
@@ -25,7 +25,7 @@ export default function ProfilePage() {
 
   return (
     <Flex flexDirection="column" alignItems="center">
-      {user === null ? (
+      {user === "loading" ? (
         <Flex justifyContent="center" alignItems="center" h="60vh" flexDirection="column">
           <Spinner size="xl" color="blue.500" />
           <Heading mt={4} fontSize="xl" color="gray.600" textAlign="center">Loading...</Heading>
