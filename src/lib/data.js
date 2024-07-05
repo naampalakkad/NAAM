@@ -206,7 +206,7 @@ export let personaldetailsdata = [
       },
       {
         prop: "Native Location",
-        name: "location2",
+        name: "nativelocation",
         default: "Select your native location",
         type: "selectable",
         options: "locationlist" 
@@ -215,15 +215,15 @@ export let personaldetailsdata = [
         prop: "Profession",
         name: "profession",
         default: "Select your profession",
-        type: "select",
-        options: ["Profession1", "Profession2", "Profession3"]  
+        type: "selectable",
+        options: "professionlist"
       },
       {
         prop: "Specialization",
         name: "specialization",
         default: "Select your specialization",
-        type: "select",
-        options: ["Specialization1", "Specialization2", "Specialization3"]  
+        type: "selectable",
+        options: "specializationlist" 
       },
       {
         prop: "About",

@@ -44,6 +44,7 @@ export default function ProfilePage() {
 
     for (const { name, type } of personaldetailsdata) {
       const input = document.getElementById(`profile${name}`);
+      
       if (input) {
         if (type === "checkbox") {
           input.checked = userdata[name] || false;

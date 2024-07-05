@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import CreatableSelect from 'react-select/creatable';
+import { components, InputProps } from 'react-select';
 import { savedatatodb, getdatafromdb } from '@/lib/firebase';
 import { useColorMode, useTheme } from '@chakra-ui/react';
 
@@ -22,13 +23,20 @@ function RenderDropdown({ detail }) {
     const fetchData = async () => {
       const data = await getdatafromdb('otherdata/locationdata');
       if (data) {
-        const fetchedOptions = createOptionsFromArray(data[optionname === 'location' ? 'locationlist' : 'nativelocationlist']);
+        const fetchedOptions = createOptionsFromArray(
+          data[optionname === 'location' ? 'locationlist' : 
+               optionname === 'nativelocation' ? 'nativelocationlist' :
+               optionname === 'profession' ? 'professionlist' :
+               'specializationlist']
+        );
         setOptions(fetchedOptions);
       } else {
         // Initialize the data if not present
         const initialData = {
           locationlist: [],
           nativelocationlist: [],
+          professionlist: [],
+          specializationlist: [],
         };
         savedatatodb('otherdata/locationdata', initialData);
         setOptions([]);
@@ -54,7 +62,10 @@ function RenderDropdown({ detail }) {
 
           // Save updated options to Firebase
           const updatedData = newOptions.map((option) => option.label);
-          const dataKey = optionname === 'location' ? 'locationlist' : 'nativelocationlist';
+          const dataKey = optionname === 'location' ? 'locationlist' :
+                          optionname === 'nativelocation' ? 'nativelocationlist' :
+                          optionname === 'profession' ? 'professionlist' :
+                          'specializationlist';
           getdatafromdb('otherdata/locationdata').then((data) => {
             const newData = { ...data, [dataKey]: updatedData };
             savedatatodb('otherdata/locationdata', newData);
@@ -99,6 +110,15 @@ function RenderDropdown({ detail }) {
     }),
   };
 
+  const customComponents = {
+    Input: (props) => (
+      <components.Input
+        {...props}
+        id={'profile' + detail.name}
+      />
+    ),
+  };
+  // {console.log(document.getElementById("profile" +detail.name).value)}
   return (
     <CreatableSelect
       className="detailitem"
@@ -110,7 +130,8 @@ function RenderDropdown({ detail }) {
       onCreateOption={handleCreate}
       options={options}
       value={value}
-      id={'profile' + detail.name}
+      components={customComponents}
+      
     />
   );
 }
