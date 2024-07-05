@@ -126,7 +126,7 @@ function RenderDropdown({ detail, userdata, handleChange }) {
       onCreateOption={handleCreate}
       options={options}
       components={customComponents}
-      value={ userdata[detail.name]}
+      placeholder={userdata[detail.name]}
     />
   );
 }
