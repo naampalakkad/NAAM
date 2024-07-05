@@ -3,37 +3,73 @@ import { signInoutWithGoogle, getuserdetailfromdb, savedatatodb ,uploadImageToSt
 import { Box, Heading, Textarea, Image, Button, Input, Card, useToast } from "@chakra-ui/react";
 import RenderDropdown from './dropdown';
 import { personaldetailsdata } from "@/lib/data";
+import { FaUpload } from "react-icons/fa";
 
 const ProfileSection = ({ user, profileImage, handleImageChange }) => {
-  const handleSignOut = useCallback(() => {
+  const handleSignOut = () => {
     signInoutWithGoogle();
-  }, []);
+  };
 
   return (
-    <Card className="profilebox">
-      <label htmlFor="profileImageInput" className="profileimage">
+    <Card className="profilebox" boxShadow="md" p={6} borderRadius="xl" textAlign="center">
+      <label htmlFor="profileImageInput" className="profileimage" style={{ position: 'relative' }}>
         <Image
-          src={profileImage}
+          src={profileImage || './assets/usericon.webp'}
           id="profileimagebox"
           alt={user.displayName}
           fallbackSrc="./assets/usericon.webp"
+          borderRadius="full"
+          objectFit="cover"
+          mb={4}
+          mx="auto"
+          onMouseOver={(e) => e.currentTarget.style.opacity = 0.8}
+          onMouseOut={(e) => e.currentTarget.style.opacity = 1}
+          transition="opacity 0.3s ease-in-out"
         />
-        <span className="upload-icon">Upload</span>
+    <Box
+  as="span"
+  className="upload-icon"
+  color="green.500"
+  cursor="pointer"
+  position="absolute"
+  fontSize={16}
+  top="50%"
+  left="50%"
+  transform="translate(-50%, -50%)"
+  opacity={0}
+  _hover={{ opacity: 1 }}
+  p={4}
+  display="flex"
+  alignItems="center"
+  justifyContent="center"
+  borderRadius="50%"
+>
+  <FaUpload  size={50}/>
+  Change Profile Image
+</Box>
       </label>
       <input
         type="file"
         id="profileImageInput"
         onChange={handleImageChange}
-        style={{ display: "none" }}
+        style={{ display: 'none' }}
       />
-      <Box>
-        <Heading as="h3" size="md" mt={2} mb={1}>{user.displayName}</Heading>
-        <Box fontSize="sm" color="gray.600" mb={2}>{user.email}</Box>
+      <Box mt={6}>
+        <Heading as="h3" size="md" mb={2}>
+          {user.displayName}
+        </Heading>
+        <Box fontSize="sm" color="gray.600" mb={4}>
+          {user.email}
+        </Box>
+        <Button onClick={handleSignOut} colorScheme="blue" size="sm">
+          Sign out
+        </Button>
       </Box>
-      <Button onClick={handleSignOut} colorScheme="blue">Sign out</Button>
     </Card>
   );
 };
+
+
 
 const DetailsSection = ({ personaldetailsdata, updateFirebaseUserData, userdata, handleChange }) => {
 
@@ -163,7 +199,6 @@ const SignedInBox = ({ user }) => {
                 duration: 3000,
                 isClosable: true,
               });
-        
     }
     catch {
       toast({
