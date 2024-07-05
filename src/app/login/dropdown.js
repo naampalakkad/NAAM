@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import CreatableSelect from 'react-select/creatable';
-import { components, InputProps } from 'react-select';
+import { components } from 'react-select';
 import { savedatatodb, getdatafromdb } from '@/lib/firebase';
 import { useColorMode, useTheme } from '@chakra-ui/react';
 
@@ -11,12 +11,11 @@ const createOption = (label) => ({
 
 const createOptionsFromArray = (array) => array.map(createOption);
 
-function RenderDropdown({ detail }) {
+function RenderDropdown({ detail, userdata, handleChange }) {
   const { colorMode } = useColorMode();
   const theme = useTheme();
   const optionname = detail.name;
   const [isLoading, setIsLoading] = useState(false);
-  const [value, setValue] = useState(detail.default);
   const [options, setOptions] = useState([]);
 
   useEffect(() => {
@@ -59,8 +58,6 @@ function RenderDropdown({ detail }) {
         setOptions((prev) => {
           const newOptions = [...prev, newOption];
           printUpdatedLocations(newOptions);
-
-          // Save updated options to Firebase
           const updatedData = newOptions.map((option) => option.label);
           const dataKey = optionname === 'location' ? 'locationlist' :
                           optionname === 'nativelocation' ? 'nativelocationlist' :
@@ -73,15 +70,14 @@ function RenderDropdown({ detail }) {
 
           return newOptions;
         });
-        setValue(newOption);
+        handleChange(detail.name, inputValue); 
       }, 1000);
     },
-    [optionname]
+    [optionname, handleChange, detail.name]
   );
 
-  const handleChange = (newValue) => {
-    setValue(newValue);
-    printUpdatedLocations(options);
+  const handleSelectChange = (newValue) => {
+    handleChange(detail.name, newValue ? newValue.label : '');
   };
 
   const customStyles = {
@@ -118,7 +114,7 @@ function RenderDropdown({ detail }) {
       />
     ),
   };
-  // {console.log(document.getElementById("profile" +detail.name).value)}
+
   return (
     <CreatableSelect
       className="detailitem"
@@ -126,12 +122,11 @@ function RenderDropdown({ detail }) {
       isClearable
       isDisabled={isLoading}
       isLoading={isLoading}
-      onChange={handleChange}
+      onChange={handleSelectChange}
       onCreateOption={handleCreate}
       options={options}
-      value={value}
       components={customComponents}
-      
+      value={ userdata[detail.name]}
     />
   );
 }

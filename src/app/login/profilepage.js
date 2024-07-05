@@ -1,7 +1,8 @@
-import React, { useCallback } from 'react';
-import { signInoutWithGoogle } from "@/lib/firebase";
-import { Box, Heading, Textarea, Image, Button, Input, Card, Select } from "@chakra-ui/react";
+import React, { useCallback, useEffect, useState } from 'react';
+import { signInoutWithGoogle, getuserdetailfromdb, savedatatodb } from "@/lib/firebase";
+import { Box, Heading, Textarea, Image, Button, Input, Card, useToast } from "@chakra-ui/react";
 import RenderDropdown from './dropdown';
+import { personaldetailsdata } from "@/lib/data";
 
 const ProfileSection = ({ user, profileImage, handleImageChange }) => {
   const handleSignOut = useCallback(() => {
@@ -9,7 +10,6 @@ const ProfileSection = ({ user, profileImage, handleImageChange }) => {
   }, []);
 
   return (
-    
     <Card className="profilebox">
       <label htmlFor="profileImageInput" className="profileimage">
         <Image
@@ -35,7 +35,8 @@ const ProfileSection = ({ user, profileImage, handleImageChange }) => {
   );
 };
 
-const DetailsSection = ({ personaldetailsdata, updateFirebaseUserData }) => {
+const DetailsSection = ({ personaldetailsdata, updateFirebaseUserData, userdata, handleChange }) => {
+
   const renderInput = useCallback((detail) => (
     <Input
       className="detailitem"
@@ -43,8 +44,10 @@ const DetailsSection = ({ personaldetailsdata, updateFirebaseUserData }) => {
       type={detail.type}
       placeholder={detail.default}
       id={"profile" + detail.name}
+      value={userdata[detail.name] || ''}
+      onChange={(e) => handleChange(detail.name, e.target.value)}
     />
-  ), []);
+  ), [userdata, handleChange]);
 
   const renderTextarea = useCallback((detail) => (
     <Textarea
@@ -55,44 +58,35 @@ const DetailsSection = ({ personaldetailsdata, updateFirebaseUserData }) => {
       resize="vertical"
       height="180px"
       id={"profile" + detail.name}
+      value={userdata[detail.name] || ''}
+      onChange={(e) => handleChange(detail.name, e.target.value)}
     />
-  ), []);
+  ), [userdata, handleChange]);
 
   const renderSwitch = useCallback((detail) => (
     <label className='switchlabel'>
-      <input type='checkbox' id={"profile" + detail.name} />
+      <input
+        type='checkbox'
+        id={"profile" + detail.name}
+        checked={userdata[detail.name] || false}
+        onChange={(e) => handleChange(detail.name, e.target.checked)}
+      />
     </label>
-  ), []);
+  ), [userdata, handleChange]);
 
   const renderDropdown = useCallback((detail) => (
-    <RenderDropdown detail={detail} />
-  ), []);
-
-  const renderSelect = useCallback((detail) => (
-    <Select
-      className="detailitem"
-      variant="filled"
-      placeholder={detail.default}
-      id={"profile" + detail.name}
-    >
-      {detail.options.map((option, index) => (
-        <option key={index} value={option}>{option}</option>
-      ))}
-    </Select>
-  ), []);
+    <RenderDropdown detail={detail} userdata={userdata} handleChange={handleChange} />
+  ), [userdata, handleChange]);
 
   return (
     <Box spacing={4} className="infobox">
       {personaldetailsdata.map((detail, index) => (
         <div className="detaillist" key={index}>
           <label htmlFor={"profile" + detail.name}>{detail.prop}</label>
-          {
-            detail.type === "textarea" ? renderTextarea(detail) :
-              detail.type === "selectable" ? renderDropdown(detail) :
-                detail.type === "select" ? renderSelect(detail) :
-                  detail.type === "checkbox" ? renderSwitch(detail) :
-                    renderInput(detail)
-          }
+          {detail.type === "textarea" && renderTextarea(detail)}
+          {detail.type === "selectable" && renderDropdown(detail)}
+          {detail.type === "checkbox" && renderSwitch(detail)}
+          {!["textarea", "selectable", "select", "checkbox"].includes(detail.type) && renderInput(detail)}
         </div>
       ))}
       <Button mt={4} colorScheme="blue" onClick={updateFirebaseUserData}>Save</Button>
@@ -100,10 +94,78 @@ const DetailsSection = ({ personaldetailsdata, updateFirebaseUserData }) => {
   );
 };
 
-const SignedInBox = ({ user, profileImage, handleImageChange, personaldetailsdata, updateFirebaseUserData }) => {
+const SignedInBox = ({ user }) => {
+  const toast = useToast();
+  const [userdata, setUserdata] = useState({});
+  const [profileImage, setProfileImage] = useState(user.photoURL);
+
+  useEffect(() => {
+    const setuserdetails = async () => {
+      if (user) {
+        setProfileImage(user.photoURL);
+        const userdataa = await getuserdetailfromdb(user.uid);
+        setUserdata(userdataa);
+      } else {
+        console.log("user not available");
+      }
+    };
+    setuserdetails();
+  }, [user]);
+
+  const handleChange = (name, value) => {
+    console.log(`Updating ${name} to ${value}`);
+    setUserdata((prevUserdata) => ({
+      ...prevUserdata,
+      [name]: value,
+    }));
+    console.log(userdata)
+  };
+
+  const handleImageChange = async (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const newImageUrl = await uploadImageToStorage(file, user.uid);
+      setProfileImage(newImageUrl);
+      setUserdata((prevUserdata) => ({
+        ...prevUserdata,
+        photoURL: newImageUrl,
+      }));
+      savedatatodb("users/" + user.uid, { photoURL: newImageUrl });
+    }
+  };
+
+  const updateFirebaseUserData = () => {
+    new Promise((resolve, reject) => {
+      try {
+        savedatatodb("users/" + user.uid, userdata);
+        resolve();
+      } catch (error) {
+        reject(error);
+      }
+    })
+    .then(() => {
+      toast({
+        title: "Profile updated.",
+        description: "Your profile information has been saved.",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+    })
+    .catch((error) => {
+      toast({
+        title: "Error updating profile.",
+        description: error.message,
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    });
+  };
+  
+
   return (
     <Box className="cardcontainer">
- 
       <ProfileSection
         user={user}
         profileImage={profileImage}
@@ -112,9 +174,11 @@ const SignedInBox = ({ user, profileImage, handleImageChange, personaldetailsdat
       <DetailsSection
         personaldetailsdata={personaldetailsdata}
         updateFirebaseUserData={updateFirebaseUserData}
+        userdata={userdata}
+        handleChange={handleChange}
       />
     </Box>
   );
-}
+};
 
 export default SignedInBox;
