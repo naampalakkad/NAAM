@@ -83,7 +83,7 @@ export const MenuItems = [
   { name: 'Gallery', link: '/gallery' },
   { name: 'Alumni', link: '/alumni' },
   { name: 'News', link: '/posts' },
-  { name: 'Calendar', link: '/calendar' },
+  { name: 'Calender', link: '/calender' },
   { name: 'Profile', link: '/login' },
 ];
 
