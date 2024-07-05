@@ -125,8 +125,11 @@ const SignedInBox = ({ user }) => {
         }
       }
         setUserdata(userdataa);
-        console.log(userdataa);
         setProfileImage(userdataa.photoURL);
+        if(userdataa.photoURL == "") {
+          setProfileImage(user.photoURL);
+        }
+        
       } else {
         console.log("user not available");
       }
