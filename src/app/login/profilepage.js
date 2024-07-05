@@ -104,11 +104,29 @@ const SignedInBox = ({ user }) => {
     const setuserdetails = async () => {
       if (user) {
         setProfileImage(user.photoURL); 
-        const userdataa = await getuserdetailfromdb(user.uid);
+        let userdataa = await getuserdetailfromdb(user.uid);
+        if (userdataa== null) {
+            userdataa = {
+              name : "",
+              email: "",
+              batch: "",
+              number: "",
+              "alternate number": "",
+              rollnow: "",
+              linkedIn: "" ,
+              facebook: "",
+              location: "",
+              nativelocation: "",
+              profession: "",
+              specialization: "",
+              about: "",
+              phoneperm: "",
+              photoURL: "",
+        }
+      }
         setUserdata(userdataa);
         console.log(userdataa);
-        setProfileImage(userdataa.photo);
-        console.log("profileImage: " + profileImage);
+        setProfileImage(userdataa.photoURL);
       } else {
         console.log("user not available");
       }
