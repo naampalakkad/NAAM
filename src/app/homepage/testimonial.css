@@ -1,4 +1,4 @@
-.testimonialspanel {
+/* .testimonialspanel {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -6,6 +6,7 @@
     width: 100%;
     flex-wrap: wrap;
 }
+    
 
 .testimonialitem {
     display: flex;
@@ -41,7 +42,7 @@
     font-size: 15px;
 }
 
-/* Responsive design */
+
 @media screen and (max-width: 768px) {
     .testimonialitem {
         width: 100%;
@@ -55,4 +56,4 @@
         width: 80px;
         height: 80px;
     }
-}
+} */

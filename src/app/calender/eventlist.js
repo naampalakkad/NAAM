@@ -7,7 +7,7 @@ const EventList = React.memo(({ futureEvents }) => {
       <Heading textAlign="center" fontWeight="bold" mb={4}>
         Upcoming Events
       </Heading>
-      <List spacing={4}>
+      <List spacing={4} justifyContent={"center"}>
         {futureEvents.map((event, index) => (
           <ListItem key={index} p={4} borderWidth="1px" borderRadius="md">
             <HStack justify="space-between" align="start">
