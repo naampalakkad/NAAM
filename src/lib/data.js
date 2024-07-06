@@ -80,17 +80,17 @@ export const blogposts = {
 }
 
 export const MenuItems = [
-    { name: 'Gallery', link: 'gallery' },
-    { name: 'Alumni', link: 'alumni' },
-    { name: 'News', link: 'posts' },
-    { name: 'Calender', link: 'calender' },
-    { name: 'Profile', link: 'login' },
+  { name: 'Gallery', link: '/gallery' },
+  { name: 'Alumni', link: '/alumni' },
+  { name: 'News', link: '/posts' },
+  { name: 'Calender', link: '/calender' },
+  { name: 'Profile', link: '/login' },
 ];
 
 export const FooterMenuItems = [
-    { name: 'About Us', link: 'aboutus' },
-    { name: 'Bye-Law', link: 'law' },
-    { name: 'Profile', link: 'login' },
+  { name: 'About Us', link: '/aboutus' },
+  { name: 'Bye-Law', link: '/law' },
+  { name: 'Profile', link: '/login' },
 ];
 
 export const socialMediaUrls = [
@@ -178,34 +178,7 @@ export let personaldetailsdata = [
         default: "Enter your Alternate number",
         type: "Number"
       },
-      {
-        prop: "Current Location",
-        name: "location",
-        default: "Select your current location",
-        type: "select",
-        options: ["Location1", "Location2", "Location3"]  
-      },
-      {
-        prop: "Native Location",
-        name: "location2",
-        default: "Select your native location",
-        type: "select",
-        options: ["Location4", "Location5", "Location6"]  
-      },
-      {
-        prop: "Profession",
-        name: "profession",
-        default: "Select your profession",
-        type: "select",
-        options: ["Profession1", "Profession2", "Profession3"]  
-      },
-      {
-        prop: "Specialization",
-        name: "specialization",
-        default: "Select your specialization",
-        type: "select",
-        options: ["Specialization1", "Specialization2", "Specialization3"]  
-      },
+   
       {
         prop: "JNV Roll No",
         name: "rollno",
@@ -225,6 +198,34 @@ export let personaldetailsdata = [
         type: "text"
       },
       {
+        prop: "Current Location",
+        name: "location",
+        default: "Select your current location",
+        type: "selectable",
+        options: "locationlist"
+      },
+      {
+        prop: "Native Location",
+        name: "nativelocation",
+        default: "Select your native location",
+        type: "selectable",
+        options: "locationlist" 
+      },
+      {
+        prop: "Profession",
+        name: "profession",
+        default: "Select your profession",
+        type: "selectable",
+        options: "professionlist"
+      },
+      {
+        prop: "Specialization",
+        name: "specialization",
+        default: "Select your specialization",
+        type: "selectable",
+        options: "specializationlist" 
+      },
+      {
         prop: "About",
         name: "about",
         default: "tell us about you",
@@ -237,7 +238,6 @@ export let personaldetailsdata = [
         type: "checkbox"
       },
       
-
 ]
 
 export const phototilesData = [

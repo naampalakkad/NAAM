@@ -1,77 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Flex, Input, Text, Button, Heading, Image, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, useDisclosure, Select } from "@chakra-ui/react";
+import {
+  Box, Flex,  Text, Button, Heading, Image,  useDisclosure
+} from "@chakra-ui/react";
 import { getdatafromdb } from "@/lib/firebase";
-import { personaldetailsdata } from "@/lib/data";
 import { SocialIcon } from 'react-social-icons';
+import SearchBox from './searchbox';
+import ModelBox from './modelbox';
 import "./alumni.css";
 
-
-const SearchBox = ({ searchTerm, setSearchTerm, formData, setFormData }) => {
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
-
-  const handleReset = () => {
-    setSearchTerm("");
-    setFormData({
-      location: '',
-      location2: '',
-      profession: '',
-      specialization: '',
-    });
-  };
-
-  const selectFields = personaldetailsdata.filter(field => field.type === 'select');
-
-  return (
-    <Box>
-      <Flex flexDirection="row" alignItems="center" gap={3} wrap="wrap" mb={4}>
-        <Input
-          placeholder="Search with Name or Batch..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          variant="filled"
-          flex="1"
-          padding={4}
-          marginTop={2}
-          size="lg"
-        />
-        <Button 
-          colorScheme="red" 
-          onClick={handleReset} 
-          padding={4}
-          marginTop={2}
-
-          size="lg"
-        >
-          Clear
-        </Button>
-      </Flex>
-      <Flex flexDirection="row" alignItems="center" gap={3} wrap="wrap">
-        {selectFields.map((field, index) => (
-          <Select
-            key={field.name}
-            placeholder={field.default}
-            value={formData[field.name]}
-            name={field.name}
-            onChange={handleChange}
-            flex="1"
-            minWidth="200px"
-            marginY={2}
-          >
-            {field.options.map(option => (
-              <option key={option} value={option}>{option}</option>
-            ))}
-          </Select>
-        ))}
-      </Flex>
-    </Box>
-  );
-};
 
 
 const SocialIcons = ({ alumni }) => {
@@ -103,7 +39,7 @@ const SocialIcons = ({ alumni }) => {
 
 const AlumniCard = ({ alumni, handleMoreClick }) => (
   <Box width="300px" borderWidth="1px" borderRadius="lg" overflow="hidden" boxShadow="md" p={4} textAlign="center">
-    <Image src={alumni.photo} alt={alumni.name} className="alumniimage" mx="auto" fallbackSrc='./assets/usericon.webp' />
+    <Image src={alumni.photoURL} alt={alumni.name} className="alumniimage" mx="auto" fallbackSrc='./assets/usericon.webp' />
     <Heading as="h5" size="md" mt={4} mb={2}>{alumni.name}</Heading>
     <Text fontSize="sm" color="gray.500" mb={2}>Batch: {alumni.batch}</Text>
     <Text fontSize="sm" color="gray.500" mb={2}>Phone: {alumni.phoneperm && alumni.number ? alumni.number : 'Not Available'}</Text>
@@ -129,29 +65,8 @@ const NoResultsBox = () => (
   </Flex>
 );
 
-const ModelBox = ({ isOpen, onClose, selectedAlumni }) => (
-  <Modal isOpen={isOpen} onClose={onClose}>
-    <ModalOverlay />
-    <ModalContent>
-      <ModalHeader>{selectedAlumni ? selectedAlumni.name : 'Alumni Name'}</ModalHeader>
-      <ModalCloseButton />
-      <ModalBody>
-        {selectedAlumni && (
-          <>
-            <Image src={selectedAlumni.photo} alt={selectedAlumni.name} className="alumniimage" />
-            <Flex direction="column" mt={4}>
-              <Text fontWeight="bold">About:</Text>
-              <Text>{selectedAlumni.about}</Text>
-            </Flex>
-          </>
-        )}
-      </ModalBody>
-      <ModalFooter>
-        <Button colorScheme="blue" onClick={onClose}>Close</Button>
-      </ModalFooter>
-    </ModalContent>
-  </Modal>
-);
+
+
 
 export default function AlumniList() {
   const [alumnidata, setAlumnidata] = useState([]);
@@ -160,14 +75,14 @@ export default function AlumniList() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [formData, setFormData] = useState({
     location: '',
-    location2: '',
+    nativelocation: '',
     profession: '',
     specialization: '',
   });
+  const [optionsData, setOptionsData] = useState({});
 
   useEffect(() => {
     const fetchData = async () => {
-      // Fetch alumni data from database
       const data = await getdatafromdb('users');
       if (data) {
         setAlumnidata(Object.values(data));
@@ -175,7 +90,18 @@ export default function AlumniList() {
         console.error('Failed to fetch data');
       }
     };
+
+    const fetchOptionsData = async () => {
+      const data = await getdatafromdb('otherdata/locationdata');
+      if (data) {
+        setOptionsData(data);
+      } else {
+        console.error('Failed to fetch options data');
+      }
+    };
+
     fetchData();
+    fetchOptionsData();
   }, []);
 
   const filteredAlumni = alumnidata.filter((alumni) => {
@@ -185,11 +111,11 @@ export default function AlumniList() {
       (alumni.batch !== undefined && alumni.batch.toString().toLowerCase().includes(searchTermLower));
 
     const matchesLocation = formData.location === "" || (alumni.location && alumni.location === formData.location);
-    const matchesLocation2 = formData.location2 === "" || (alumni.location2 && alumni.location2 === formData.location2);
+    const matchesnativelocation = formData.nativelocation === "" || (alumni.nativelocation && alumni.nativelocation === formData.nativelocation);
     const matchesProfession = formData.profession === "" || (alumni.profession && alumni.profession === formData.profession);
     const matchesSpecialization = formData.specialization === "" || (alumni.specialization && alumni.specialization === formData.specialization);
 
-    return matchesSearchTerm && matchesLocation && matchesLocation2 && matchesProfession && matchesSpecialization;
+    return matchesSearchTerm && matchesLocation && matchesnativelocation && matchesProfession && matchesSpecialization;
   });
 
   const handleMoreClick = (alumni) => {
@@ -204,6 +130,7 @@ export default function AlumniList() {
         setSearchTerm={setSearchTerm}
         formData={formData}
         setFormData={setFormData}
+        optionsData={optionsData}
       />
       {alumnidata.length > 0 ? (
         filteredAlumni.length > 0 ? (

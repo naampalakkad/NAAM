@@ -1,7 +1,7 @@
 // app/layout.js
 import Header from "./components/header";
 import Footer from "./components/footer";
-import { ChakraProvider, extendTheme, ColorModeScript } from "@chakra-ui/react";
+import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 import "./globals.css";
 import Dochead from "@/lib/docheader";
 

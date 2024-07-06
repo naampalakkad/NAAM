@@ -1,25 +1,29 @@
 'use client';
 import React, { useState, useRef, useEffect } from 'react';
-import DateTimePicker from './DateTimePicker';
-import './calendar.css';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
-import { eventSave, fetchEventsFromDB, auth, checkuserrole } from "@/lib/firebase";
-import { Card } from "@chakra-ui/react";
+import { Box, Flex, Heading, Button, Spinner, Card, useMediaQuery, Text } from "@chakra-ui/react";
+import { fetchEventsFromDB, auth, checkuserrole } from "@/lib/firebase";
 import { onAuthStateChanged } from "firebase/auth";
+import EventList from './eventlist';
+import AddEventDrawer from './addevent';
+import EventDetailModal from './eventpopup';
+import './calendar.css';
 
 export default function Calendar() {
   const calendarRef = useRef(null);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedTime, setSelectedTime] = useState('00:00');
   const [showAddEventModal, setShowAddEventModal] = useState(false);
-  const [eventTitle, setEventTitle] = useState('');
-  const [eventDesc, setEventDesc] = useState('');
   const [events, setEvents] = useState([]);
   const [user, setUser] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [isMobile] = useMediaQuery("(max-width: 768px)");
+  const [showEventDetailModal, setShowEventDetailModal] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState(null);
 
   useEffect(() => {
     const loadEventsFromFirebase = async () => {
@@ -31,13 +35,16 @@ export default function Calendar() {
       }
     };
 
-    loadEventsFromFirebase();
-
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user ? user : null);
+    const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
+      setUser(user);
+      setLoading(false);
     });
 
-    return () => unsubscribe();
+    loadEventsFromFirebase();
+
+    return () => {
+      unsubscribeAuth();
+    };
   }, []);
 
   useEffect(() => {
@@ -53,13 +60,8 @@ export default function Calendar() {
     fetchUserRole();
   }, [user]);
 
-  const handleClose = () => setShowAddEventModal(false);
-
-  const handleEventTitleChange = (event) => setEventTitle(event.target.value);
-  const handleEventDescChange = (event) => setEventDesc(event.target.value);
-
   const handleDateClick = (arg) => {
-    if (user) {
+    if (user && isAdmin) {
       setSelectedDate(arg.date);
       setShowAddEventModal(true);
     } else {
@@ -68,7 +70,8 @@ export default function Calendar() {
   };
 
   const handleEventClick = (arg) => {
-    console.log('Event clicked:', arg.event);
+    setSelectedEvent(arg.event);
+    setShowEventDetailModal(true);
   };
 
   const handleAddEvent = () => {
@@ -79,100 +82,89 @@ export default function Calendar() {
     }
   };
 
-  const submit = (e) => {
-    e.preventDefault();
-    addEvent();
-    setEventTitle('');
-    setEventDesc('');
-    setSelectedDate(new Date());
-    setSelectedTime('00:00');
-  };
-
-  const addEvent = () => {
-    const newEvent = {
-      title: eventTitle,
-      description: eventDesc,
-      date: selectedDate.toISOString().split('T')[0],
-      time: selectedTime,
-      timestamp: new Date().getTime()
-    };
-    eventSave(newEvent);
-    setEvents([...events, newEvent]);
-    setShowAddEventModal(false);
-  };
-
   const futureEvents = events.filter(event => new Date(event.date + 'T' + event.time) > new Date());
 
   const eventList = events.map((event) => ({
     title: event.title,
-    start: event.date + 'T' + event.time
+    start: event.date + 'T' + event.time,
+    time: event.time,
+    extendedProps: {
+      description: event.description,
+      time: event.time,
+    },
   }));
 
   const handleEventContent = (arg) => (
-    <div className="custom-event">
-      <div className="event-title">{arg.event.title}</div>
-      <div className="event-time">{arg.timeText}</div>
-    </div>
+    <Box
+      className="custom-event"
+      p={1}
+      m={1}
+      bg="blue.500"
+      borderRadius="md"
+      color="white"
+      textAlign="center"
+      _hover={{ bg: "blue.600" }}
+    >
+    <Text className="event-title" fontSize="sm" isTruncated>
+      {arg.event.title}
+    </Text>
+  </Box>
   );
 
-  return (
-    <div style={{ paddingTop: "10vh", display: 'flex' }}>
-      <div className='bar'>
-        <Card className='card'>
-          <FullCalendar
-            ref={calendarRef}
-            plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-            initialView='dayGridMonth'
-            headerToolbar={{
-              start: "today prev,next",
-              center: "title",
-              end: ""
-            }}
-            height={"100vh"}
-            dateClick={handleDateClick}
-            eventClick={handleEventClick}
-            eventContent={handleEventContent}
-            events={eventList}
-          />
-        </Card>
-      </div>
-      <div className='sidebar'>
-        {isAdmin && <button onClick={handleAddEvent} className='addbutton'>Add Event</button>}
-        <h1 style={{ textAlign: 'center', fontWeight: 'bold', color: 'rgb(5, 5, 68)' }}>Upcoming Events</h1>
-        <ul className="event-list">
-          {futureEvents.map((event, index) => (
-            <li key={index} style={{ marginBottom: '10px', padding: '10px', backgroundColor: '#f7f7f7', borderRadius: '5px', boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)' }}>
-              <span className="event-title" style={{ fontWeight: 'bold', marginLeft: '10px' }}>{event.title}</span>
-              <span className="event-date" style={{ color: '#666', marginLeft: '10px' }}>{event.date}</span>
-              <br />
-              <span className="event-date" style={{ color: 'grey', marginLeft: '10px' }}>{event.description}</span>
-              <span className="event-time" style={{ color: '#666', marginLeft: '10px' }}>{event.time}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
+  if (loading) {
+    return (
+      <Flex justifyContent="center" alignItems="center" h="60vh">
+        <Spinner size="xl" />
+      </Flex>
+    );
+  }
 
-      {showAddEventModal && isAdmin && (
-        <div className="add-event-form">
-          <p className='title' style={{ fontSize: 16 }}>{selectedDate.toDateString()}</p>
-          <label>
-            Event Title
-            <input type="text" value={eventTitle} onChange={handleEventTitleChange} />
-          </label>
-          <label>
-            Event Description
-            <input type="text" value={eventDesc} onChange={handleEventDescChange} />
-          </label>
-          <DateTimePicker
-            selectedDate={selectedDate}
-            setSelectedDate={setSelectedDate}
-            selectedTime={selectedTime}
-            setSelectedTime={setSelectedTime}
-          />
-          <button type="submit" onClick={submit}>Submit</button>
-          <button type="button" onClick={handleClose}>Close</button>
-        </div>
-      )}
-    </div>
+  return (
+    <Box pt={{ base: "10vh",  md: "10vh" }}>
+      <Flex direction={{ base: "column", md: "row" }} className='container'>
+        <Box className='bar' flex={{ base: "1", md: "3" }} mb={{ base: 4, md: 0 }}>
+          <Card className='card'>
+            <FullCalendar
+              ref={calendarRef}
+              plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+              initialView={isMobile ? 'timeGridDay' : 'dayGridMonth'}
+              headerToolbar={{
+                start: "today prev,next",
+                center: "title",
+                end: ""
+              }}
+              height={"100vh"}
+              dateClick={handleDateClick}
+              eventClick={handleEventClick}
+              eventContent={handleEventContent}
+              events={eventList}
+            />
+          </Card>
+        </Box>
+        <Box className='sidebar' flex={{ base: "1", md: "1" }} pl={{ base: 0, md: 4 }}>
+          {isAdmin &&<Flex justifyContent="center" alignItems="center"> <Button onClick={handleAddEvent} className='addbutton'>Add Event</Button></Flex>}
+          <EventList futureEvents={futureEvents} />
+        </Box>
+        <AddEventDrawer
+          isOpen={showAddEventModal}
+          onClose={() => setShowAddEventModal(false)}
+          selectedDate={selectedDate}
+          selectedTime={selectedTime}
+          setSelectedDate={setSelectedDate}
+          setSelectedTime={setSelectedTime}
+          events={events}
+          setEvents={setEvents}
+        />
+         {selectedEvent && (
+         <EventDetailModal
+         showEventDetailModal={showEventDetailModal}
+         setShowEventDetailModal={setShowEventDetailModal}
+         selectedEvent={selectedEvent}
+       />
+        )}
+        
+      </Flex>
+      
+    </Box>
   );
 }

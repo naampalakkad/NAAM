@@ -218,8 +218,11 @@ export async function uploadImageToStorage(userId, imageFile) {
   const folderPath = `profile_images/${userId}`;
   const folderRef = sref(storage, folderPath);
   const files = await listAll(folderRef);
+
+  // Delete existing files in the folder
   const deletePromises = files.items.map((fileRef) => deleteObject(fileRef));
   await Promise.all(deletePromises);
+
   if (typeof window !== "undefined") {
     try {
       const compressor = new ImageCompressor();
@@ -229,8 +232,14 @@ export async function uploadImageToStorage(userId, imageFile) {
         quality: 0.8,
         mimeType: 'image/webp',
       });
-      const storageRef = sref(storage, `profile_images/${userId}/${compressedImage.name}`);
-      await uploadBytes(storageRef, compressedImage);
+
+      // Create a new file with the name 'profilepic.webp'
+      const renamedFile = new File([compressedImage], 'profilepic.webp', {
+        type: 'image/webp'
+      });
+
+      const storageRef = sref(storage, `profile_images/${userId}/profilepic.webp`);
+      await uploadBytes(storageRef, renamedFile);
       const imageUrl = await getDownloadURL(storageRef);
       return imageUrl;
     } catch (error) {
