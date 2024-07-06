@@ -63,7 +63,7 @@ const Blog = () => {
                             <option value="BLOG">Blog</option>
                         </select>
                     </Box>
-                    {isAdmin &&  <Link href="/posts/addnew">
+                    {isAdmin &&  <Link href="/addnew">
                         <Button colorScheme="blue">Add Post</Button>
                     </Link>}
                 </Box>

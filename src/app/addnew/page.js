@@ -6,6 +6,7 @@ import './page.css';
 import dynamic from 'next/dynamic';
 import { saveposttodb, auth } from '@/lib/firebase';
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { useRouter } from 'next/navigation';
 
 if (typeof window !== 'undefined') {
   var ReactQuill = require('react-quill');
@@ -21,7 +22,7 @@ function Page() {
 
   const quillRef = useRef();
   const fileInputRef = useRef(); // Add a ref for the file input
-
+  const router= useRouter();
   const modules = {
     toolbar: [
       [{ header: [1, 2, 3, 4, 5, 6, false] }],
@@ -31,6 +32,9 @@ function Page() {
       [{ list: 'ordered' }, { list: 'bullet' }],
       ['link', 'image', 'video'],
     ],
+    clipboard: {
+      matchVisual: false, // for link
+    },
   };
 
   const onChangeHandler = (e) => {
@@ -66,6 +70,10 @@ function Page() {
   const handleSubmit = async (event) => {
     try {
       event.preventDefault();
+      if (!isfile) {
+        window.alert("Please select a thumbnail photo.");
+        return;
+      }
       const quillContent = quillRef.current?.getEditor().getContents();
 
       let file = isfile;
@@ -102,6 +110,7 @@ function Page() {
         window.alert("Form submitted");
       }
       resetForm();
+      router.push("/posts");
     } catch (error) {
       throw error;
     }
@@ -112,12 +121,12 @@ function Page() {
       <h1>Upload Your Post<hr /></h1>
 
       <form onSubmit={handleSubmit}>
-        <FormControl>
+        <FormControl isRequired>
           <FormLabel>Title</FormLabel>
-          <Input variant='filled' placeholder='Enter the title' type='text' name='title' value={formData.title} onChange={onChangeHandler} />
+          <Input variant='filled' placeholder='Enter the title' type='text' name='title' value={formData.title} onChange={onChangeHandler} required/>
           <FormHelperText></FormHelperText>
         </FormControl>
-        <FormControl>
+        <FormControl isRequired>
           <FormLabel>Type of post</FormLabel>
           <Select
             variant='filled'
@@ -127,6 +136,7 @@ function Page() {
             value={formData.type}
             onChange={onChangeHandler}
             style={{ border: '2px solid black' }}
+            required
           >
             <option value='EVENT'>Event</option>
             <option value='JOB'>Job</option>
@@ -135,14 +145,15 @@ function Page() {
           </Select>
           <FormHelperText></FormHelperText>
         </FormControl>
-        <FormControl>
+        <FormControl isRequired>
           <FormLabel>Thumbnail photo</FormLabel>
           <input
             type='file'
             name='thumbnail'
             accept='.png, .jpg, .jpeg'
             onChange={handleImageAsFile}
-            ref={fileInputRef} // Add the ref here
+            ref={fileInputRef} 
+            required
           />
           <FormHelperText></FormHelperText>
         </FormControl>
@@ -166,8 +177,8 @@ function Page() {
           }
           <FormHelperText></FormHelperText>
         </FormControl>
-        <FormControl>
-          <Button colorScheme='yellow' type='submit' className='submit-button' mt={4}>
+        <FormControl style={{ paddingTop: '25px' }}>
+          <Button colorScheme='yellow' type='submit' className='submit-button' mt={4}  >
             Submit
           </Button>
         </FormControl>
