@@ -1,6 +1,34 @@
 {
   "rules": {
-    ".read": "true",
-    ".write": "auth != null"
+    "aboutnaam": {
+      ".read": "true",
+      ".write": false
+    },
+    "menuitems": {
+      ".read": "true",
+      ".write": false
+    },
+    "posts": {
+      ".read": "true",
+      ".write": "auth != null && root.child('userroles/blogger').child(auth.token.email.replace('.', '_')).val() == true"
+    },
+    "events": {
+      ".read": "auth != null",
+      ".write": "auth != null && root.child('userroles/admin').child(auth.token.email.replace('.', '_')).val() == true"
+    },
+    "userroles": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
+    "users": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
+    "otherdata": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
+    ".read": false,
+    ".write": false
   }
 }
