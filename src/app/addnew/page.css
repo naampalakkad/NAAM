@@ -1,43 +1,60 @@
 .container {
     background-color: rgb(195, 209, 221);
-    height: 100%;
-    width: 80%; 
-    padding: 50px;
-    margin: 50px auto; 
-    border: 2px double black; 
-    margin-top: 10em;
+    height: auto;
+    width: 80%;
+    max-width: 1200px;
+    padding: 20px;
+    margin: 50px auto;
+    border: 2px double black;
+    margin-top: 5em;
     color: #000;
-}
-
-h1 {
+    box-sizing: border-box;
+  }
+  
+  h1 {
     color: rgb(3, 3, 3);
-    font-size: 50px;
-    align-items: center;
+    font-size: 2.5em;
     text-align: center;
-    padding-bottom: 50px;
-}
-
-.editor {
-    background-color:white;
-    border: 2px solid black; 
-}
-
-input[type='text'],
-input[type='file'],
-select,
-textarea {
+    padding-bottom: 20px;
+  }
+  
+  .editor {
+    background-color: white;
+    border: 2px solid black;
+  }
+  
+  input[type='text'],
+  input[type='file'],
+  select,
+  textarea {
     color: rgb(7, 7, 7);
-    background-color: rgb(252, 251, 251); 
-    border: 2px solid black; 
-    border-radius: 5px; 
+    background-color: rgb(252, 251, 251);
+    border: 2px solid black;
+    border-radius: 5px;
     padding: 10px;
     margin-bottom: 10px;
-}
-
-input[type='text']::placeholder,
-input[type='file']::placeholder,
-select::placeholder,
-textarea::placeholder {
-    color: white; 
-    opacity: 0.5; 
-}
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  input[type='text']::placeholder,
+  input[type='file']::placeholder,
+  select::placeholder,
+  textarea::placeholder {
+    color: grey;
+    opacity: 0.5;
+  }
+  
+  @media (max-width: 768px) {
+    .container {
+      width: 95%;
+      padding: 15px;
+      margin-top: 2em;
+    }
+  
+    h1 {
+      font-size: 2em;
+      padding-bottom: 15px;
+    }
+  }
+  
