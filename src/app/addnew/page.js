@@ -12,6 +12,16 @@ if (typeof window !== 'undefined') {
   var ReactQuill = require('react-quill');
   require('react-quill/dist/quill.snow.css');
 }
+let ImageCompressor = null
+if (typeof window !== "undefined") {
+  import('image-compressor.js')
+    .then((module) => {
+      ImageCompressor = module.default;
+    })
+    .catch((err) => {
+      console.error('Error loading ImageCompressor:', err);
+    });
+}
 
 function Page() {
   const [value, setValue] = useState('');
@@ -78,11 +88,20 @@ function Page() {
 
       let file = isfile;
 
+      const compressor = new ImageCompressor();
+      const compressedImage = await compressor.compress(file, {
+        maxWidth: 720,
+        maxHeight: 540,
+        quality: 0.8,
+        mimeType: 'image/webp',
+      });
+
+
       const storage = getStorage();
       var storagePath = 'thumbnail/' + file.name;
 
       const storageRef = ref(storage, storagePath);
-      const uploadTask = uploadBytesResumable(storageRef, file);
+      const uploadTask = uploadBytesResumable(storageRef, compressedImage);
 
       uploadTask.on('state_changed', (snapshot) => {
         const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
