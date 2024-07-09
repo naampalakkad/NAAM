@@ -51,7 +51,7 @@ const SearchBox = ({ searchTerm, setSearchTerm, formData, setFormData, optionsDa
           {selectFields.map((field, index) => (
             <Select
               key={field.name}
-              placeholder={field.default}
+              placeholder={field.prop}
               value={formData[field.name]}
               name={field.name}
               onChange={handleChange}
