@@ -1,14 +1,16 @@
-import { Box, Heading, Text, Divider, VStack, Image, HStack, Flex } from '@chakra-ui/react';
+import { Box, Heading, Text, Divider, VStack, Image, HStack,  Button, Tooltip, Link, Flex } from '@chakra-ui/react';
 
 const AboutPage = () => {
   const ContactInfo = () => {
     return (
       <HStack spacing={4} mt={4}>
         <HStack spacing={2}>
+          {/* <EmailIcon /> */}
           <Text>Email: sreejithksgupta2255@gmail.com</Text>
         </HStack>
         <HStack spacing={2}>
-          <Text>Phone: 7306181024</Text>
+          {/* <PhoneIcon /> */}
+          <Text>Phone: 9846370188</Text>
         </HStack>
       </HStack>
     );
@@ -121,6 +123,10 @@ const AboutPage = () => {
         </VStack>
       </VStack>
       <Box
+ 
+        </VStack>
+      </VStack>
+      <Box
             p={6}
             shadow="md"
             borderWidth="1px"
@@ -130,10 +136,13 @@ const AboutPage = () => {
             <Heading size="lg" color="teal.500">Contact Us</Heading>
             <Text fontSize="md" mt={4}>
               If you have any questions, suggestions, or would like to get involved with NAAM, please feel free to reach out to us at .
+              If you have any questions, suggestions, or would like to get involved with NAAM, please feel free to reach out to us at .
             </Text>
+            <ContactInfo/>
             <ContactInfo/>
           </Box>
     </Box>
+    
     
   );
 };
