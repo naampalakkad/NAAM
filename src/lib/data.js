@@ -46,39 +46,6 @@ export const statistics = [
     }
 ]
 
-export const blogposts = {
-    "posts": [
-        {
-            "title": "Post 1",
-            "content": "This is the first post. this is some dummy text used to fill in the rest of the page, and this is some random text",
-            "image": "https://via.placeholder.com/150",
-            type: "offer",
-            author: "unnimaya",
-        },
-        {
-            "title": "Post 2",
-            "content": "This is the second post. this is some dummy text used to fill in the rest of the page, and this is some random text",
-            "image": "https://via.placeholder.com/150",
-            type: "blog",
-            author: "Sreejith KS",
-        },
-        {
-            "title": "Post 3",
-            "content": "This is the third post. this is some dummy text used to fill in the rest of the page, and this is some random text",
-            "image": "https://via.placeholder.com/150",
-            type: "announcement",
-            author: "Suneeb vishnu",
-        },
-        {
-            "title": "Post 4",
-            "content": "This is the fourth post. this is some dummy text used to fill in the rest of the page, and this is some random text",
-            "image": "https://via.placeholder.com/150",
-            type: "blog",
-            author: "Anjitha J",
-        },
-    ]
-}
-
 export const MenuItems = [
   { name: 'Gallery', link: '/gallery' },
   { name: 'Alumni', link: '/alumni' },
@@ -95,23 +62,10 @@ export const FooterMenuItems = [
 
 export const socialMediaUrls = [
     "https://www.linkedin.com",
-    "https://www.facebook.com",
+    "https://www.facebook.com/groups/jnvitesalumni/",
     "https://www.twitter.com",
     "https://www.instagram.com",
     "https://www.youtube.com"
-];
-
-export const galleryphotos = [
-    { src: "assets/galleryimages/1.jpg", width: 560, height: 320 },
-    { src: "assets/galleryimages/2.jpg", width: 720, height: 480 },
-    { src: "assets/galleryimages/3.jpg", width: 640, height: 360 },
-    { src: "assets/galleryimages/4.jpg", width: 480, height: 240 },
-    { src: "assets/galleryimages/5.jpg", width: 800, height: 600 },
-    { src: "assets/galleryimages/6.jpg", width: 720, height: 480 },
-    { src: "assets/galleryimages/7.jpg", width: 600, height: 400 },
-    { src: "assets/galleryimages/8.jpg", width: 640, height: 360 },
-    { src: "assets/galleryimages/9.jpg", width: 500, height: 300 },
-    { src: "assets/galleryimages/10.jpg", width: 400, height: 300 },
 ];
 
 export let testimonial = [
@@ -163,37 +117,37 @@ export let personaldetailsdata = [
         prop: "Batch",
         name: "batch",
         default: "Enter your batch,  eg: 25",
-        type: "Number"
+        type: "number"
       },
       {
         prop: "Number",
         name:"number",
         default: "Enter your Mobile number",
-        type: "Number"
+        type: "number"
       },
       {
         prop: "Alternate Number",
         name:"Alternate number",
         default: "Enter your Alternate number",
-        type: "Number"
+        type: "number"
       },
    
       {
         prop: "JNV Roll No",
         name: "rollno",
-        default: "Enter your JNV Roll No",
-        type: "Number"
+        default: "Enter your JNV Roll No.",
+        type: "number"
       },
       {
         prop: "LinkedIn",
         name: "linkedIn",
-        default: "Enter your LinkedIn Profile",
+        default: "EG : https://www.linkedin.com/in/username",
         type: "text"
       },
       {
         prop: "Facebook",
         name: "facebook",
-        default: "Enter your Facebook Profile",
+        default: "EG: https://www.facebook.com/username",
         type: "text"
       },
       {

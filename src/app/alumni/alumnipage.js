@@ -14,8 +14,8 @@ const SocialIcons = ({ alumni }) => {
   const socialIconData = [
     { network: "email", url: `https://mail.google.com/mail/?view=cm&fs=1&to=${alumni.email}` },
     { network: "whatsapp", url: `https://wa.me/${alumni.number}`, condition: alumni.phoneperm && alumni.number },
-    { network: "linkedin", url: `https://www.linkedin.com/in/${alumni.linkedIn}`, condition: alumni.linkedIn },
-    { network: "facebook", url: `https://www.facebook.com/${alumni.facebook}`, condition: alumni.facebook }
+    { network: "linkedin", url: `${alumni.linkedIn}`, condition: alumni.linkedIn },
+    { network: "facebook", url: `${alumni.facebook}`, condition: alumni.facebook }
   ];
 
   return (
