@@ -8,7 +8,7 @@ const AboutPage = () => {
           <Text>Email: sreejithksgupta2255@gmail.com</Text>
         </HStack>
         <HStack spacing={2}>
-          <Text>Phone: 9846370188</Text>
+          <Text>Phone: 7306181024</Text>
         </HStack>
       </HStack>
     );
