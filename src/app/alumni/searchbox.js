@@ -22,6 +22,7 @@ const SearchBox = ({ searchTerm, setSearchTerm, formData, setFormData, optionsDa
     };
   
     const selectFields = personaldetailsdata.filter(field => field.type === 'selectable');
+    console.log(selectFields)
   
     return (
       <Box>
