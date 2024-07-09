@@ -1,6 +1,21 @@
-import { Box, Heading, Text, Divider, VStack, Image, HStack, Stack, Button, Link, Flex } from '@chakra-ui/react';
+import { Box, Heading, Text, Divider, VStack, Image, HStack,  Button, Tooltip, Link, Flex } from '@chakra-ui/react';
 
 const AboutPage = () => {
+  const ContactInfo = () => {
+    return (
+      <HStack spacing={4} mt={4}>
+        <HStack spacing={2}>
+          {/* <EmailIcon /> */}
+          <Text>Email: sreejithksgupta2255@gmail.com</Text>
+        </HStack>
+        <HStack spacing={2}>
+          {/* <PhoneIcon /> */}
+          <Text>Phone: 9846370188</Text>
+        </HStack>
+      </HStack>
+    );
+  };
+
   return (
     <Box p={8} minH="100vh">
       <div style={{ paddingTop: '10vh' }}></div>
@@ -104,7 +119,10 @@ const AboutPage = () => {
             </Text>
           </Box>
 
-          <Box
+ 
+        </VStack>
+      </VStack>
+      <Box
             p={6}
             shadow="md"
             borderWidth="1px"
@@ -113,20 +131,12 @@ const AboutPage = () => {
           >
             <Heading size="lg" color="teal.500">Contact Us</Heading>
             <Text fontSize="md" mt={4}>
-              If you have any questions, suggestions, or would like to get involved with NAAM, please feel free to reach out to us at <Link color="teal.500" href="mailto:alumni@jawaharnavodayapalakkad.org">alumni@jawaharnavodayapalakkad.org</Link>.
+              If you have any questions, suggestions, or would like to get involved with NAAM, please feel free to reach out to us at .
             </Text>
-            <HStack spacing={4} mt={4}>
-              <Button colorScheme="teal" size="md">
-                <Link href="mailto:sreejithksgupta2255@gmail.com">Email Us</Link>
-              </Button>
-              <Button colorScheme="teal" size="md">
-                <Link href="/contact">Contact Form</Link>
-              </Button>
-            </HStack>
+            <ContactInfo/>
           </Box>
-        </VStack>
-      </VStack>
     </Box>
+    
   );
 };
 
