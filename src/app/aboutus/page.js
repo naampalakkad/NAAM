@@ -1,15 +1,13 @@
-import { Box, Heading, Text, Divider, VStack, Image, HStack,  Button, Tooltip, Link, Flex } from '@chakra-ui/react';
+import { Box, Heading, Text, Divider, VStack, Image, HStack, Flex } from '@chakra-ui/react';
 
 const AboutPage = () => {
   const ContactInfo = () => {
     return (
       <HStack spacing={4} mt={4}>
         <HStack spacing={2}>
-          {/* <EmailIcon /> */}
           <Text>Email: sreejithksgupta2255@gmail.com</Text>
         </HStack>
         <HStack spacing={2}>
-          {/* <PhoneIcon /> */}
           <Text>Phone: 9846370188</Text>
         </HStack>
       </HStack>

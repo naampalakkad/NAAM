@@ -61,11 +61,11 @@ export const FooterMenuItems = [
 ];
 
 export const socialMediaUrls = [
-    "https://www.linkedin.com/groups/4107176/",
+    "https://www.linkedin.com",
     "https://www.facebook.com/groups/jnvitesalumni/",
-    "https://x.com",
+    "https://www.twitter.com",
     "https://www.instagram.com",
-    "https://www.youtube.com/@navodayaalumniassociationm5762"
+    "https://www.youtube.com"
 ];
 
 export let testimonial = [
@@ -118,17 +118,20 @@ export let personaldetailsdata = [
         name: "batch",
         default: "Enter your batch,  eg: 25",
         type: "number"
+        type: "number"
       },
       {
         prop: "Number",
         name:"number",
         default: "Enter your Mobile number",
         type: "number"
+        type: "number"
       },
       {
         prop: "Alternate Number",
         name:"Alternate number",
         default: "Enter your Alternate number",
+        type: "number"
         type: "number"
       },
    
@@ -137,16 +140,20 @@ export let personaldetailsdata = [
         name: "rollno",
         default: "Enter your JNV Roll No.",
         type: "number"
+        default: "Enter your JNV Roll No.",
+        type: "number"
       },
       {
         prop: "LinkedIn",
         name: "linkedIn",
+        default: "EG : https://www.linkedin.com/in/username",
         default: "EG : https://www.linkedin.com/in/username",
         type: "text"
       },
       {
         prop: "Facebook",
         name: "facebook",
+        default: "EG: https://www.facebook.com/username",
         default: "EG: https://www.facebook.com/username",
         type: "text"
       },
