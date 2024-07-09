@@ -104,18 +104,25 @@ export default function AlumniList() {
     fetchOptionsData();
   }, []);
 
-  const filteredAlumni = alumnidata.filter((alumni) => {
+  const filteredAlumni = alumnidata
+  .filter((alumni) => {
     const searchTermLower = searchTerm.toLowerCase();
     const matchesSearchTerm = searchTerm === "" ||
       (alumni.name && alumni.name.toLowerCase().includes(searchTermLower)) ||
       (alumni.batch !== undefined && alumni.batch.toString().toLowerCase().includes(searchTermLower));
 
     const matchesLocation = formData.location === "" || (alumni.location && alumni.location === formData.location);
-    const matchesnativelocation = formData.nativelocation === "" || (alumni.nativelocation && alumni.nativelocation === formData.nativelocation);
+    const matchesNativeLocation = formData.nativelocation === "" || (alumni.nativelocation && alumni.nativelocation === formData.nativelocation);
     const matchesProfession = formData.profession === "" || (alumni.profession && alumni.profession === formData.profession);
     const matchesSpecialization = formData.specialization === "" || (alumni.specialization && alumni.specialization === formData.specialization);
 
-    return matchesSearchTerm && matchesLocation && matchesnativelocation && matchesProfession && matchesSpecialization;
+    return matchesSearchTerm && matchesLocation && matchesNativeLocation && matchesProfession && matchesSpecialization;
+  })
+  .sort((a, b) => {
+    if (a.name && b.name) {
+      return a.name.localeCompare(b.name);
+    }
+    return 0;
   });
 
   const handleMoreClick = (alumni) => {
