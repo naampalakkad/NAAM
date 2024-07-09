@@ -122,7 +122,7 @@ const DetailsSection = ({ personaldetailsdata, updateFirebaseUserData, userdata,
           {detail.type === "textarea" && renderTextarea(detail)}
           {detail.type === "selectable" && renderDropdown(detail)}
           {detail.type === "checkbox" && renderSwitch(detail)}
-          {!["textarea", "selectable", "select", "checkbox"].includes(detail.type) && renderInput(detail)}
+          {!["textarea","selectable","select","checkbox"].includes(detail.type) && renderInput(detail)}
         </div>
       ))}
       <Button mt={4} colorScheme="blue" onClick={updateFirebaseUserData}>Save</Button>
@@ -173,14 +173,52 @@ const SignedInBox = ({ user }) => {
   }, [user]);
 
   const handleChange = (name, value) => {
-    console.log(`Updating ${name} to ${value}`);
     setUserdata((prevUserdata) => ({
       ...prevUserdata,
       [name]: value,
     }));
-    console.log(userdata)
   };
 
+  const validateData = (userdata) => {
+    const errors = {};
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(userdata.email)) {
+      errors.email = "Invalid email format";
+    }
+
+    const batch = Number(userdata.batch);
+    if (isNaN(batch) || batch <= 0 || batch >= 100) {
+      errors.batch = "Enter a valid batch name";
+    }
+  
+    // Phone number validation
+    const phoneRegex = /^\d{10}$/;
+    if (!phoneRegex.test(userdata.number)) {
+      errors.number = "Invalid phone number format";
+    }
+    if (userdata["alternate number"] && !phoneRegex.test(userdata["alternate number"])) {
+      errors["alternate number"] = "Invalid alternate phone number format";
+    }
+  
+    // Roll number validation
+    const rollNumber = Number(userdata.rollno);
+    if (isNaN(rollNumber) || rollNumber <= 0 || rollNumber >= 10000) {
+      errors.rollnow = "Enter a valid JNV roll number";
+    }
+  
+    // URL validation
+    const urlRegex = /^(https?:\/\/)?(www\.)?([a-zA-Z0-9-]{1,256}\.[a-zA-Z0-9]{2,6})(:[0-9]{1,5})?(\/.*)?$/;
+    if (userdata.linkedIn && !urlRegex.test(userdata.linkedIn)) {
+      errors.linkedIn = "Invalid LinkedIn URL";
+    }
+    if (userdata.facebook && !urlRegex.test(userdata.facebook)) {
+      errors.facebook = "Invalid Facebook URL";
+    }
+  
+    return Object.keys(errors).length > 0 ? errors : true;
+  };
+
+  
   const handleImageChange = async (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -214,6 +252,18 @@ const SignedInBox = ({ user }) => {
   };
 
   const updateFirebaseUserData = () => {
+    const validationResult = validateData(userdata);
+if (validationResult != true) {
+  const errorMessages = Object.keys(validationResult)
+  .map((key, index) => `${index + 1}. ${validationResult[key]}`).join("  \n")
+   toast({
+          title: 'Invalid Data Entered',
+          description:<pre>{errorMessages}</pre>,
+          status: 'error',
+          duration: 2000,
+          isClosable: true,
+        })
+} else {
     new Promise((resolve, reject) => {
       try {
         savedatatodb("users/" + user.uid, userdata);
@@ -240,6 +290,7 @@ const SignedInBox = ({ user }) => {
         isClosable: true,
       });
     });
+  }
   };
   
 
