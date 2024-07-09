@@ -63,9 +63,9 @@ export const FooterMenuItems = [
 export const socialMediaUrls = [
     "https://www.linkedin.com",
     "https://www.facebook.com/groups/jnvitesalumni/",
-    "https://www.twitter.com",
+    "https://x.com",
     "https://www.instagram.com",
-    "https://www.youtube.com"
+    "https://www.youtube.com/@navodayaalumniassociationm5762"
 ];
 
 export let testimonial = [
