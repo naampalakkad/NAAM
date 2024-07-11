@@ -88,11 +88,14 @@ export default function Calendar() {
     title: event.title,
     start: event.date + 'T' + event.time,
     time: event.time,
+    venue: event.venue,
     extendedProps: {
       description: event.description,
       time: event.time,
     },
   }));
+
+  console.log(eventList)
 
   const handleEventContent = (arg) => (
     <Box
@@ -105,10 +108,10 @@ export default function Calendar() {
       textAlign="center"
       _hover={{ bg: "blue.600" }}
     >
-    <Text className="event-title" fontSize="sm" isTruncated>
-      {arg.event.title}
-    </Text>
-  </Box>
+      <Text className="event-title" fontSize="sm" isTruncated>
+        {arg.event.title}
+      </Text>
+    </Box>
   );
 
   if (loading) {
@@ -120,7 +123,7 @@ export default function Calendar() {
   }
 
   return (
-    <Box pt={{ base: "10vh",  md: "10vh" }}>
+    <Box pt={{ base: "10vh", md: "10vh" }}>
       <Flex direction={{ base: "column", md: "row" }} className='container'>
         <Box className='bar' flex={{ base: "1", md: "3" }} mb={{ base: 4, md: 0 }}>
           <Card className='card'>
@@ -142,7 +145,7 @@ export default function Calendar() {
           </Card>
         </Box>
         <Box className='sidebar' flex={{ base: "1", md: "1" }} pl={{ base: 0, md: 4 }}>
-          {isAdmin &&<Flex justifyContent="center" alignItems="center"> <Button onClick={handleAddEvent} className='addbutton'>Add Event</Button></Flex>}
+          {isAdmin && <Flex justifyContent="center" alignItems="center"> <Button onClick={handleAddEvent} className='addbutton'>Add Event</Button></Flex>}
           <EventList futureEvents={futureEvents} />
         </Box>
         <AddEventDrawer
@@ -155,16 +158,16 @@ export default function Calendar() {
           events={events}
           setEvents={setEvents}
         />
-         {selectedEvent && (
-         <EventDetailModal
-         showEventDetailModal={showEventDetailModal}
-         setShowEventDetailModal={setShowEventDetailModal}
-         selectedEvent={selectedEvent}
-       />
+        {selectedEvent && (
+          <EventDetailModal
+            showEventDetailModal={showEventDetailModal}
+            setShowEventDetailModal={setShowEventDetailModal}
+            selectedEvent={selectedEvent}
+          />
         )}
-        
+
       </Flex>
-      
+
     </Box>
   );
 }

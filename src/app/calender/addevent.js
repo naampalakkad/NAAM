@@ -5,10 +5,12 @@ import { eventSave } from "@/lib/firebase";
 const AddEventDrawer = ({ isOpen, onClose, selectedDate, selectedTime, setSelectedDate, setSelectedTime, events, setEvents }) => {
   const [eventTitle, setEventTitle] = useState('');
   const [eventDesc, setEventDesc] = useState('');
+  const [eventVenue, setEventVenue] = useState('');
   const submit = (e) => {
     e.preventDefault();
     addEvent();
     setEventTitle('');
+    setEventVenue(' ');
     setEventDesc('');
     setSelectedDate(new Date());
     setSelectedTime('00:00');
@@ -17,6 +19,7 @@ const AddEventDrawer = ({ isOpen, onClose, selectedDate, selectedTime, setSelect
   const addEvent = () => {
     const newEvent = {
       title: eventTitle,
+      venue: eventVenue,
       description: eventDesc,
       date: selectedDate.toISOString().split('T')[0],
       time: selectedTime,
@@ -36,18 +39,18 @@ const AddEventDrawer = ({ isOpen, onClose, selectedDate, selectedTime, setSelect
         <DrawerBody>
           <FormControl mb={4}>
             <FormLabel>Date</FormLabel>
-            <Input 
-              type="date" 
-              value={selectedDate.toISOString().split('T')[0]} 
+            <Input
+              type="date"
+              value={selectedDate.toISOString().split('T')[0]}
               onChange={(e) => setSelectedDate(new Date(e.target.value))}
               focusBorderColor="blue.500"
             />
           </FormControl>
           <FormControl mb={4}>
             <FormLabel>Time</FormLabel>
-            <Input 
-              type="time" 
-              value={selectedTime} 
+            <Input
+              type="time"
+              value={selectedTime}
               onChange={(e) => setSelectedTime(e.target.value)}
               focusBorderColor="blue.500"
             />
@@ -59,6 +62,10 @@ const AddEventDrawer = ({ isOpen, onClose, selectedDate, selectedTime, setSelect
           <FormControl mb={4}>
             <FormLabel>Event Description</FormLabel>
             <Input type="text" value={eventDesc} onChange={(e) => setEventDesc(e.target.value)} />
+          </FormControl>
+          <FormControl mb={4}>
+            <FormLabel>Event Venue</FormLabel>
+            <Input type="text" value={eventVenue} onChange={(e) => setEventVenue(e.target.value)} />
           </FormControl>
         </DrawerBody>
         <DrawerFooter>
