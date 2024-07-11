@@ -126,6 +126,17 @@ export function saveposttodb(data) {
       });
   }
 }
+
+export function savetesttodb(data) {
+  if (auth.currentUser) {
+    let dataRef = ref(db, "testimonials/" + data.time);
+    set(dataRef, data)
+      .catch((error) => {
+        console.error("Error writing testimonial: ", error);
+      });
+  }
+}
+
 export function eventSave(data) {
   if (auth.currentUser) {
     data.userId = auth.currentUser.uid;
