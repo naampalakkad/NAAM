@@ -29,6 +29,7 @@ const saveTestimonialToDb = async (testimonialContent) => {
     let testimonialData = {
       authorName: auth.currentUser.displayName,
       content: testimonialContent,
+      photo:auth.currentUser.photoURL,
       time: new Date().getTime(),
 
     };
@@ -173,7 +174,7 @@ function Page() {
         return;
       }
       await saveTestimonialToDb(testimonialContent);
-      window.alert("Testimonial added successfully!");
+      // window.alert("Testimonial added successfully!");
       resetForm();
       router.push("/addnew");
     } catch (error) {
