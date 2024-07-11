@@ -27,8 +27,8 @@
 .heroText {
     color: white;
     font-size:  7rem;
-    font-family: "Carter One", system-ui;
-    text-shadow: 8px 3px 2px rgba(8,206,125,0.63);
+    font-family: "Open Sans";
+    /* text-shadow: 8px 3px 2px rgba(8,206,125,0.63); */
   
 }
 

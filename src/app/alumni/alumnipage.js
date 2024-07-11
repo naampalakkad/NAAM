@@ -14,8 +14,8 @@ const SocialIcons = ({ alumni }) => {
   const socialIconData = [
     { network: "email", url: `https://mail.google.com/mail/?view=cm&fs=1&to=${alumni.email}` },
     { network: "whatsapp", url: `https://wa.me/${alumni.number}`, condition: alumni.phoneperm && alumni.number },
-    { network: "linkedin", url: `https://www.linkedin.com/in/${alumni.linkedIn}`, condition: alumni.linkedIn },
-    { network: "facebook", url: `https://www.facebook.com/${alumni.facebook}`, condition: alumni.facebook }
+    { network: "linkedin", url: `${alumni.linkedIn}`, condition: alumni.linkedIn },
+    { network: "facebook", url: `${alumni.facebook}`, condition: alumni.facebook }
   ];
 
   return (
@@ -104,18 +104,25 @@ export default function AlumniList() {
     fetchOptionsData();
   }, []);
 
-  const filteredAlumni = alumnidata.filter((alumni) => {
+  const filteredAlumni = alumnidata
+  .filter((alumni) => {
     const searchTermLower = searchTerm.toLowerCase();
     const matchesSearchTerm = searchTerm === "" ||
       (alumni.name && alumni.name.toLowerCase().includes(searchTermLower)) ||
       (alumni.batch !== undefined && alumni.batch.toString().toLowerCase().includes(searchTermLower));
 
     const matchesLocation = formData.location === "" || (alumni.location && alumni.location === formData.location);
-    const matchesnativelocation = formData.nativelocation === "" || (alumni.nativelocation && alumni.nativelocation === formData.nativelocation);
+    const matchesNativeLocation = formData.nativelocation === "" || (alumni.nativelocation && alumni.nativelocation === formData.nativelocation);
     const matchesProfession = formData.profession === "" || (alumni.profession && alumni.profession === formData.profession);
     const matchesSpecialization = formData.specialization === "" || (alumni.specialization && alumni.specialization === formData.specialization);
 
-    return matchesSearchTerm && matchesLocation && matchesnativelocation && matchesProfession && matchesSpecialization;
+    return matchesSearchTerm && matchesLocation && matchesNativeLocation && matchesProfession && matchesSpecialization;
+  })
+  .sort((a, b) => {
+    if (a.name && b.name) {
+      return a.name.localeCompare(b.name);
+    }
+    return 0;
   });
 
   const handleMoreClick = (alumni) => {
