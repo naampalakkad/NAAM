@@ -35,6 +35,12 @@ const EventList = React.memo(({ futureEvents }) => {
                   </Text>
                   <Text>{event.time}</Text>
                 </Box>
+                <Box>
+                  <Text fontSize="sm" color="gray.500">
+                    Venue
+                  </Text>
+                  <Text>{event.venue}</Text>
+                </Box>
               </VStack>
             </HStack>
           </ListItem>
