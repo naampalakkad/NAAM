@@ -176,7 +176,7 @@ function Page() {
       await saveTestimonialToDb(testimonialContent);
       // window.alert("Testimonial added successfully!");
       resetForm();
-      router.push("/addnew");
+      router.push("/");
     } catch (error) {
       console.error('Error adding testimonial:', error);
     }
