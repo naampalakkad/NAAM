@@ -57,6 +57,7 @@ const Blog = () => {
                             bg="white"
                             _hover={{ bg: "gray.100" }}
                             _focus={{ borderColor: "blue.500" }}
+                            color={"black"}
                         >
                             <option value="all">All</option>
                             <option value="EVENT">Events</option>
