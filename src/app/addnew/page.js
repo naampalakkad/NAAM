@@ -4,7 +4,7 @@ import { Input, Button, Select, FormControl, FormLabel, FormHelperText } from '@
 import { ChevronDownIcon } from '@chakra-ui/icons';
 import './page.css';
 import dynamic from 'next/dynamic';
-import { saveposttodb, auth, savetesttodb } from '@/lib/firebase';
+import { saveposttodb, auth, savetesttodb,getuserdetailfromdb } from '@/lib/firebase';
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { useRouter } from 'next/navigation';
 
@@ -25,11 +25,14 @@ if (typeof window !== "undefined") {
 }
 
 const saveTestimonialToDb = async (testimonialContent) => {
+  let user = await getuserdetailfromdb(auth.currentUser.uid);
+// console.log(user);
   try {
     let testimonialData = {
-      authorName: auth.currentUser.displayName,
+      authorName: user.name,
       content: testimonialContent,
-      photo:auth.currentUser.photoURL,
+      photo:user.photo,
+      batch:user.batch,
       time: new Date().getTime(),
 
     };
