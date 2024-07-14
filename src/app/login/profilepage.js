@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { signInoutWithGoogle, getuserdetailfromdb, savedatatodb ,uploadImageToStorage} from "@/lib/firebase";
+import { signInoutWithGoogle, getuserdetailfromdb, savedatatodb, uploadImageToStorage } from "@/lib/firebase";
 import { Box, Heading, Textarea, Image, Button, Input, Card, useToast } from "@chakra-ui/react";
 import RenderDropdown from './dropdown';
 import { personaldetailsdata } from "@/lib/data";
@@ -26,27 +26,27 @@ const ProfileSection = ({ user, profileImage, handleImageChange }) => {
           onMouseOut={(e) => e.currentTarget.style.opacity = 1}
           transition="opacity 0.3s ease-in-out"
         />
-    <Box
-  as="span"
-  className="upload-icon"
-  color="green.500"
-  cursor="pointer"
-  position="absolute"
-  fontSize={16}
-  top="50%"
-  left="50%"
-  transform="translate(-50%, -50%)"
-  opacity={0}
-  _hover={{ opacity: 1 }}
-  p={4}
-  display="flex"
-  alignItems="center"
-  justifyContent="center"
-  borderRadius="50%"
->
-  <FaUpload  size={50}/>
-  Change Profile Image
-</Box>
+        <Box
+          as="span"
+          className="upload-icon"
+          color="green.500"
+          cursor="pointer"
+          position="absolute"
+          fontSize={16}
+          top="50%"
+          left="50%"
+          transform="translate(-50%, -50%)"
+          opacity={0}
+          _hover={{ opacity: 1 }}
+          p={4}
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          borderRadius="50%"
+        >
+          <FaUpload size={50} />
+          Change Profile Image
+        </Box>
       </label>
       <input
         type="file"
@@ -122,7 +122,7 @@ const DetailsSection = ({ personaldetailsdata, updateFirebaseUserData, userdata,
           {detail.type === "textarea" && renderTextarea(detail)}
           {detail.type === "selectable" && renderDropdown(detail)}
           {detail.type === "checkbox" && renderSwitch(detail)}
-          {!["textarea","selectable","select","checkbox"].includes(detail.type) && renderInput(detail)}
+          {!["textarea", "selectable", "select", "checkbox"].includes(detail.type) && renderInput(detail)}
         </div>
       ))}
       <Button mt={4} colorScheme="blue" onClick={updateFirebaseUserData}>Save</Button>
@@ -138,33 +138,29 @@ const SignedInBox = ({ user }) => {
   useEffect(() => {
     const setuserdetails = async () => {
       if (user) {
-        setProfileImage(user.photoURL); 
+        setProfileImage(user.photoURL);
         let userdataa = await getuserdetailfromdb(user.uid);
-        if (userdataa== null) {
-            userdataa = {
-              name : "",
-              email: "",
-              batch: "",
-              number: "",
-              "alternate number": "",
-              rollnow: "",
-              linkedIn: "" ,
-              facebook: "",
-              location: "",
-              nativelocation: "",
-              profession: "",
-              specialization: "",
-              about: "",
-              phoneperm: "",
-              photoURL: "",
+        if (userdataa == null) {
+          userdataa = {
+            name: "",
+            email: "",
+            batch: "",
+            number: "",
+            alternate: "",
+            rollno: "",
+            linkedIn: "",
+            facebook: "",
+            location: "",
+            nativelocation: "",
+            profession: "",
+            specialization: "",
+            about: "",
+            phoneperm: "",
+            photoURL: user.photoURL,
+          }
         }
-      }
         setUserdata(userdataa);
         setProfileImage(userdataa.photoURL);
-        if(userdataa.photoURL == "") {
-          setProfileImage(user.photoURL);
-        }
-        
       } else {
         console.log("user not available");
       }
@@ -190,7 +186,7 @@ const SignedInBox = ({ user }) => {
     if (isNaN(batch) || batch <= 0 || batch >= 100) {
       errors.batch = "Enter a valid batch name";
     }
-  
+
     // Phone number validation
     const phoneRegex = /^\d{10}$/;
     if (!phoneRegex.test(userdata.number)) {
@@ -199,13 +195,13 @@ const SignedInBox = ({ user }) => {
     if (userdata["alternate number"] && !phoneRegex.test(userdata["alternate number"])) {
       errors["alternate number"] = "Invalid alternate phone number format";
     }
-  
+
     // Roll number validation
     const rollNumber = Number(userdata.rollno);
     if (isNaN(rollNumber) || rollNumber <= 0 || rollNumber >= 10000) {
       errors.rollnow = "Enter a valid JNV roll number";
     }
-  
+
     // URL validation
     const urlRegex = /^(https?:\/\/)?(www\.)?([a-zA-Z0-9-]{1,256}\.[a-zA-Z0-9]{2,6})(:[0-9]{1,5})?(\/.*)?$/;
     if (userdata.linkedIn && !urlRegex.test(userdata.linkedIn)) {
@@ -214,85 +210,97 @@ const SignedInBox = ({ user }) => {
     if (userdata.facebook && !urlRegex.test(userdata.facebook)) {
       errors.facebook = "Invalid Facebook URL";
     }
-  
+
     return Object.keys(errors).length > 0 ? errors : true;
   };
 
-  
+
   const handleImageChange = async (event) => {
     const file = event.target.files[0];
     if (file) {
       try {
-      const newImageUrl = await uploadImageToStorage( user.uid,file);
-      setProfileImage(newImageUrl);
-      setUserdata((prevUserdata) => ({
-        ...prevUserdata,
-        photoURL: newImageUrl,
-      }));
-      savedatatodb("users/" + user.uid, userdata);
-      toast({
-                title: "Success",
-                description: "Changed your profile image",
-                status: 'success',
-                duration: 3000,
-                isClosable: true,
-              });
-    }
-    catch {
-      toast({
-                title: "Success",
-                description: "Changed your profile image",
-                status: 'success',
-                duration: 3000,
-                isClosable: true,
-              });
-        
-    }
+        const newImageUrl = await uploadImageToStorage(user.uid, file);
+  
+        // Update profile image state
+        setProfileImage(newImageUrl);
+  
+        // Update userdata with new photoURL
+        setUserdata((prevUserdata) => ({
+          ...prevUserdata,
+          photoURL: newImageUrl,
+        }));
+  
+        // Save updated userdata to database
+        savedatatodb("users/" + user.uid, {
+          ...userdata, // Use spread operator to ensure updated userdata is used
+          photoURL: newImageUrl, // Ensure new photoURL is saved to database
+        });
+  
+        // Display success toast
+        toast({
+          title: "Success",
+          description: "Changed your profile image to " + newImageUrl,
+          status: 'success',
+          duration: 3000,
+          isClosable: true,
+        });
+      } catch (error) {
+        // Handle error and display toast
+        console.error('Error changing profile image:', error);
+        toast({
+          title: "Error",
+          description: "Failed to change your profile image",
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+        });
+      }
     }
   };
+  
 
   const updateFirebaseUserData = () => {
     const validationResult = validateData(userdata);
-if (validationResult != true) {
-  const errorMessages = Object.keys(validationResult)
-  .map((key, index) => `${index + 1}. ${validationResult[key]}`).join("  \n")
-   toast({
-          title: 'Invalid Data Entered',
-          description:<pre>{errorMessages}</pre>,
-          status: 'error',
-          duration: 2000,
-          isClosable: true,
+    if (validationResult != true) {
+      const errorMessages = Object.keys(validationResult)
+        .map((key, index) => `${index + 1}. ${validationResult[key]}`).join("  \n")
+      toast({
+        title: 'Invalid Data Entered',
+        description: <pre>{errorMessages}</pre>,
+        status: 'error',
+        duration: 2000,
+        isClosable: true,
+      })
+    } else {
+      new Promise((resolve, reject) => {
+        try {
+          savedatatodb("users/" + user.uid, userdata);
+          resolve();
+        } catch (error) {
+          reject(error);
+        }
+      })
+        .then(() => {
+          toast({
+            title: "Profile updated.",
+            description: "Your profile information has been saved.",
+            status: "success",
+            duration: 3000,
+            isClosable: true,
+          });
         })
-} else {
-    new Promise((resolve, reject) => {
-      try {
-        savedatatodb("users/" + user.uid, userdata);
-        resolve();
-      } catch (error) {
-        reject(error);
-      }
-    })
-    .then(() => {
-      toast({
-        title: "Profile updated.",
-        description: "Your profile information has been saved.",
-        status: "success",
-        duration: 3000,
-        isClosable: true,
-      });
-    })
-    .catch((error) => {
-      toast({
-        title: "Error updating profile.",
-        description: error.message,
-        status: "error",
-        duration: 3000,
-        isClosable: true,
-      });
-    });
-  }
+        .catch((error) => {
+          toast({
+            title: "Error updating profile.",
+            description: error.message,
+            status: "error",
+            duration: 3000,
+            isClosable: true,
+          });
+        });
+    }
   };
-  
+
 
   return (
     <Box className="cardcontainer">

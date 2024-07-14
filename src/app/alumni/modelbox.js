@@ -64,8 +64,8 @@ import {
                 <Box mt={4}>
                   <Text fontWeight="bold">Social Links:</Text>
                   <Flex direction="column" gap={1}>
-                    <Link href={`https://facebook.com/${selectedAlumni.facebook}`} isExternal color="blue.500">Facebook</Link>
-                    <Link href={`https://linkedin.com/in/${selectedAlumni.linkedIn}`} isExternal color="blue.500">LinkedIn</Link>
+                    <Link href={selectedAlumni.facebook} isExternal color="blue.500">Facebook</Link>
+                    <Link href={selectedAlumni.linkedIn} isExternal color="blue.500">LinkedIn</Link>
                   </Flex>
                 </Box>
               </Flex>

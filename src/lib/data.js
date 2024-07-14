@@ -68,32 +68,6 @@ export const socialMediaUrls = [
   "https://www.youtube.com"
 ];
 
-export let testimonial = [
-  {
-    name: "Sreejith KS",
-    batch: "25th Batch",
-    testimonial: "I am very happy to be a part of this institution. I have learned a lot from here. The teachers are very helpful and the environment is very good. I am very happy to be a part of this institution. I have learned a lot from here. The teachers are very helpful and the environment is very good.",
-    image: "https://www.w3schools.com/w3images/avatar2.png",
-  },
-  {
-    name: "Anjitha J",
-    batch: "25th Batch",
-    testimonial: "I am very happy to be a part of this institution. I have learned a lot from here. The teachers are very helpful and the environment is very good. I am very happy to be a part of this institution. I have learned a lot from here. The teachers are very helpful and the environment is very good.",
-    image: "https://www.w3schools.com/w3images/avatar2.png",
-  },
-  {
-    name: "Unnimaya T",
-    batch: "5th Batch",
-    testimonial: "I am very happy to be a part of this institution. I have learned a lot from here. The teachers are very helpful and the environment is very good. I am very happy to be a part of this institution. I have learned a lot from here. The teachers are very helpful and the environment is very good.",
-    image: "https://www.w3schools.com/w3images/avatar2.png",
-  },
-  {
-    name: "suneeb",
-    batch: "17th Batch",
-    testimonial: "I am very happy to be a part of this institution. I have learned a lot from here. The teachers are very helpful and the environment is very good. I am very happy to be a part of this institution. I have learned a lot from here. The teachers are very helpful and the environment is very good.",
-    image: "https://www.w3schools.com/w3images/avatar2.png",
-  },
-]
 
 export let aboutnaam = {
   about: " NAAM (Navodaya Alumni Association Malampuzha), unites Alumnis from Jawahar Navodaya Vidyalaya Palakkad. We celebrate shared experiences, fostering connections, and giving back to our alma mater and the community.",
@@ -126,7 +100,7 @@ export let personaldetailsdata = [
   },
   {
     prop: "Alternate Number",
-    name: "Alternate number",
+    name: "alternate",
     default: "Enter your Alternate number",
     type: "number"
   },
