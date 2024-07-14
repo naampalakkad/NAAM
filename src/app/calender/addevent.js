@@ -48,6 +48,13 @@ const AddEventDrawer = ({ isOpen, onClose, selectedDate, selectedTime, setSelect
     };
     eventSave(newEvent);
     setEvents([...events, newEvent]);
+    toast({
+      title: 'Event Added',
+      description: 'Your event has been successfully added.',
+      status: 'success',
+      duration: 3000, // Toast will close after 3 seconds
+      isClosable: true,
+    });
     resetForm();
     onClose();
   }, [eventTitle, eventDesc, eventVenue, selectedDate, selectedTime, events, setEvents, onClose, resetForm, toast]);

@@ -11,7 +11,6 @@ import EventList from './eventlist';
 import AddEventDrawer from './addevent';
 import EventDetailModal from './eventpopup';
 import './calendar.css';
-import { green } from '@mui/material/colors';
 
 export default function Calendar() {
   const calendarRef = useRef(null);
