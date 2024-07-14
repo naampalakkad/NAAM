@@ -118,28 +118,22 @@ export let personaldetailsdata = [
         name: "batch",
         default: "Enter your batch,  eg: 25",
         type: "number"
-        type: "number"
       },
       {
         prop: "Number",
         name:"number",
         default: "Enter your Mobile number",
-        type: "number"
-        type: "number"
       },
       {
         prop: "Alternate Number",
         name:"Alternate number",
         default: "Enter your Alternate number",
         type: "number"
-        type: "number"
       },
    
       {
         prop: "JNV Roll No",
         name: "rollno",
-        default: "Enter your JNV Roll No.",
-        type: "number"
         default: "Enter your JNV Roll No.",
         type: "number"
       },
