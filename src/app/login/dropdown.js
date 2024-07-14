@@ -21,10 +21,9 @@ function RenderDropdown({ detail, userdata, handleChange }) {
     const fetchData = async () => {
       const data = await getdatafromdb('otherdata/locationdata');
       if (data) {
-        const fetchedOptions = createOptionsFromArray(
-          data[optionname+"list"]
-        );
-        setOptions(fetchedOptions);
+        const fetchedOptions = createOptionsFromArray(data[optionname+"list"]);
+        const sortedOptions = fetchedOptions.sort((a, b) => a.label.localeCompare(b.label)); // Sort options alphabetically
+        setOptions(sortedOptions);
       } else {
         const initialData = {
           locationlist: [],
@@ -52,15 +51,16 @@ function RenderDropdown({ detail, userdata, handleChange }) {
         setIsLoading(false);
         setOptions((prev) => {
           const newOptions = [...prev, newOption];
-          printUpdatedLocations(newOptions);
-          const updatedData = newOptions.map((option) => option.label);
+          const sortedOptions = newOptions.sort((a, b) => a.label.localeCompare(b.label)); // Sort options alphabetically
+          printUpdatedLocations(sortedOptions);
+          const updatedData = sortedOptions.map((option) => option.label);
           const dataKey = optionname+"list";
           getdatafromdb('otherdata/locationdata').then((data) => {
             const newData = { ...data, [dataKey]: updatedData };
             savedatatodb('otherdata/locationdata', newData);
           });
 
-          return newOptions;
+          return sortedOptions;
         });
         handleChange(detail.name, inputValue); 
       }, 1000);
@@ -102,8 +102,6 @@ function RenderDropdown({ detail, userdata, handleChange }) {
       color: colorMode === 'dark' ? theme.colors.white : theme.colors.black,
     }),
   };
-  
-
 
   return (
     <CreatableSelect
