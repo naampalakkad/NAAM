@@ -124,7 +124,7 @@ export default function Calendar() {
             <FullCalendar
               ref={calendarRef}
               plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-              initialView={isMobile ? 'timeGridDay' : 'dayGridMonth'}
+              initialView={'dayGridMonth'}
               headerToolbar={{
                 start: "today prev,next",
                 center: "title",

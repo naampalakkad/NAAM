@@ -1,25 +1,33 @@
-import { Card, Image, CardBody, CardHeader,Flex, SimpleGrid } from '@chakra-ui/react';
-import React from 'react';
-import { aboutnaam } from './data';
-import './aboutnaam.css'
-
+import { Box, Card, Image, CardBody, CardHeader, SimpleGrid, Text, Grid } from '@chakra-ui/react';
+import { aboutnaam } from '@/lib/data';
 
 export default function AboutNaam() {
     return (
-        <SimpleGrid  columns={{ base: 1, md: 2 }} spacing={4} p={0} className='cardcontainer'>
-            <Card p={0} boxShadow="lg" className='card'>
-                <CardHeader fontSize="5xl" color="rgb(23, 110, 81)" >About NAAM</CardHeader>
-                <CardBody >
-                    <SimpleGrid columns={{ base: 1, md: 2 }} gridTemplateColumns="1fr 2fr" gap='6'>
-                    <Image  boxSize='150px' src={"/assets/logo.png"} alt="naam logo"/>
-                    {aboutnaam.about}
-                    </SimpleGrid>
+        <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6} p={4} className='cardcontainer'>
+            <Card boxShadow="lg" p={0}>
+                <CardHeader fontSize="3xl" color="rgb(23, 110, 81)" textAlign="center">
+                    About NAAM
+                </CardHeader>
+                <CardBody>
+                    <Grid templateColumns={{ base: "1fr", md: "150px auto" }} gap={6} alignItems="center">
+                        <Box display="flex" justifyContent="center">
+                            <Image boxSize='150px' src={"/assets/logo.png"} alt="NAAM logo" loading="lazy" />
+                        </Box>
+                        <Text>{aboutnaam.about}</Text>
+                    </Grid>
                 </CardBody>
             </Card>
-            <Card p={0} boxShadow="lg" borderRadius="10px" className='card' >
-                <CardHeader fontSize="5xl"  color="rgb(23, 110, 81)" >Our Mission</CardHeader>
-                <CardBody  >
-                    {aboutnaam.mission}
+            <Card boxShadow="lg" p={0} borderRadius="10px">
+                <CardHeader fontSize="3xl" color="rgb(23, 110, 81)" textAlign="center">
+                    Our Mission
+                </CardHeader>
+                <CardBody>
+                    <Grid templateColumns={{ base: "1fr", md: "150px auto" }} gap={6} alignItems="center">
+                        <Box display="flex" justifyContent="center">
+                            <Image boxSize='150px' src={"/assets/logo.png"} alt="NAAM logo" loading="lazy" />
+                        </Box>
+                        <Text>{aboutnaam.mission}</Text>
+                    </Grid>
                 </CardBody>
             </Card>
         </SimpleGrid>
