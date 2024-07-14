@@ -59,7 +59,7 @@ const SearchBox = ({ searchTerm, setSearchTerm, formData, setFormData, optionsDa
             minWidth="200px"
             marginY={2}
           >
-            {optionsData[field.options]?.map(option => (
+            {optionsData[field.options]?.sort((a, b) => a.localeCompare(b)).map(option => (
               <option key={option} value={option}>{option}</option>
             ))}
           </Select>
