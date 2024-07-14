@@ -1,6 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react';
-import { Box, Heading, Button, Select, Flex } from "@chakra-ui/react";
+import { Box, Heading, Button, Select, Flex, Text } from "@chakra-ui/react";
 import { getpostsfromdb, checkuserrole } from "@/lib/firebase";
 import { BlogPost } from './blogpage';
 import Link from 'next/link';
@@ -22,8 +22,8 @@ const Blog = () => {
     useEffect(() => {
         const fetchPosts = async () => {
             const postsFromDb = await getpostsfromdb();
-            
-            setPosts(Object.entries(postsFromDb));
+            if(postsFromDb)
+                setPosts(Object.entries(postsFromDb));
         };
 
         fetchPosts();
@@ -72,20 +72,26 @@ const Blog = () => {
                         }
                     </Flex>
                 </Box>
-                <Box
-                    display="flex"
-                    flexDirection="row"
-                    flexWrap="wrap"
-                    justifyContent="space-evenly"
-                    alignItems="center"
-                    gap="20px"
-                    width="100%"
-                    margin="20px"
-                >
-                    {filteredPosts.map((post, index) => (
-                        <BlogPost key={index} post={post} />
-                    )).reverse()}
-                </Box>
+                {filteredPosts.length === 0 ? (
+                    <Text textAlign="center" fontSize="xl" color="gray.600">
+                        No content available.
+                    </Text>
+                ) : (
+                    <Box
+                        display="flex"
+                        flexDirection="row"
+                        flexWrap="wrap"
+                        justifyContent="space-evenly"
+                        alignItems="center"
+                        gap="20px"
+                        width="100%"
+                        margin="20px"
+                    >
+                        {filteredPosts.map((post, index) => (
+                            <BlogPost key={index} post={post} />
+                        )).reverse()}
+                    </Box>
+                )}
             </Box>
         </Box>
     );
