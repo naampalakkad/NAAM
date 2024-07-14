@@ -17,6 +17,7 @@ import {
 import { FaCalendarAlt, FaClock, FaInfoCircle, FaLocationArrow } from 'react-icons/fa';
 
 const EventDetailModal = ({ showEventDetailModal, setShowEventDetailModal, selectedEvent }) => {
+  console.log(selectedEvent);
   return (
     <Modal isOpen={showEventDetailModal} onClose={() => setShowEventDetailModal(false)} size="lg">
       <ModalOverlay />

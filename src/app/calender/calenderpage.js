@@ -70,9 +70,9 @@ export default function Calendar() {
   };
 
   const handleEventClick = (arg) => {
-    const selectedDate = new Date(arg.date);
-    setSelectedEvent(selectedDate);
-    setShowEventDetailModal(true);
+    console.log(arg)
+    // setSelectedEvent(arg);
+    // setShowEventDetailModal(true);
   };
 
   const handleAddEvent = () => {
