@@ -136,6 +136,9 @@ export default function Calendar() {
                 center: "title",
                 end: ""
               }}
+              buttonText={{
+                today: 'Today'
+              }}
               dateClick={handleDateClick}
               eventClick={handleEventClick}
               eventContent={handleEventContent}
