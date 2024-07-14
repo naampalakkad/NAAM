@@ -1,19 +1,31 @@
 import React from 'react';
-import './statisticspanel.css';
-import { Card, CardBody, CardHeader, SimpleGrid } from '@chakra-ui/react';
+import { Flex, Circle, Text, Heading } from '@chakra-ui/react';
 import { statistics } from './data';
 
 export default function Statisticspanel() {
     return (
-        <SimpleGrid spacing={4} className='cardcontainer' >
-            {statistics.map((statistic, index) => {
-                return (
-                    <Card variant={"filled"} size={"sm"} borderRadius={"50%"} className='card' key={index} colorScheme='green'>
-                        <CardHeader className='statsval'>{statistic.text}</CardHeader>
-                        <CardBody className='statstitle'>{statistic.title}</CardBody>
-                    </Card>
-                )
-            })}
-        </SimpleGrid>
-    )
+        <Flex justifyContent="center" gap={6} p={5} className='cardcontainer'>
+            {statistics.map((statistic, index) => (
+                <Circle
+                    key={index}
+                    size="250px"
+                    bgGradient="linear(to-r, teal.500, green.500)"
+                    boxShadow="xl"
+                    _hover={{ transform: "scale(1.05)", transition: "0.3s" }}
+                    display="flex"
+                    flexDirection="column"
+                    justifyContent="center"
+                    alignItems="center"
+                >
+                    <Heading fontSize="6xl" color="white" className='statsval'>
+                        {statistic.text}
+                    </Heading>
+                    <Text fontSize="3xl" color="whiteAlpha.800" className='statstitle'>
+                        {statistic.title}
+                    </Text>
+
+                </Circle>
+            ))}
+        </Flex>
+    );
 }

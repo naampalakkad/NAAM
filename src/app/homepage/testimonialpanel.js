@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from 'react';
 import { getdatafromdb } from '@/lib/firebase';
 import { Card, CardBody, CardHeader, Box, Image, Text, VStack, Flex } from '@chakra-ui/react';
-import './testimonial.css';
 
 export default function TestimonialPanel() {
     const [testimonials, setTestimonials] = useState([]);
