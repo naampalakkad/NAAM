@@ -141,13 +141,11 @@ export let personaldetailsdata = [
         prop: "LinkedIn",
         name: "linkedIn",
         default: "EG : https://www.linkedin.com/in/username",
-        default: "EG : https://www.linkedin.com/in/username",
         type: "text"
       },
       {
         prop: "Facebook",
         name: "facebook",
-        default: "EG: https://www.facebook.com/username",
         default: "EG: https://www.facebook.com/username",
         type: "text"
       },
