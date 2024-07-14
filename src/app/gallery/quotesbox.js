@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Text, Center, Flex, Spacer, IconButton } from "@chakra-ui/react";
+import { Box, Text, Center, Flex, IconButton } from "@chakra-ui/react";
 import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
-import './gallery.css'
+
 const quotes = [
     {
         text: "Photographs are our memories captured in time.",
@@ -25,15 +25,15 @@ const quotes = [
     }
 ];
 
-export default function quotebox() {
+export default function QuoteBox() {
     const [index, setIndex] = useState(0);
 
     useEffect(() => {
         const interval = setInterval(() => {
-            setIndex((index + 1) % quotes.length);
-        }, 5000); // Change interval as needed
+            setIndex((prevIndex) => (prevIndex + 1) % quotes.length);
+        }, 5000);
         return () => clearInterval(interval);
-    }, [index]);
+    }, []);
 
     const nextQuote = () => {
         setIndex((index + 1) % quotes.length);
@@ -45,26 +45,32 @@ export default function quotebox() {
 
     return (
         <Center>
-            <Box maxW="80vw" borderWidth="1px" borderRadius="lg" overflow="hidden" boxShadow="lg" className='quote-container'>
-                <Box p="6">
-                    <Center>
-                        <Text className='quotetext' fontSize="xl" fontWeight="bold" mb="4">"{quotes[index].text}"</Text>
-                    </Center>
-                    <Text fontSize="md" color="gray.500" textAlign="right">- {quotes[index].author}</Text>
-                </Box>
-                <Flex justifyContent="space-between" p="4">
+            <Box 
+                maxW="80vw" 
+                borderWidth="1px" 
+                borderRadius="lg" 
+                overflow="hidden" 
+                boxShadow="lg" 
+                bgGradient="linear(to-r, teal.500, green.500)" 
+                color="white"
+                p="6"
+            >
+                <Center>
+                    <Text fontSize="xl" fontWeight="bold" mb="4">"{quotes[index].text}"</Text>
+                </Center>
+                <Text fontSize="md" color="gray.300" textAlign="right">- {quotes[index].author}</Text>
+                <Flex justifyContent="space-between" mt="4">
                     <IconButton
                         icon={<ChevronLeftIcon />}
                         aria-label="Previous"
                         onClick={prevQuote}
-                        disabled={index === 0}
+                        colorScheme="teal"
                     />
-                    <Spacer />
                     <IconButton
                         icon={<ChevronRightIcon />}
                         aria-label="Next"
                         onClick={nextQuote}
-                        disabled={index === quotes.length - 1}
+                        colorScheme="teal"
                     />
                 </Flex>
             </Box>
