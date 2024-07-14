@@ -27,16 +27,16 @@ const AboutPage = () => {
             borderRadius="lg"
             w="100%"
             display="flex"
-            flexDirection={{ base: "column", md: "row" }} 
+            flexDirection={{ base: "column", md: "row" }}
             alignItems="center">
 
             <Image
               src="/assets/logo.webp"
               alt="Jawahar Navodaya Vidyalaya Palakkad"
               borderRadius="md"
-              mb={{ base: 4, md: 0 }}  
-              mr={{ base: 0, md: 4 }} 
-              w={{ base: "50%", md: "20%" }}  
+              mb={{ base: 4, md: 0 }}
+              mr={{ base: 0, md: 4 }}
+              w={{ base: "50%", md: "20%" }}
               objectFit="cover"
             />
 
@@ -117,31 +117,29 @@ const AboutPage = () => {
             </Text>
           </Box>
 
- 
+
         </VStack>
       </VStack>
+
+
       <Box
- 
-        </VStack>
-      </VStack>
-      <Box
-            p={6}
-            shadow="md"
-            borderWidth="1px"
-            borderRadius="lg"
-            w="100%"
-          >
-            <Heading size="lg" color="teal.500">Contact Us</Heading>
-            <Text fontSize="md" mt={4}>
-              If you have any questions, suggestions, or would like to get involved with NAAM, please feel free to reach out to us at .
-              If you have any questions, suggestions, or would like to get involved with NAAM, please feel free to reach out to us at .
-            </Text>
-            <ContactInfo/>
-            <ContactInfo/>
-          </Box>
+        p={6}
+        shadow="md"
+        borderWidth="1px"
+        borderRadius="lg"
+        w="100%"
+      >
+        <Heading size="lg" color="teal.500">Contact Us</Heading>
+        <Text fontSize="md" mt={4}>
+          If you have any questions, suggestions, or would like to get involved with NAAM, please feel free to reach out to us at .
+          If you have any questions, suggestions, or would like to get involved with NAAM, please feel free to reach out to us at .
+        </Text>
+        <ContactInfo />
+        <ContactInfo />
+      </Box>
     </Box>
-    
-    
+
+
   );
 };
 
