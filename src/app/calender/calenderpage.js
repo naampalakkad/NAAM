@@ -1,10 +1,10 @@
 'use client';
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
-import { Box, Flex, Heading, Button, Spinner, Card, useMediaQuery, Text } from "@chakra-ui/react";
+import { Box, Flex, Button, Spinner, useMediaQuery, Card, Text } from "@chakra-ui/react";
 import { fetchEventsFromDB, auth, checkuserrole } from "@/lib/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import EventList from './eventlist';
@@ -35,9 +35,13 @@ export default function Calendar() {
       }
     };
 
-    const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
-      setUser(user);
+    const unsubscribeAuth = onAuthStateChanged(auth, async (currentUser) => {
+      setUser(currentUser);
       setLoading(false);
+      if (currentUser) {
+        const isUserAdmin = await checkuserrole('admin');
+        setIsAdmin(isUserAdmin);
+      }
     });
 
     loadEventsFromFirebase();
@@ -46,19 +50,6 @@ export default function Calendar() {
       unsubscribeAuth();
     };
   }, []);
-
-  useEffect(() => {
-    const fetchUserRole = async () => {
-      if (user) {
-        const isUserAdmin = await checkuserrole('admin');
-        setIsAdmin(isUserAdmin);
-      } else {
-        setIsAdmin(false);
-      }
-    };
-
-    fetchUserRole();
-  }, [user]);
 
   const handleDateClick = (arg) => {
     if (user && isAdmin) {
@@ -76,26 +67,29 @@ export default function Calendar() {
 
   const handleAddEvent = () => {
     if (user) {
+      setSelectedDate(new Date());
       setShowAddEventModal(true);
     } else {
       alert('Please log in to add events.');
     }
   };
 
-  const futureEvents = events.filter(event => new Date(event.date + 'T' + event.time) > new Date());
+  const futureEvents = useMemo(() => {
+    return events.filter(event => new Date(event.date + 'T' + event.time) > new Date());
+  }, [events]);
 
-  const eventList = events.map((event) => ({
-    title: event.title,
-    start: event.date + 'T' + event.time,
-    time: event.time,
-    venue: event.venue,
-    extendedProps: {
-      description: event.description,
+  const eventList = useMemo(() => {
+    return events.map((event) => ({
+      title: event.title,
+      start: event.date + 'T' + event.time,
       time: event.time,
-    },
-  }));
-
-  console.log(eventList)
+      venue: event.venue,
+      extendedProps: {
+        description: event.description,
+        time: event.time,
+      },
+    }));
+  }, [events]);
 
   const handleEventContent = (arg) => (
     <Box
@@ -136,7 +130,9 @@ export default function Calendar() {
                 center: "title",
                 end: ""
               }}
-              height={"100vh"}
+              buttonText={{
+                today: 'Today'
+              }}
               dateClick={handleDateClick}
               eventClick={handleEventClick}
               eventContent={handleEventContent}
@@ -145,7 +141,14 @@ export default function Calendar() {
           </Card>
         </Box>
         <Box className='sidebar' flex={{ base: "1", md: "1" }} pl={{ base: 0, md: 4 }}>
-          {isAdmin && <Flex justifyContent="center" alignItems="center"> <Button onClick={handleAddEvent} className='addbutton'>Add Event</Button></Flex>}
+          {isAdmin && <Flex justifyContent="center" alignItems="center"> <Button
+  m={4}
+  colorScheme='green'  // Apply Chakra UI green color scheme
+  onClick={handleAddEvent}
+  className='addbutton' // Custom class for additional styling
+>
+  Add Event
+</Button></Flex>}
           <EventList futureEvents={futureEvents} />
         </Box>
         <AddEventDrawer
@@ -165,9 +168,7 @@ export default function Calendar() {
             selectedEvent={selectedEvent}
           />
         )}
-
       </Flex>
-
     </Box>
   );
 }

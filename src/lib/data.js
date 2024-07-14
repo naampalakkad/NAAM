@@ -123,7 +123,6 @@ export let personaldetailsdata = [
         prop: "Number",
         name:"number",
         default: "Enter your Mobile number",
-        type: "number"
       },
       {
         prop: "Alternate Number",

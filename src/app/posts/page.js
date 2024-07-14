@@ -7,7 +7,7 @@ import Link from 'next/link';
 
 const Blog = () => {
     const [posts, setPosts] = useState([]);
-    const [filter, setFilter] = useState("all"); 
+    const [filter, setFilter] = useState("all");
     const [isAdmin, setIsAdmin] = useState(false);
 
     useEffect(() => {
@@ -15,14 +15,14 @@ const Blog = () => {
             const isUserAdmin = await checkuserrole('blogger');
             setIsAdmin(isUserAdmin);
         };
-    
+
         fetchUserRole();
     }, []);
 
     useEffect(() => {
         const fetchPosts = async () => {
             const postsFromDb = await getpostsfromdb();
-            
+
             setPosts(Object.entries(postsFromDb));
         };
 
@@ -64,7 +64,7 @@ const Blog = () => {
                             <option value="anoun">Announcements</option>
                             <option value="BLOG">Blog</option>
                         </Select>
-                        {isAdmin &&  
+                        {isAdmin &&
                             <Link href="/addnew">
                                 <Button colorScheme="blue" size="lg">Add Post</Button>
                             </Link>
