@@ -70,10 +70,9 @@ export default function Calendar() {
   };
 
   const handleEventClick = (arg) => {
-    console.log(arg)
-    // setSelectedEvent(arg);
-    // setShowEventDetailModal(true);
-  };
+      setSelectedEvent(arg.event);
+      setShowEventDetailModal(true);
+    };
 
   const handleAddEvent = () => {
     if (user) {
@@ -137,7 +136,6 @@ export default function Calendar() {
                 center: "title",
                 end: ""
               }}
-              height={"100vh"}
               dateClick={handleDateClick}
               eventClick={handleEventClick}
               eventContent={handleEventContent}
