@@ -15,7 +15,6 @@ const AddEventDrawer = ({ isOpen, onClose, selectedDate, selectedTime, setSelect
     setSelectedDate(new Date());
     setSelectedTime('00:00');
   };
-
   const addEvent = () => {
     const newEvent = {
       title: eventTitle,
@@ -29,7 +28,12 @@ const AddEventDrawer = ({ isOpen, onClose, selectedDate, selectedTime, setSelect
     setEvents([...events, newEvent]);
     onClose();
   };
-
+  const formatDate = (date) => {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
   return (
     <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
       <DrawerOverlay />
@@ -41,7 +45,7 @@ const AddEventDrawer = ({ isOpen, onClose, selectedDate, selectedTime, setSelect
             <FormLabel>Date</FormLabel>
             <Input
               type="date"
-              value={selectedDate.toISOString().split('T')[0]}
+              value={formatDate(selectedDate)}
               onChange={(e) => setSelectedDate(new Date(e.target.value))}
               focusBorderColor="blue.500"
             />

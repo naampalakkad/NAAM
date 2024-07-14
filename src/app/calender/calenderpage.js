@@ -70,12 +70,14 @@ export default function Calendar() {
   };
 
   const handleEventClick = (arg) => {
-    setSelectedEvent(arg.event);
+    const selectedDate = new Date(arg.date);
+    setSelectedEvent(selectedDate);
     setShowEventDetailModal(true);
   };
 
   const handleAddEvent = () => {
     if (user) {
+      setSelectedDate(new Date())
       setShowAddEventModal(true);
     } else {
       alert('Please log in to add events.');
@@ -95,7 +97,6 @@ export default function Calendar() {
     },
   }));
 
-  console.log(eventList)
 
   const handleEventContent = (arg) => (
     <Box
