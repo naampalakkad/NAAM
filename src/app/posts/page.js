@@ -45,7 +45,7 @@ const Blog = () => {
                     mb="20px"
                     px={['50px', '100px']}
                 >
-                    <Heading mb="30px" textAlign="center">
+                    <Heading mb="30px" textAlign="center" fontFamily={'open Sans'}>
                         NEWS AND UPDATES
                     </Heading>
                     <Flex justifyContent="space-between" alignItems="center">

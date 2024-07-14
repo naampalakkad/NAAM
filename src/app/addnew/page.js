@@ -265,7 +265,7 @@ function Page() {
 
   return (
     <div className='container'>
-      <h1>Upload Your Post<hr /></h1>
+      <h1 style={{fontFamily:'open Sans'}}>Upload Your Post<hr /></h1>
       <FormControl isRequired>
         <FormLabel>Type of post</FormLabel>
         <Select
