@@ -67,7 +67,7 @@ export default function Blogspanel() {
     <SimpleGrid minChildWidth='260px' spacing='10px' className='cardcontainer'>
       {posts.map(([id, post]) => (
         <Card key={id} minBlockSize={300} variant="elevated" size="sm" className="card">
-          <Image src={post.thumbnail || defaultImage} alt={post.title} className="cardImage" loading="lazy" />
+          <Image src={post.thumbnail || defaultImage} alt={post.title} height={"250px"} className="cardImage" loading="lazy" />
           <CardHeader className="cardTitle">{post.title}</CardHeader>
           <CardBody className="cardText">{post.description}</CardBody>
           <Stack direction="row">

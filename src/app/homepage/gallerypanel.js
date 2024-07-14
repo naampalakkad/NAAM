@@ -36,7 +36,7 @@ const GalleryPanel = () => {
       <Suspense fallback={<GallerySkeleton />}>
         <SimpleGrid columns={1} className="gallerypanel">
           <PhotoAlbum layout="rows" photos={imgUrls} />
-          <Button colorScheme="teal" size="sm" alignSelf="flex-end" onClick={goToLink} rightIcon={<FaImages />}>
+          <Button colorScheme="teal" size="sm" alignSelf="flex-end" m={2} onClick={goToLink} rightIcon={<FaImages />}>
             Photos
           </Button>
         </SimpleGrid>

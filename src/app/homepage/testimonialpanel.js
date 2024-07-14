@@ -42,7 +42,7 @@ export default function TestimonialPanel() {
                             </Box>
                         </CardHeader>
                         <CardBody>
-                            <Text>{item.content}</Text>
+                        <Text whiteSpace="normal">{item.content}</Text>
                         </CardBody>
                     </Card>
                 ))}
