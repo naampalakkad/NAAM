@@ -1,7 +1,6 @@
 'use client'
 import React, { useEffect, useState } from "react";
 import { auth } from "@/lib/firebase";
-import './login.css';
 import { onAuthStateChanged } from "firebase/auth";
 import { Flex, Heading, Spinner} from "@chakra-ui/react";
 import SigninBox from "./signin";
@@ -24,7 +23,7 @@ export default function ProfilePage() {
   }, []);
 
   return (
-    <Flex flexDirection="column" alignItems="center">
+    <Flex flexDirection="column" alignItems="center" pt={"10vh"}>
       {user === "loading" ? (
         <Flex justifyContent="center" alignItems="center" h="60vh" flexDirection="column">
           <Spinner size="xl" color="blue.500" />

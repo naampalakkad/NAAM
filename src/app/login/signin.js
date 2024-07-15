@@ -1,21 +1,39 @@
 import { signInoutWithGoogle } from "@/lib/firebase";
-import { Box, Heading, Text, Button, Card } from "@chakra-ui/react";
+import { Box, Heading, Text, Button, Card, Stack } from "@chakra-ui/react";
 
 // SignInCard component
 const SignInCard = ({ signInWithGoogle }) => (
-  <Card className="sign-in-card" padding={8} margin={4}>
-    <Heading as="h2" size="lg" marginBottom={4}>Sign In to NAAM Website</Heading>
-    <Button onClick={signInWithGoogle} colorScheme="blue">Sign In</Button>
+  <Card
+    className="sign-in-card"
+    padding={8}
+    margin={4}
+    boxShadow="md"
+    borderRadius="lg"
+    width="100%"
+  >
+    <Heading as="h2" size="lg" marginBottom={4}>Welcome Back!</Heading>
+    <Text fontSize="lg" marginBottom={4}>
+      Please sign in to continue to the NAAM website.
+    </Text>
+    <Button onClick={signInWithGoogle} colorScheme="blue" width="full" p={4}>
+      Sign In with Google
+    </Button>
   </Card>
 );
 
 const InfoCard = () => (
-  <Card className="info-card" padding={8} margin={4}>
-    <Heading as="h2" size="md" marginBottom={4}>Welcome to NAAM Website</Heading>
+  <Card
+    className="info-card"
+    padding={8}
+    margin={4}
+    boxShadow="md"
+    borderRadius="lg"
+    width="100%"
+  >
+    <Heading as="h2" size="md" marginBottom={4}>About NAAM</Heading>
     <Text>
-      Sign in with your Google account to set your details so that other users can find you, or to view others' details.
-      We will not share your details with anyone else, and we will not use your details for any other purpose.
-      Google may collect your details as per their privacy policy.
+      By signing in with your Google account, you can manage your profile and connect with other alumni. Your information will be securely stored and will not be shared with anyone else.
+      Please refer to Google’s privacy policy for details on data collection.
     </Text>
   </Card>
 );
@@ -26,9 +44,14 @@ export default function SignInPage() {
   };
 
   return (
-    <Box  className="cardcontainer" padding={8}>
-      <SignInCard signInWithGoogle={signInWithGoogle} />
-      <InfoCard />
-    </Box>
+      <Stack spacing={4} width="full" maxWidth="lg"    className="cardcontainer"
+      padding={4}
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      >
+        <SignInCard signInWithGoogle={signInWithGoogle} />
+        <InfoCard />
+      </Stack>
   );
 }
