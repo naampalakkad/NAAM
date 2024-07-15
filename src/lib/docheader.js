@@ -16,6 +16,17 @@ function Header() {
       <meta name="twitter:title" content="NAAM Alumni Website" />
       <meta name="twitter:description" content="Connect with fellow NAAM alumni, share experiences, and build lasting relationships." />
       <meta name="twitter:image" content="https://ik.imagekit.io/0ta3q23cu/Naam/logo.webp?updatedAt=1715590880123" />
+        {/* Preconnect Hints */}
+        <link rel="preconnect" href="https://fonts.gstatic.com" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://identitytoolkit.googleapis.com" />
+        <link rel="preconnect" href="https://www.googleapis.com" />
+
+        {/* DNS Prefetch Hints */}
+        <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+        <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+        <link rel="dns-prefetch" href="https://identitytoolkit.googleapis.com" />
+        <link rel="dns-prefetch" href="https://www.googleapis.com" />
     </head>
   );
 }

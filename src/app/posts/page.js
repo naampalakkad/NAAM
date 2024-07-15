@@ -7,7 +7,7 @@ import Link from 'next/link';
 
 const Blog = () => {
     const [posts, setPosts] = useState([]);
-    const [filter, setFilter] = useState("all"); 
+    const [filter, setFilter] = useState("all");
     const [isAdmin, setIsAdmin] = useState(false);
 
     useEffect(() => {
@@ -15,19 +15,22 @@ const Blog = () => {
             const isUserAdmin = await checkuserrole('blogger');
             setIsAdmin(isUserAdmin);
         };
-    
+
         fetchUserRole();
     }, []);
 
-    useEffect(() => {
-        const fetchPosts = async () => {
-            const postsFromDb = await getpostsfromdb();
-            if(postsFromDb)
-                setPosts(Object.entries(postsFromDb));
-        };
+ useEffect(() => {
+    const fetchPosts = async () => {
+        const postsFromDb = await getPostsFromDb();
+        
+        if (postsFromDb) {
+            setPosts(Object.entries(postsFromDb));
+        }
+    };
 
-        fetchPosts();
-    }, []);
+    fetchPosts();
+}, []);
+
 
     const filteredPosts = filter === "all" ? posts : posts.filter(post => post[1].type === filter);
 
@@ -57,7 +60,6 @@ const Blog = () => {
                             bg="white"
                             _hover={{ bg: "gray.100" }}
                             _focus={{ borderColor: "blue.500" }}
-                            color={"black"}
                         >
                             <option value="all">All</option>
                             <option value="EVENT">Events</option>
@@ -65,7 +67,7 @@ const Blog = () => {
                             <option value="anoun">Announcements</option>
                             <option value="BLOG">Blog</option>
                         </Select>
-                        {isAdmin &&  
+                        {isAdmin &&
                             <Link href="/addnew">
                                 <Button colorScheme="blue" size="lg">Add Post</Button>
                             </Link>

@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { useColorMode, useDisclosure, Flex, Box, Text } from '@chakra-ui/react';
-import { Drawer, DrawerBody, DrawerHeader, DrawerOverlay, DrawerContent, DrawerCloseButton,  IconButton } from "@chakra-ui/react";
+import { Drawer, DrawerBody, DrawerHeader, DrawerOverlay, DrawerContent, DrawerCloseButton, IconButton } from "@chakra-ui/react";
 import './header.css'
 import { HamburgerIcon } from '@chakra-ui/icons';
 import { MenuItems } from '@/lib/data';
@@ -68,7 +68,13 @@ export default function Header() {
         </Box>
 
         {isMobile ? (
-          <IconButton icon={<HamburgerIcon />} onClick={onOpen} variant="ghost" aria-label="Open Menu" />
+          <IconButton
+            icon={<HamburgerIcon />}
+            onClick={onOpen}
+            variant="ghost"
+            aria-label="Open Menu"
+            color={colorMode === 'dark' ? 'white' : 'inherit'} // Set the color based on the color mode
+          />
         ) : (
           <Box id="main_menu" display="flex" alignItems="center">
             {MenuItems.map((item) => (
@@ -93,5 +99,6 @@ export default function Header() {
         </Drawer>
       </Flex>
     </header>
+
   );
 }
