@@ -1,6 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react';
-import { Box, Heading, Button, Select, Flex } from "@chakra-ui/react";
+import { Box, Heading, Button, Select, Flex, Text } from "@chakra-ui/react";
 import { getpostsfromdb, checkuserrole } from "@/lib/firebase";
 import { BlogPost } from './blogpage';
 import Link from 'next/link';
@@ -19,15 +19,18 @@ const Blog = () => {
         fetchUserRole();
     }, []);
 
-    useEffect(() => {
-        const fetchPosts = async () => {
-            const postsFromDb = await getpostsfromdb();
-
+ useEffect(() => {
+    const fetchPosts = async () => {
+        const postsFromDb = await getPostsFromDb();
+        
+        if (postsFromDb) {
             setPosts(Object.entries(postsFromDb));
-        };
+        }
+    };
 
-        fetchPosts();
-    }, []);
+    fetchPosts();
+}, []);
+
 
     const filteredPosts = filter === "all" ? posts : posts.filter(post => post[1].type === filter);
 
@@ -45,7 +48,7 @@ const Blog = () => {
                     mb="20px"
                     px={['50px', '100px']}
                 >
-                    <Heading mb="30px" textAlign="center">
+                    <Heading mb="30px" textAlign="center" fontFamily={'open Sans'}>
                         NEWS AND UPDATES
                     </Heading>
                     <Flex justifyContent="space-between" alignItems="center">
@@ -71,20 +74,26 @@ const Blog = () => {
                         }
                     </Flex>
                 </Box>
-                <Box
-                    display="flex"
-                    flexDirection="row"
-                    flexWrap="wrap"
-                    justifyContent="space-evenly"
-                    alignItems="center"
-                    gap="20px"
-                    width="100%"
-                    margin="20px"
-                >
-                    {filteredPosts.map((post, index) => (
-                        <BlogPost key={index} post={post} />
-                    )).reverse()}
-                </Box>
+                {filteredPosts.length === 0 ? (
+                    <Text textAlign="center" fontSize="xl" color="gray.600">
+                        No content available.
+                    </Text>
+                ) : (
+                    <Box
+                        display="flex"
+                        flexDirection="row"
+                        flexWrap="wrap"
+                        justifyContent="space-evenly"
+                        alignItems="center"
+                        gap="20px"
+                        width="100%"
+                        margin="20px"
+                    >
+                        {filteredPosts.map((post, index) => (
+                            <BlogPost key={index} post={post} />
+                        )).reverse()}
+                    </Box>
+                )}
             </Box>
         </Box>
     );
