@@ -21,7 +21,7 @@ const Blog = () => {
 
  useEffect(() => {
     const fetchPosts = async () => {
-        const postsFromDb = await getPostsFromDb();
+        const postsFromDb = await getpostsfromdb();
         
         if (postsFromDb) {
             setPosts(Object.entries(postsFromDb));
@@ -57,7 +57,7 @@ const Blog = () => {
                             width='200px'
                             padding='10px'
                             size="lg"
-                            bg="white"
+                            // bg="white"
                             _hover={{ bg: "gray.100" }}
                             _focus={{ borderColor: "blue.500" }}
                         >
