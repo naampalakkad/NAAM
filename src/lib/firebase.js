@@ -209,6 +209,7 @@ export async function getdatafromStorage(location) {
   }
   return resurls;
 }
+
 export async function getuserdetailfromdb(uid) {
   const userRef = ref(db, "users/" + uid);
   return get(userRef)
@@ -272,5 +273,47 @@ export async function getImageUrlFromStorage(userId) {
       console.error("Error getting image URL:", error);
       throw error;
     }
+  }
+}
+
+export async function deleteImageFromStorage(location, imageUrl) {
+  const storageRef = sref(storage, location);
+  const res = await listAll(storageRef);
+  for (let i = 0; i < res.items.length; i++) {
+    const fileRef = res.items[i];
+    const fileUrl = await getDownloadURL(fileRef);
+    if (fileUrl === imageUrl) {
+      await deleteObject(fileRef);
+      break;
+    }
+  }
+}
+
+export async function uploadadminImageToStorage(location, imageFile) {
+  console.log("saving image at",location)
+  try {
+    const compressor = new ImageCompressor();
+    const compressedImage = await compressor.compress(imageFile, {
+      maxWidth: 720,
+      maxHeight: 540,
+      quality: 0.8,
+      mimeType: 'image/webp',
+    });
+  console.log(compressedImage)
+    // Create a new file with the name 'compressedImage.webp'
+    const originalFilename = imageFile.name.split('.').slice(0, -1).join('.');
+    console.log("image named ",originalFilename," compressed")
+    const renamedFile = new File([compressedImage], `${originalFilename}.webp`, {
+      type: 'image/webp'
+    });
+
+    const storageRef = sref(storage, `${location}/${renamedFile.name}`);
+    await uploadBytes(storageRef, renamedFile);
+    const imageUrl = await getDownloadURL(storageRef);
+    console.log("iamge url is",imageUrl)
+    return imageUrl;
+  } catch (error) {
+    console.error("Error uploading image:", error);
+    throw error;
   }
 }

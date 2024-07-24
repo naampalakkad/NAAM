@@ -1,104 +1,90 @@
 'use client'
+// pages/admin.js
 import { useState, useEffect } from 'react';
-import {
-  Box, Button, Textarea, FormControl, FormLabel, VStack, Heading, Input, HStack, IconButton,
-} from "@chakra-ui/react";
-import { AddIcon, DeleteIcon } from '@chakra-ui/icons';
-import { onAuthStateChanged } from 'firebase/auth';
-import { auth, checkuserrole } from "@/lib/firebase";
-import { statistics, MenuItems } from "@/lib/data.js";
+import { Box, Button, Image, SimpleGrid, Heading, Stack, Input, VStack } from '@chakra-ui/react';
+import { getdatafromStorage, uploadadminImageToStorage, deleteImageFromStorage } from '@/lib/firebase'; // Import your Firebase functions
 
 const AdminPanel = () => {
-  const [user, setUser] = useState(null);
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [formData, setFormData] = useState({
-    statistics: statistics,
-    MenuItems: MenuItems,
-  });
+  const [carousalImages, setCarousalImages] = useState([]);
+  const [galleryImages, setGalleryImages] = useState([]);
+  const [newImage, setNewImage] = useState(null);
 
   useEffect(() => {
-    const unsubscribeAuth = onAuthStateChanged(auth, async (currentUser) => {
-      setUser(currentUser);
-      setLoading(false);
-      if (currentUser) {
-        const isUserAdmin = await checkuserrole('admin');
-        setIsAdmin(isUserAdmin);
-      }
-    });
+    const fetchImages = async () => {
+      const carousal = await getdatafromStorage('carousalimages');
+      const gallery = await getdatafromStorage('galleryimgs');
+      setCarousalImages(carousal);
+      setGalleryImages(gallery);
+    };
 
-    return () => unsubscribeAuth();
+    fetchImages();
   }, []);
 
-  const handleChange = (e, key, index, field) => {
-    const newData = { ...formData };
-    newData[key][index][field] = e.target.value;
-    setFormData(newData);
+  const handleImageUpload = async (location) => {
+    if (newImage) {
+      await uploadadminImageToStorage(location, newImage);
+      setNewImage(null);
+      // Refresh the images after upload
+      const updatedImages = await getdatafromStorage(location);
+      if (location === 'carousalimages') setCarousalImages(updatedImages);
+      if (location === 'galleryimgs') setGalleryImages(updatedImages);
+    }
   };
 
-  const handleAdd = (key) => {
-    const newData = { ...formData };
-    newData[key].push({}); // Assuming each item is an object
-    setFormData(newData);
+  const handleImageDelete = async (location, imageUrl) => {
+    await deleteImageFromStorage(location, imageUrl);
+    // Refresh the images after deletion
+    const updatedImages = await getdatafromStorage(location);
+    if (location === 'carousalimages') setCarousalImages(updatedImages);
+    if (location === 'galleryimgs') setGalleryImages(updatedImages);
   };
-
-  const handleDelete = (key, index) => {
-    const newData = { ...formData };
-    newData[key].splice(index, 1);
-    setFormData(newData);
-  };
-
-  const handleSave = () => {
-    // Implement save functionality to update the data in your storage (e.g., Firebase or local file)
-    console.log('Data to be saved:', formData);
-  };
-
-  if (loading) return <Box>Loading...</Box>;
-
-  if (!user) return <Box>Please sign in to access the admin panel.</Box>;
-
-  if (!isAdmin) return <Box>Access Denied. You are not an admin.</Box>;
 
   return (
-    <Box p={5} pt={'10vh'}>
+    <Box p={5} pt={"10vh"}>
       <Heading mb={5}>Admin Panel</Heading>
-      <VStack spacing={4}>
-        {Object.keys(formData).map((key) => (
-          <Box key={key} w="100%">
-            <FormControl id={key}>
-              <FormLabel>{key}</FormLabel>
-              {formData[key].map((item, index) => (
-                <HStack key={index} mb={2}>
-                  {Object.keys(item).map((field) => (
-                    <Input
-                      key={field}
-                      name={field}
-                      value={item[field]}
-                      onChange={(e) => handleChange(e, key, index, field)}
-                      placeholder={field}
-                    />
-                  ))}
-                  <IconButton
-                    icon={<DeleteIcon />}
-                    onClick={() => handleDelete(key, index)}
-                    colorScheme="red"
-                  />
-                </HStack>
-              ))}
-              <Button
-                leftIcon={<AddIcon />}
-                onClick={() => handleAdd(key)}
-                colorScheme="teal"
-              >
-                Add {key.slice(0, -1)}
-              </Button>
-            </FormControl>
-          </Box>
-        ))}
-        <Button onClick={handleSave} colorScheme="teal">
-          Save Changes
-        </Button>
-      </VStack>
+      <Stack spacing={10}>
+        <VStack align="start">
+          <Heading size="md">Carousal Images</Heading>
+          <SimpleGrid columns={3} spacing={5}>
+            {carousalImages.map((url, index) => (
+              <Box key={index} position="relative">
+                <Image src={url} alt={`Carousal Image ${index}`} boxSize="150px" objectFit="cover" />
+                <Button 
+                  position="absolute" 
+                  top={0} 
+                  right={0} 
+                  colorScheme="red" 
+                  onClick={() => handleImageDelete('carousalimages', url)}>
+                  Delete
+                </Button>
+              </Box>
+            ))}
+          </SimpleGrid>
+          <Input type="file" onChange={(e) => setNewImage(e.target.files[0])} />
+          <Button colorScheme="teal" onClick={() => handleImageUpload('carousalimages')}>Upload New Image</Button>
+        </VStack>
+
+        <VStack align="start">
+          <Heading size="md">Gallery Images</Heading>
+          <SimpleGrid columns={3} spacing={5}>
+            {galleryImages.map((url, index) => (
+              <Box key={index} position="relative">
+                <Image src={url} alt={`Gallery Image ${index}`} boxSize="150px" objectFit="cover" />
+                <Button 
+                  position="absolute" 
+                  top={0} 
+                  right={0} 
+                  colorScheme="red" 
+                  onClick={() => handleImageDelete('galleryimgs', url)}>
+                  Delete
+                </Button>
+              </Box>
+            ))}
+          </SimpleGrid>
+          <Input type="file" onChange={(e) => setNewImage(e.target.files[0])} />
+          <Button colorScheme="teal" onClick={() => handleImageUpload('galleryimgs')}>Upload New Image</Button>
+        </VStack>
+      </Stack>
     </Box>
   );
 };
