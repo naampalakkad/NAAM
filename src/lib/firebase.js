@@ -1,9 +1,7 @@
-'use client'
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, signInWithPopup,onAuthStateChanged } from "firebase/auth";
 import { getStorage, ref as sref, uploadBytes, getDownloadURL, listAll, deleteObject } from "firebase/storage";
 import { getDatabase, set, get, ref } from "firebase/database"
-import { useEffect, useState } from 'react';
 let ImageCompressor = null
 if (typeof window !== "undefined") {
   import('image-compressor.js')
