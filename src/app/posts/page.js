@@ -58,7 +58,7 @@ const Blog = () => {
                             padding='10px'
                             size="lg"
                             // bg="white"
-                            _hover={{ bg: "gray.100" }}
+                            _hover={{ bg: "gray.100", color:"black" }}
                             _focus={{ borderColor: "blue.500" }}
                         >
                             <option value="all">All</option>
