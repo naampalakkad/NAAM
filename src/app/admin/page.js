@@ -1,92 +1,50 @@
 'use client'
-// pages/admin.js
-import { useState, useEffect } from 'react';
-import { Box, Button, Image, SimpleGrid, Heading, Stack, Input, VStack } from '@chakra-ui/react';
-import { getdatafromStorage, uploadadminImageToStorage, deleteImageFromStorage } from '@/lib/firebase'; // Import your Firebase functions
+import React, { useState, useEffect } from 'react';
+import { Flex, Heading, Button, Spinner } from "@chakra-ui/react";
+import { checkIfUserSignedIn, checkuserrole } from "@/lib/firebase";
+import AdminPanel from "./adminpanel";
 
-const AdminPanel = () => {
-  const [carousalImages, setCarousalImages] = useState([]);
-  const [galleryImages, setGalleryImages] = useState([]);
-  const [newImage, setNewImage] = useState(null);
+export default function AlumniListPage() {
+  const [userSignedIn, setUserSignedIn] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
-    const fetchImages = async () => {
-      const carousal = await getdatafromStorage('carousalimages');
-      const gallery = await getdatafromStorage('galleryimgs');
-      setCarousalImages(carousal);
-      setGalleryImages(gallery);
+    const checkSignIn = async () => {
+      const user = await checkIfUserSignedIn();
+      if (user) {
+        setUserSignedIn(true);
+        const isUserAdmin = await checkuserrole('admin');
+        setIsAdmin(isUserAdmin);
+      } else {
+        setUserSignedIn(false);
+      }
     };
-
-    fetchImages();
+    checkSignIn();
   }, []);
 
-  const handleImageUpload = async (location) => {
-    if (newImage) {
-      await uploadadminImageToStorage(location, newImage);
-      setNewImage(null);
-      // Refresh the images after upload
-      const updatedImages = await getdatafromStorage(location);
-      if (location === 'carousalimages') setCarousalImages(updatedImages);
-      if (location === 'galleryimgs') setGalleryImages(updatedImages);
-    }
-  };
-
-  const handleImageDelete = async (location, imageUrl) => {
-    await deleteImageFromStorage(location, imageUrl);
-    // Refresh the images after deletion
-    const updatedImages = await getdatafromStorage(location);
-    if (location === 'carousalimages') setCarousalImages(updatedImages);
-    if (location === 'galleryimgs') setGalleryImages(updatedImages);
+  const signInRedirect = () => {
+    window.location.href = '/login';
   };
 
   return (
-    <Box p={5} pt={"10vh"}>
-      <Heading mb={5}>Admin Panel</Heading>
-      <Stack spacing={10}>
-        <VStack align="start">
-          <Heading size="md">Carousal Images</Heading>
-          <SimpleGrid columns={3} spacing={5}>
-            {carousalImages.map((url, index) => (
-              <Box key={index} position="relative">
-                <Image src={url} alt={`Carousal Image ${index}`} boxSize="150px" objectFit="cover" />
-                <Button 
-                  position="absolute" 
-                  top={0} 
-                  right={0} 
-                  colorScheme="red" 
-                  onClick={() => handleImageDelete('carousalimages', url)}>
-                  Delete
-                </Button>
-              </Box>
-            ))}
-          </SimpleGrid>
-          <Input type="file" onChange={(e) => setNewImage(e.target.files[0])} />
-          <Button colorScheme="teal" onClick={() => handleImageUpload('carousalimages')}>Upload New Image</Button>
-        </VStack>
-
-        <VStack align="start">
-          <Heading size="md">Gallery Images</Heading>
-          <SimpleGrid columns={3} spacing={5}>
-            {galleryImages.map((url, index) => (
-              <Box key={index} position="relative">
-                <Image src={url} alt={`Gallery Image ${index}`} boxSize="150px" objectFit="cover" />
-                <Button 
-                  position="absolute" 
-                  top={0} 
-                  right={0} 
-                  colorScheme="red" 
-                  onClick={() => handleImageDelete('galleryimgs', url)}>
-                  Delete
-                </Button>
-              </Box>
-            ))}
-          </SimpleGrid>
-          <Input type="file" onChange={(e) => setNewImage(e.target.files[0])} />
-          <Button colorScheme="teal" onClick={() => handleImageUpload('galleryimgs')}>Upload New Image</Button>
-        </VStack>
-      </Stack>
-    </Box>
+    <Flex flexDirection="column" alignItems="center">
+      {userSignedIn === null ? ( 
+        <Flex justifyContent="center" alignItems="center" h="60vh" flexDirection="column">
+          <Spinner size="xl" color="blue.500" />
+          <Heading mt={4} fontSize="xl" color="gray.600" textAlign="center">Loading...</Heading>
+        </Flex>
+      ) : !userSignedIn ? (
+        <Flex justifyContent="center" alignItems="center" h="60vh" flexDirection="column">
+          <Heading fontSize="4xl" color="gray.600" textAlign="center">You need to sign in first</Heading>
+          <Button colorScheme="blue" mt={4} onClick={signInRedirect}>Sign In</Button>
+        </Flex>
+      ) : !isAdmin ? (
+        <Flex justifyContent="center" alignItems="center" h="60vh" flexDirection="column">
+          <Heading fontSize="4xl" color="gray.600" textAlign="center">Only admin users can access this page</Heading>
+        </Flex>
+      ) : (
+        <AdminPanel />
+      )}
+    </Flex>
   );
-};
-
-export default AdminPanel;
+}
