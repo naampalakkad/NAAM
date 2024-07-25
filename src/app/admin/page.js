@@ -27,7 +27,7 @@ export default function AlumniListPage() {
   };
 
   return (
-    <Flex flexDirection="column" alignItems="center">
+    <Flex flexDirection="column" alignItems="center" pt={"10vh"}>
       {userSignedIn === null ? ( 
         <Flex justifyContent="center" alignItems="center" h="60vh" flexDirection="column">
           <Spinner size="xl" color="blue.500" />
