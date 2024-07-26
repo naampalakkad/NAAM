@@ -18,13 +18,13 @@ import {
 } from '@chakra-ui/react';
 
 const ItemModal = ({ isOpen, onClose, selectedItem }) => (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={onClose}  scrollBehavior="inside" size={"xl"}>
         <ModalOverlay />
         <ModalContent>
             <ModalHeader>{selectedItem.title}</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
-                <Box maxW="800px" mx="auto" p={5} pt="12vh">
+                <Box idth="60vw" mx="auto" p={5} pt="12vh">
                     <Heading mb={4}>{selectedItem.title}</Heading>
                     <HStack spacing={2} mb={4}>
                         <Badge colorScheme="yellow">{selectedItem.authorName}</Badge>

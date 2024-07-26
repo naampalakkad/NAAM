@@ -5,7 +5,7 @@ import ContentManager from './contentmanager';
 const AdminPage = () => {
   return (
       <Stack spacing={5} width={"90vw"}>
-       <Heading mb={5}>Admin Panel</Heading>
+       <Heading mb={5} alignSelf={"center"} p={10} m={5}>Admin Panel</Heading>
         <ContentManager/>
         {/*
         <ImageManager title="Carousal Images" location="carousalimages" />

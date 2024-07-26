@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import RenderItems from './components/rendercontent';
 import ItemModal from './components/contentmodel';
-import { VStack, HStack, Spinner, useToast, Heading, useDisclosure, Box, Text, Button, Image } from '@chakra-ui/react';
+import { VStack,  Spinner, useToast, Heading, useDisclosure, Box,SimpleGrid,Accordion, AccordionItem, AccordionButton, AccordionPanel, AccordionIcon} from '@chakra-ui/react';
 import { getdatafromdb, savedatatodb, deletedatafromdb } from '@/lib/firebase';
-import { CheckIcon, DeleteIcon, RepeatIcon, TimeIcon, WarningIcon } from '@chakra-ui/icons';
 
 const itemConfig = {
     posts: {
@@ -23,14 +22,12 @@ const itemConfig = {
     },
 };
 
-
-
 const showToast = (toast, title, description, status) => {
     toast({
         title,
         description,
         status,
-        duration: 9000,
+        duration: 2000,
         isClosable: true,
     });
 };
@@ -48,7 +45,6 @@ const moveItem = async (item, action, setData, toast, onOpen) => {
         ],
     };
 
-    try {
         if (action === 'delete') {
             for (const path of paths[action]) {
                 await deletedatafromdb(path);
@@ -61,27 +57,29 @@ const moveItem = async (item, action, setData, toast, onOpen) => {
 
         setData(prevData => {
             const newData = { ...prevData };
+
+            // Ensure source and target states are initialized
+            const sourceState = paths[action][0].split('/').pop();
+            const targetState = paths[action][1].split('/').pop();
+
+            newData[item.type][sourceState] = newData[item.type][sourceState] || [];
+            newData[item.type][targetState] = newData[item.type][targetState] || [];
+
             if (action === 'delete') {
                 ['pending', 'approved', 'archived'].forEach(state => {
                     newData[item.type][state] = newData[item.type][state].filter(i => i.id !== item.id);
                 });
             } else {
-                const sourceState = paths[action][0].split('/').pop();
-                const targetState = paths[action][1].split('/').pop();
-                newData[item.type][sourceState] = newData[item.type][sourceState].filter(i => i.id !== item.id);
-                newData[item.type][targetState] = [...newData[item.type][targetState], { ...item, state: targetState }];
+                newData[item.type] = {
+                    ...newData[item.type],
+                    [sourceState]: newData[item.type][sourceState].filter(i => i.id !== item.id),
+                    [targetState]: [...newData[item.type][targetState], { ...item, state: targetState }]
+                };
             }
             return newData;
         });
 
         showToast(toast, `${action.charAt(0).toUpperCase() + action.slice(1)}d ${item.type}`, `The ${item.type.slice(0, -1)} has been ${action}d.`, "success");
-    } catch (error) {
-        showToast(toast, `Error ${action}ing ${item.type}`, error.message, "error");
-    }
-
-    if (action === 'readMore') {
-        onOpen();
-    }
 };
 
 const AdminPanel = () => {
@@ -124,22 +122,50 @@ const AdminPanel = () => {
     const handleMove = (item, action) => {
         if (action === 'readMore') {
             setSelectedItem(item);
+            onOpen();
+            
         }
+        else {
         moveItem(item, action, setData, toast, onOpen);
-    };
+    }};
 
     const renderSections = () => {
-        return Object.keys(itemConfig).map((itemType) => (
-            <HStack key={itemType} align="start" spacing={8}>
-                {['pending', 'approved', 'archived'].map((state) => (
-                    <VStack key={state}>
-                        <Heading size="md">{`${state.charAt(0).toUpperCase() + state.slice(1)} ${itemType.charAt(0).toUpperCase() + itemType.slice(1)}`}</Heading>
-                        <RenderItems items={data[itemType][state]} handleMove={handleMove} itemState={state} />
-                    </VStack>
-                ))}
-            </HStack>
-        ));
-    };
+        return (
+          <Accordion allowMultiple width={"100vw"}>
+            {Object.keys(itemConfig).map((itemType) => (
+              <AccordionItem key={itemType}>
+                <h2>
+                  <AccordionButton>
+                    <Box flex="1" textAlign="left">
+                      <Heading size="lg" color="teal.500">
+                        {itemType.charAt(0).toUpperCase() + itemType.slice(1)}
+                      </Heading>
+                    </Box>
+                    <AccordionIcon />
+                  </AccordionButton>
+                </h2>
+                <AccordionPanel pb={4}>
+                  <SimpleGrid columns={{ base: 1, md: 3 }} spacing={8}>
+                    {['pending', 'approved', 'archived'].map((state) => (
+                      <VStack key={state} align="start" spacing={4}>
+                        <Heading size="md">
+                          {`${state.charAt(0).toUpperCase() + state.slice(1)} ${itemType.charAt(0).toUpperCase() + itemType.slice(1)}`}
+                        </Heading>
+                        <RenderItems
+                          items={data[itemType][state]}
+                          handleMove={handleMove}
+                          itemState={state}
+                          itemType={itemType}
+                        />
+                      </VStack>
+                    ))}
+                  </SimpleGrid>
+                </AccordionPanel>
+              </AccordionItem>
+            ))}
+          </Accordion>
+        );
+      };
 
     if (loading) {
         return (
