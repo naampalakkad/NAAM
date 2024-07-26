@@ -1,13 +1,16 @@
 import { Heading, Stack } from '@chakra-ui/react';
 import ImageManager from './ImageManager';
 import GalleryManager from './gallerymanager';
+import ContentManager from './contentmanager';
 const AdminPage = () => {
   return (
       <Stack spacing={5} width={"90vw"}>
-      <Heading mb={5}>Admin Panel</Heading>
+       <Heading mb={5}>Admin Panel</Heading>
+        <ContentManager/>
+        {/*
         <ImageManager title="Carousal Images" location="carousalimages" />
         <ImageManager title="Gallery Images" location="galleryimgs" />
-        <GalleryManager/>
+        <GalleryManager/> */}
       </Stack>
   );
 };

@@ -1,7 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, signInWithPopup,onAuthStateChanged } from "firebase/auth";
 import { getStorage, ref as sref, uploadBytes, getDownloadURL, listAll, deleteObject } from "firebase/storage";
-import { getDatabase, set, get, ref } from "firebase/database"
+import { getDatabase, set, get, ref,remove } from "firebase/database"
 let ImageCompressor = null
 if (typeof window !== "undefined") {
   import('image-compressor.js')
@@ -124,6 +124,18 @@ export function saveposttodb(data) {
       });
   }
 }
+
+export async function deletedatafromdb  (path) {
+  const db = getDatabase();
+  const reference = ref(db, path);
+  try {
+      await remove(reference);
+      console.log(`Data removed from path: ${path}`);
+  } catch (error) {
+      console.error(`Error removing data from path: ${path}`, error);
+      throw error;
+  }
+};
 
 export function savetesttodb(data) {
   if (auth.currentUser) {
