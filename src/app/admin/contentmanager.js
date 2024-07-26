@@ -1,102 +1,119 @@
 import React, { useState, useEffect } from 'react';
-import {
-    VStack,
-    HStack,
-    Box,
-    Spinner,
-    Text,
-    useToast,
-    IconButton,
-    Heading,
-    Button,
-    Image,
-    Modal,
-    ModalOverlay,
-    ModalContent,
-    ModalHeader,
-    ModalFooter,
-    ModalBody,
-    ModalCloseButton,
-    useDisclosure,
-    Badge,
-    List,
-    Link,
-} from '@chakra-ui/react';import { CheckIcon, DeleteIcon, RepeatIcon, TimeIcon } from '@chakra-ui/icons';
+import RenderItems from './components/rendercontent';
+import ItemModal from './components/contentmodel';
+import { VStack, HStack, Spinner, useToast, Heading, useDisclosure, Box, Text, Button, Image } from '@chakra-ui/react';
 import { getdatafromdb, savedatatodb, deletedatafromdb } from '@/lib/firebase';
+import { CheckIcon, DeleteIcon, RepeatIcon, TimeIcon, WarningIcon } from '@chakra-ui/icons';
 
-const RenderPosts = ({ posts, handleApprove, handleArchive, handleDelete, handleReadMore }) => {
-    if (!Array.isArray(posts)) {
-        console.error('Expected posts to be an array but got', posts);
-        return null;
+const itemConfig = {
+    posts: {
+        pending: 'posts',
+        approved: 'content/approvedposts',
+        archived: 'content/archivedposts',
+    },
+    testimonials: {
+        pending: 'testimonials',
+        approved: 'content/approvedtestimonials',
+        archived: 'content/archivedtestimonials',
+    },
+    events: {
+        pending: 'events',
+        approved: 'content/approvedevents',
+        archived: 'content/archivedevents',
+    },
+};
+
+
+
+const showToast = (toast, title, description, status) => {
+    toast({
+        title,
+        description,
+        status,
+        duration: 9000,
+        isClosable: true,
+    });
+};
+
+const moveItem = async (item, action, setData, toast, onOpen) => {
+    const paths = {
+        approve: [itemConfig[item.type].pending, itemConfig[item.type].approved],
+        archive: [itemConfig[item.type].approved, itemConfig[item.type].archived],
+        unarchive: [itemConfig[item.type].archived, itemConfig[item.type].approved],
+        unapprove: [itemConfig[item.type].approved, itemConfig[item.type].pending],
+        delete: [
+            `${itemConfig[item.type].pending}/${item.id}`,
+            `${itemConfig[item.type].approved}/${item.id}`,
+            `${itemConfig[item.type].archived}/${item.id}`,
+        ],
+    };
+
+    try {
+        if (action === 'delete') {
+            for (const path of paths[action]) {
+                await deletedatafromdb(path);
+            }
+        } else {
+            const [sourcePath, targetPath] = paths[action];
+            await savedatatodb(`${targetPath}/${item.id}`, item);
+            await deletedatafromdb(`${sourcePath}/${item.id}`);
+        }
+
+        setData(prevData => {
+            const newData = { ...prevData };
+            if (action === 'delete') {
+                ['pending', 'approved', 'archived'].forEach(state => {
+                    newData[item.type][state] = newData[item.type][state].filter(i => i.id !== item.id);
+                });
+            } else {
+                const sourceState = paths[action][0].split('/').pop();
+                const targetState = paths[action][1].split('/').pop();
+                newData[item.type][sourceState] = newData[item.type][sourceState].filter(i => i.id !== item.id);
+                newData[item.type][targetState] = [...newData[item.type][targetState], { ...item, state: targetState }];
+            }
+            return newData;
+        });
+
+        showToast(toast, `${action.charAt(0).toUpperCase() + action.slice(1)}d ${item.type}`, `The ${item.type.slice(0, -1)} has been ${action}d.`, "success");
+    } catch (error) {
+        showToast(toast, `Error ${action}ing ${item.type}`, error.message, "error");
     }
 
-    return (
-        <Box>
-            {posts.map((post) => (
-                <Box key={post.id} p={4} shadow="md" borderWidth="1px">
-                    <Text fontWeight="bold">{post.title}</Text>
-                    <Text>{post.authorName}</Text>
-                    {post.thumbnail && <Image boxSize="150px" src={post.thumbnail} alt={post.title} />}
-                    <HStack mt={2}>
-                        <Button onClick={() => handleReadMore(post)}>
-                            <CheckIcon /> Read More
-                        </Button>
-                        <Button onClick={() => handleApprove(post.id)}>
-                            <CheckIcon /> Approve
-                        </Button>
-                        <Button onClick={() => handleArchive(post.id)}>
-                            <TimeIcon /> Archive
-                        </Button>
-                        <Button onClick={() => handleDelete(post.id)}>
-                            <DeleteIcon /> Delete
-                        </Button>
-                        <Button onClick={() => handleApprove(post.id)}>
-                            <RepeatIcon /> Unarchive
-                        </Button>
-                    </HStack>
-                </Box>
-            ))}
-        </Box>
-    );
+    if (action === 'readMore') {
+        onOpen();
+    }
 };
 
 const AdminPanel = () => {
-    const [pendingPosts, setPendingPosts] = useState([]);
-    const [approvedPosts, setApprovedPosts] = useState([]);
-    const [archivedPosts, setArchivedPosts] = useState([]);
+    const [data, setData] = useState({
+        posts: { pending: [], approved: [], archived: [] },
+        testimonials: { pending: [], approved: [], archived: [] },
+        events: { pending: [], approved: [], archived: [] },
+    });
     const [loading, setLoading] = useState(true);
-    const [selectedPost, setSelectedPost] = useState(null);
+    const [selectedItem, setSelectedItem] = useState(null);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const toast = useToast();
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const pending = await getdatafromdb('posts');
-                const approved = await getdatafromdb('content/approvedposts');
-                const archived = await getdatafromdb('content/archivedposts');
-
-                const transformData = (data) => {
-                    if (data == null) {
-                        return [];
+                const fetchedData = {};
+                for (const itemType in itemConfig) {
+                    fetchedData[itemType] = {};
+                    for (const state in itemConfig[itemType]) {
+                        const data = await getdatafromdb(itemConfig[itemType][state]);
+                        fetchedData[itemType][state] = data ? Object.keys(data).map(key => ({
+                            ...data[key],
+                            id: key,
+                            type: itemType,
+                            state,
+                        })) : [];
                     }
-                    return Object.keys(data).map(key => ({
-                        ...data[key],
-                        id: key
-                    }));
-                };
-
-                setPendingPosts(transformData(pending));
-                setApprovedPosts(transformData(approved));
-                setArchivedPosts(transformData(archived));
+                }
+                setData(fetchedData);
             } catch (error) {
-                toast({
-                    title: "Error fetching data",
-                    description: error.message,
-                    status: "error",
-                    duration: 9000,
-                    isClosable: true,
-                });
+                showToast(toast, "Error fetching data", error.message, "error");
             } finally {
                 setLoading(false);
             }
@@ -104,85 +121,24 @@ const AdminPanel = () => {
         fetchData();
     }, [toast]);
 
-    const handleApprove = async (id) => {
-        try {
-            const postToApprove = pendingPosts.find(post => post.id === id);
-            await savedatatodb(`content/approvedposts/${id}`, postToApprove);
-            await deletedatafromdb(`posts/${id}`);
-            setPendingPosts(pendingPosts.filter(post => post.id !== id));
-            setApprovedPosts([...approvedPosts, { ...postToApprove, approved: true }]);
-            toast({
-                title: "Post Approved",
-                description: "The post has been approved.",
-                status: "success",
-                duration: 9000,
-                isClosable: true,
-            });
-        } catch (error) {
-            toast({
-                title: "Error Approving Post",
-                description: error.message,
-                status: "error",
-                duration: 9000,
-                isClosable: true,
-            });
+    const handleMove = (item, action) => {
+        if (action === 'readMore') {
+            setSelectedItem(item);
         }
+        moveItem(item, action, setData, toast, onOpen);
     };
 
-    const handleArchive = async (id) => {
-        try {
-            const postToArchive = approvedPosts.find(post => post.id === id);
-            await savedatatodb(`content/archivedposts/${id}`, postToArchive);
-            await deletedatafromdb(`content/approvedposts/${id}`);
-            setApprovedPosts(approvedPosts.filter(post => post.id !== id));
-            setArchivedPosts([...archivedPosts, { ...postToArchive, archived: true }]);
-            toast({
-                title: "Post Archived",
-                description: "The post has been archived.",
-                status: "success",
-                duration: 9000,
-                isClosable: true,
-            });
-        } catch (error) {
-            toast({
-                title: "Error Archiving Post",
-                description: error.message,
-                status: "error",
-                duration: 9000,
-                isClosable: true,
-            });
-        }
-    };
-
-    const handleDelete = async (id) => {
-        try {
-            await deletedatafromdb(`posts/${id}`);
-            await deletedatafromdb(`content/approvedposts/${id}`);
-            await deletedatafromdb(`content/archivedposts/${id}`);
-            setPendingPosts(pendingPosts.filter(post => post.id !== id));
-            setApprovedPosts(approvedPosts.filter(post => post.id !== id));
-            setArchivedPosts(archivedPosts.filter(post => post.id !== id));
-            toast({
-                title: "Post Deleted",
-                description: "The post has been deleted.",
-                status: "success",
-                duration: 9000,
-                isClosable: true,
-            });
-        } catch (error) {
-            toast({
-                title: "Error Deleting Post",
-                description: error.message,
-                status: "error",
-                duration: 9000,
-                isClosable: true,
-            });
-        }
-    };
-
-    const handleReadMore = (post) => {
-        setSelectedPost(post);
-        onOpen();
+    const renderSections = () => {
+        return Object.keys(itemConfig).map((itemType) => (
+            <HStack key={itemType} align="start" spacing={8}>
+                {['pending', 'approved', 'archived'].map((state) => (
+                    <VStack key={state}>
+                        <Heading size="md">{`${state.charAt(0).toUpperCase() + state.slice(1)} ${itemType.charAt(0).toUpperCase() + itemType.slice(1)}`}</Heading>
+                        <RenderItems items={data[itemType][state]} handleMove={handleMove} itemState={state} />
+                    </VStack>
+                ))}
+            </HStack>
+        ));
     };
 
     if (loading) {
@@ -194,71 +150,10 @@ const AdminPanel = () => {
     }
 
     return (
-        <VStack align="start" spacing={8}>
-            <Heading size="lg">Posts</Heading>
-            <Heading size="md">Pending Posts</Heading>
-            <RenderPosts posts={pendingPosts} handleApprove={handleApprove} handleArchive={handleArchive} handleDelete={handleDelete} handleReadMore={handleReadMore} />
-            <Heading size="md">Approved Posts</Heading>
-            <RenderPosts posts={approvedPosts} handleApprove={handleApprove} handleArchive={handleArchive} handleDelete={handleDelete} handleReadMore={handleReadMore} />
-            <Heading size="md">Archived Posts</Heading>
-            <RenderPosts posts={archivedPosts} handleApprove={handleApprove} handleArchive={handleArchive} handleDelete={handleDelete} handleReadMore={handleReadMore} />
-
-            {selectedPost && (
-                <Modal isOpen={isOpen} onClose={onClose}>
-                    <ModalOverlay />
-                    <ModalContent>
-                        <ModalHeader>{selectedPost.title}</ModalHeader>
-                        <ModalCloseButton />
-                        <ModalBody>
-                            <Box maxW="800px" mx="auto" p={5} pt="12vh">
-                                <Heading mb={4}>{selectedPost.title}</Heading>
-                                <HStack spacing={2} mb={4}>
-                                    <Badge colorScheme="yellow">{selectedPost.authorName}</Badge>
-                                    <Badge colorScheme="blue">{selectedPost.type}</Badge>
-                                </HStack>
-                                <VStack spacing={4} align="start">
-                                    {selectedPost.content.ops.map((op, idx) => {
-                                        if (op.insert && typeof op.insert === 'string') {
-                                            return (
-                                                <Text key={idx} textAlign="justify" id={`section-${idx}`}>
-                                                    {op.attributes && op.attributes.bold ? (
-                                                        <strong>{op.insert}</strong>
-                                                    ) : (
-                                                        op.insert
-                                                    )}
-                                                </Text>
-                                            );
-                                        } else if (op.attributes && op.attributes.header) {
-                                            const HeadingComponent = `h${op.attributes.header}`;
-                                            return (
-                                                <HeadingComponent key={idx} textAlign="justify" id={`section-${idx}`}>
-                                                    {op.insert}
-                                                </HeadingComponent>
-                                            );
-                                        } else if (op.attributes && op.attributes.link) {
-                                            return (
-                                                <Link key={idx} href={op.attributes.link} color="teal.500" isExternal>
-                                                    {op.insert}
-                                                </Link>
-                                            );
-                                        } else if (op.insert && op.insert.image) {
-                                            return (
-                                                <Image key={idx} src={op.insert.image} alt="Post content" mx="auto" />
-                                            );
-                                        }
-                                        return null;
-                                    })}
-                                </VStack>
-                            </Box>
-                        </ModalBody>
-                        <ModalFooter>
-                            <Button colorScheme="blue" mr={3} onClick={onClose}>
-                                Close
-                            </Button>
-                        </ModalFooter>
-                    </ModalContent>
-                </Modal>
-
+        <VStack>
+            {renderSections()}
+            {selectedItem && (
+                <ItemModal isOpen={isOpen} onClose={onClose} selectedItem={selectedItem} />
             )}
         </VStack>
     );
