@@ -22,7 +22,7 @@ const AdminPage = () => {
         Admin Panel
       </Heading>
       <Accordion width={"100vw"}>
-        {/* <AccordionItem>
+        <AccordionItem>
           <h2>
             <AccordionButton>
               <Box as="span" flex="1" textAlign="left">
@@ -60,8 +60,8 @@ const AdminPage = () => {
           <AccordionPanel pb={4}>
             <LazyLoadComponent component={ImageManager} title="Gallery Images" location="galleryimgs" />
           </AccordionPanel>
-        </AccordionItem> */}
-        {/* <AccordionItem>
+        </AccordionItem> 
+         <AccordionItem>
           <h2>
             <AccordionButton>
               <Box as="span" flex="1" textAlign="left">
@@ -73,7 +73,7 @@ const AdminPage = () => {
           <AccordionPanel pb={4}>
             <LazyLoadComponent component={GalleryManager} />
           </AccordionPanel>
-        </AccordionItem> */}
+        </AccordionItem>
         <AccordionItem>
           <h2>
             <AccordionButton>
@@ -101,6 +101,6 @@ export default AdminPage;
 // facility to accept posts // post management => Done
 // facility to approve teestimonials // testimonial management => Done
 // facility to approve events // event management => Done
+// facility to add batch rep emials [aka emails with roles] aka user management =>Done
 
-// facility to add batch rep emials [aka emails with roles] aka user management
-// Admin approve batch rep Batch rep approve users
+// Batch rep approve users of their batch

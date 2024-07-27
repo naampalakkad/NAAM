@@ -1,23 +1,32 @@
 import React, { useState, useEffect } from 'react';
-import { VStack, Button, Input, List, ListItem, useToast, Box, Heading } from '@chakra-ui/react';
+import { VStack, Button, Input, List, ListItem, useToast, Box, Heading, Text } from '@chakra-ui/react';
 import { savedatatodb, deletedatafromdb, getdatafromdb } from '@/lib/firebase';
 
 const BatchRepManager = () => {
     const [batchReps, setBatchReps] = useState([]);
-    const [newRepName, setNewRepName] = useState('');
+    const [users, setUsers] = useState({});
+    const [newRepEmail, setNewRepEmail] = useState('');
+    const [filteredUsers, setFilteredUsers] = useState([]);
     const [loading, setLoading] = useState(true);
     const toast = useToast();
 
     useEffect(() => {
-        const fetchBatchReps = async () => {
+        const fetchData = async () => {
             try {
-                const data = await getdatafromdb('userroles/batchreps');
-                if (data) {
-                    setBatchReps(Object.values(data));
+                // Fetch batch representatives
+                const repsData = await getdatafromdb('userroles/batchreps');
+                if (repsData) {
+                    setBatchReps(Object.values(repsData));
+                }
+
+                // Fetch all users
+                const usersData = await getdatafromdb('users');
+                if (usersData) {
+                    setUsers(usersData);
                 }
             } catch (error) {
                 toast({
-                    title: "Error fetching batch representatives.",
+                    title: "Error fetching data.",
                     description: error.message,
                     status: "error",
                     duration: 2000,
@@ -28,21 +37,27 @@ const BatchRepManager = () => {
             }
         };
 
-        fetchBatchReps();
+        fetchData();
     }, [toast]);
 
-    const handleAddRep = async () => {
-        if (newRepName.trim() === '') return;
+    const handleEmailChange = (e) => {
+        setNewRepEmail(e.target.value);
+        const filtered = Object.values(users).filter(user => user.email.includes(e.target.value));
+        setFilteredUsers(filtered);
+    };
 
+    const handleAddRep = async (user) => {
         const newRep = {
-            id: Date.now().toString(),
-            name: newRepName.trim(),
+            id: user.uid,
+            email: user.email,
+            batch: user.batch,
         };
 
         try {
             await savedatatodb(`userroles/batchreps/${newRep.id}`, newRep);
             setBatchReps(prev => [...prev, newRep]);
-            setNewRepName('');
+            setNewRepEmail('');
+            setFilteredUsers([]);
             toast({
                 title: "Batch representative added.",
                 status: "success",
@@ -90,25 +105,40 @@ const BatchRepManager = () => {
             <Heading size="lg">Batch Representatives</Heading>
             <Box>
                 <Input
-                    placeholder="Enter name"
-                    value={newRepName}
-                    onChange={(e) => setNewRepName(e.target.value)}
+                    placeholder="Enter email"
+                    value={newRepEmail}
+                    onChange={handleEmailChange}
                 />
-                <Button mt={2} colorScheme="teal" onClick={handleAddRep}>
-                    Add Batch Representative
-                </Button>
+                {filteredUsers.length > 0 && (
+                    <List spacing={3} mt={2}>
+                        {filteredUsers.map(user => (
+                            <ListItem key={user.uid} onClick={() => handleAddRep(user)} cursor="pointer" _hover={{ bg: 'gray.100' }}>
+                                <Box display="flex" justifyContent="space-between" alignItems="center">
+                                    <Text>{user.email}</Text>
+                                    <Text>{user.batch && `Batch: ${user.batch}`}</Text>
+                                </Box>
+                            </ListItem>
+                        ))}
+                    </List>
+                )}
             </Box>
             <List spacing={3}>
-                {batchReps.map(rep => (
-                    <ListItem key={rep.id}>
-                        <Box display="flex" justifyContent="space-between" alignItems="center">
-                            {rep.name}
-                            <Button colorScheme="red" onClick={() => handleRemoveRep(rep.id)}>
-                                Remove
-                            </Button>
-                        </Box>
-                    </ListItem>
-                ))}
+                {batchReps.map(rep => {
+                    const user = users[rep.id] || {};
+                    return (
+                        <ListItem key={rep.id}>
+                            <Box display="flex" justifyContent="space-between" alignItems="center">
+                                <Box>
+                                    <Text>{user.email || 'User not signed in'}</Text>
+                                    {user.batch && <Text>{`Batch: ${user.batch}`}</Text>}
+                                </Box>
+                                <Button colorScheme="red" onClick={() => handleRemoveRep(rep.id)}>
+                                    Remove
+                                </Button>
+                            </Box>
+                        </ListItem>
+                    );
+                })}
             </List>
         </VStack>
     );
