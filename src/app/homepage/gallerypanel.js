@@ -1,30 +1,48 @@
 'use client';
-import React, { useState, useEffect } from 'react';
-import { Button, SimpleGrid } from "@chakra-ui/react";
+import React, { useState, useEffect, Suspense } from 'react';
+import { Box, Button, SimpleGrid, Skeleton } from "@chakra-ui/react";
 import PhotoAlbum from "react-photo-album";
-import {getGalleryImageUrls, photogalleryurl} from './data';
-import './gallerypanel.css';
+import { getGalleryImageUrls } from '@/lib/data';
+import { FaImages } from "react-icons/fa";
 
-export default function Gallerypanel() {
-    const [imgurls, setImgUrls] = useState([]);
+const GallerySkeleton = () => (
+  <SimpleGrid columns={1} className="gallerypanel">
+    <Skeleton height="400px" />
+    <Button colorScheme="teal" alignSelf="flex-end" size="sm" className="gallerybutton" disabled>
+      Loading...
+    </Button>
+  </SimpleGrid>
+);
 
-    const goToLink = () => {
-        window.location.href = photogalleryurl;
-    };
+const GalleryPanel = () => {
+  const [imgUrls, setImgUrls] = useState([]);
 
-    useEffect(() => {
-        getGalleryImageUrls().then((urls) => {
-            
-            setImgUrls(urls);
-        });
-    }, []);
+  useEffect(() => {
+    getGalleryImageUrls()
+      .then((urls) => {
+        setImgUrls(urls);
+      })
+      .catch((error) => {
+        console.error('Error fetching gallery images:', error);
+      });
+  }, []);
 
-    return (
-        <SimpleGrid column={1} className="gallerypanel" >
-            <PhotoAlbum layout="rows" photos={imgurls} />
-            <Button colorScheme="teal" alignSelf={"right"} size="sm" className="gallerybutton" onClick={goToLink}>
-                  Photos -&gt;
-            </Button>
+  const goToLink = () => {
+    window.location.href = "gallery";
+  };
+
+  return (
+    <Box className="cardcontainer" bg="rgba(0, 0, 0, 0.5)" p={4} borderRadius="md" boxShadow="md">
+      <Suspense fallback={<GallerySkeleton />}>
+        <SimpleGrid columns={1} className="gallerypanel">
+          <PhotoAlbum layout="rows" photos={imgUrls} />
+          <Button colorScheme="teal" size="sm" alignSelf="flex-end" m={2} onClick={goToLink} rightIcon={<FaImages />}>
+            Photos
+          </Button>
         </SimpleGrid>
-    );
-}
+      </Suspense>
+    </Box>
+  );
+};
+
+export default GalleryPanel;

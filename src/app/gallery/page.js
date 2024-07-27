@@ -1,6 +1,45 @@
-import React from "react";
-import { photogalleryurl } from "../homepage/data";
+'use client'
+import React, { useState, useEffect } from 'react';
+import { Flex, Heading, Button, Spinner } from "@chakra-ui/react";
+import { checkIfUserSignedIn } from "@/lib/firebase";
+import GalleryPage from './gallerypage';
 
-export default function gallerypage() {
-  return <a href="https://lh3.googleusercontent.com/pw/AP1GczPZeKlLxNrZB-sl-qieBl9MB_0QQlBfLdiH1IbvVDex9b9xW09PlTktwUzf6waSEXpWM1KLJopcfqc20jE1-IS4UEJtvOof9cCbJzU5mE1HYhLOFw=w2400?source=screenshot.guru"> <img src="https://lh3.googleusercontent.com/pw/AP1GczPZeKlLxNrZB-sl-qieBl9MB_0QQlBfLdiH1IbvVDex9b9xW09PlTktwUzf6waSEXpWM1KLJopcfqc20jE1-IS4UEJtvOof9cCbJzU5mE1HYhLOFw=w600-h315-p-k" /> </a>
+export default function GalleryListPage() {
+  const [userSignedIn, setUserSignedIn] = useState(null); 
+
+  useEffect(() => {
+    const checkSignIn = async () => {
+      const user = await checkIfUserSignedIn();
+      if (user) {
+        console.log('User is signed in:', user);
+        setUserSignedIn(true);
+      } else {
+        console.log('No user signed in');
+        setUserSignedIn(false);
+      }
+    };
+    checkSignIn();
+  }, []);
+
+  const signInRedirect = () => {
+    window.location.href = '/login';
+  };
+
+  return (
+    <Flex flexDirection="column" alignItems="center">
+      {userSignedIn === null ? ( 
+        <Flex justifyContent="center" alignItems="center" h="60vh" flexDirection="column">
+          <Spinner size="xl" color="blue.500" />
+          <Heading mt={4} fontSize="xl" color="gray.600" textAlign="center"> Loading </Heading>
+        </Flex>
+      ) : !userSignedIn ? (
+        <Flex justifyContent="center" alignItems="center" h="60vh" flexDirection="column">
+          <Heading fontSize="4xl" color="gray.600" textAlign="center">You need to sign in first</Heading>
+          <Button colorScheme="blue" mt={4} onClick={signInRedirect}>Sign In</Button>
+        </Flex>
+      ) : (
+        <GalleryPage />
+      )}
+    </Flex>
+  );
 }

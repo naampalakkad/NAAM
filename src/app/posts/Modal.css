@@ -1,0 +1,99 @@
+/* Modal.css */
+
+/* Styling for body when modal is active */
+body.active-modal {
+    overflow-y: hidden;
+}
+
+/* Button styling */
+.btn-modal {
+    padding: 10px 20px;
+    display: block;
+    margin: 100px auto 0;
+    font-size: 18px;
+}
+
+/* Modal and overlay styles */
+.modal, .overlay {
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    position: fixed;
+    z-index: 1;
+}
+
+.overlay {
+    background: rgba(49, 49, 49, 0.8);
+}
+
+/* Close button styling */
+.close-modal {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 5px 7px;
+    background-color: red;
+    opacity: 0.7;
+    color: white;
+    border-radius: 25px;
+    border: 0;
+}
+
+.close-modal:hover {
+    opacity: 1;
+    transform: translate3D(0, -1px, 0) scale(1.03);
+    cursor: pointer;
+}
+
+/* Modal container styles */
+.modal-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 101;
+    width: 100%;
+    height: 80%;
+    justify-content: center;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 20px;
+    box-shadow: 20px 15px 20px 0px rgba(255, 255, 255, 0.2);
+    border-right: 1px solid rgba(255, 255, 255, 0.2);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    overflow-y: auto;
+    color: black;
+    max-width: 900px;
+    padding: 14px 28px;
+    line-height: 1.4;
+}
+
+/* Modal container content styles */
+.modal-container .modal-container-content {
+    margin: 40px;
+    text-align: justify;
+}
+
+.modal-container .modal-container-content p {
+    margin-bottom: 15px;
+    font-size: 18px;
+    line-height: 1.6;
+}
+
+.modal-container .modal-container-content strong {
+    font-size: 24px;
+    color: #333; /* Adjust color as needed */
+    display: block;
+    margin-bottom: 20px;
+    
+}
+.post-thumbnail {
+    width: 100%;
+    height: 200px; /* Adjust the height to your desired cropped size */
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}

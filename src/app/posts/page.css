@@ -83,4 +83,19 @@
     color:   #161a30;
     margin: 20px;
   }
-  
+  .select-box {
+    width: 200px;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 1px;
+    background-color: #fff;
+    color: #333;
+    outline: none;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+    
+  }
+.select-box:focus {
+    border-color: #007BFF;
+}
