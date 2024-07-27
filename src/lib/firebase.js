@@ -11,15 +11,15 @@ import { getStorage ,ref as sref, listAll, getDownloadURL} from "firebase/storag
 import {getDatabase,set,get,ref} from "firebase/database"
 
 const firebaseConfig = {
-  apiKey: "AIzaSyC97WJwdO5012NyYyRMfjZYUehk6kTZTQI",
-  authDomain: "naam-demo.firebaseapp.com",
-  projectId: "naam-demo",
-  storageBucket: "naam-demo.appspot.com",
-  databaseURL:"https://naam-demo-default-rtdb.asia-southeast1.firebasedatabase.app",
-  messagingSenderId: "608229011102",
-  appId: "1:608229011102:web:a62c520e1e527f4c3b558f",
-  measurementId: "G-NPX2H6Q43C"
+  apiKey: "AIzaSyAwBCJsji0R5UeZuKkroe4JsS3RSrVHrsA",
+  authDomain: "naamsiteprod.firebaseapp.com",
+  projectId: "naamsiteprod",
+  storageBucket: "naamsiteprod.appspot.com",
+  messagingSenderId: "441558746731",
+  appId: "1:441558746731:web:da6e9e5f18396ac0bd132e",
+  measurementId: "G-PPQBL6FYQT"
 };
+
 
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
