@@ -8,22 +8,40 @@
 }
 
 .page h1 {
-
     font-size: 3rem;
-
     color: #333;
-
 }
+
 .pdf-viewer {
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 5px;
     background-color: #fff;
-    width: 800px;
+    width: 90%; /* Use a percentage width */
+    max-width: 800px; /* Ensure it doesn’t exceed a certain width */
+    box-sizing: border-box; /* Include padding and border in the width calculation */
 }
 
 .pdf-viewer h2 {
     font-size: 1.5rem;
     font-weight: bold;
     margin-top: 0;
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+    .pdf-viewer {
+        width: 100%; /* Full width on smaller screens */
+        padding: 10px; /* Adjust padding if needed */
+    }
+}
+
+@media (max-width: 480px) {
+    .page h1 {
+        font-size: 2rem; /* Smaller font size for very small screens */
+    }
+
+    .pdf-viewer h2 {
+        font-size: 1.2rem; /* Adjust heading size if needed */
+    }
 }
