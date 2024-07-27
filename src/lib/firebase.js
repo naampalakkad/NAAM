@@ -2,8 +2,7 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, signInWithPopup,onAuthStateChanged } from "firebase/auth";
 import { getStorage, ref as sref, uploadBytes, getDownloadURL, listAll, deleteObject } from "firebase/storage";
-import { getDatabase, set, get, ref } from "firebase/database"
-import { useEffect, useState } from 'react';
+import { getDatabase, set, get, ref, update, remove } from "firebase/database"; 
 let ImageCompressor = null
 if (typeof window !== "undefined") {
   import('image-compressor.js')
@@ -28,6 +27,83 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const storage = getStorage(app);
 export const db = getDatabase(app);
+
+export const addLike = async (postId, userId) => {
+  try {
+    const postRef = ref(db, `posts/${postId}`);
+    const likesRef = ref(db, `posts/${postId}/likes/${userId}`);
+
+    // Add the user to the likes node
+    await set(likesRef, true);
+
+    // Increment the like count for the post
+    const postSnapshot = await get(postRef);
+    if (postSnapshot.exists()) {
+      const postData = postSnapshot.val();
+      const currentLikesCount = postData.likesCount || 0;
+      await update(postRef, {
+        likesCount: currentLikesCount + 1
+      });
+    }
+
+    console.log('Like added successfully');
+  } catch (error) {
+    console.error('Error adding like:', error);
+  }
+};
+
+// Function to remove a like
+export const removeLike = async (postId, userId) => {
+  try {
+    const postRef = ref(db, `posts/${postId}`);
+    const likesRef = ref(db, `posts/${postId}/likes/${userId}`);
+
+    // Remove the user from the likes node
+    await remove(likesRef);
+
+    // Decrement the like count for the post
+    const postSnapshot = await get(postRef);
+    if (postSnapshot.exists()) {
+      const postData = postSnapshot.val();
+      const currentLikesCount = postData.likesCount || 0;
+      await update(postRef, {
+        likesCount: Math.max(currentLikesCount - 1, 0) // Ensure likesCount doesn't go below 0
+      });
+    }
+
+    console.log('Like removed successfully');
+  } catch (error) {
+    console.error('Error removing like:', error);
+  }
+};
+
+// Function to get the likes count for a post
+export const getLikesCount = async (postId) => {
+  try {
+    const postRef = ref(db, `posts/${postId}`);
+    const postSnapshot = await get(postRef);
+    
+    if (postSnapshot.exists()) {
+      const postData = postSnapshot.val();
+      const likesSnapshot = await get(ref(db, `posts/${postId}/likes`));
+
+      if (likesSnapshot.exists()) {
+        // Count the number of likes
+        const likesCount = Object.keys(likesSnapshot.val()).length;
+        return likesCount;
+      } else {
+        // No likes found
+        return 0;
+      }
+    } else {
+      // Post not found
+      return 0;
+    }
+  } catch (error) {
+    console.error('Error getting likes count:', error);
+    return 0;
+  }
+};
 
 export function signInoutWithGoogle() {
   if (auth.currentUser) {

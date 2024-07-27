@@ -8,12 +8,10 @@ body.active-modal {
 /* Button styling */
 .btn-modal {
     padding: 10px 20px;
-    display: block;
-    margin: 100px auto 0;
     font-size: 18px;
+    /* Margin for spacing, not for centering */
+    margin-left: 20px;
 }
-
-/* Modal and overlay styles */
 .modal, .overlay {
     width: 100vw;
     height: 100vh;
