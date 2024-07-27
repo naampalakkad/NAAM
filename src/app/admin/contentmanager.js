@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import RenderItems from './components/rendercontent';
 import ItemModal from './components/contentmodel';
-import { VStack,  Spinner, useToast, Heading, useDisclosure, Box,SimpleGrid,Accordion, AccordionItem, AccordionButton, AccordionPanel, AccordionIcon} from '@chakra-ui/react';
+import { VStack, Spinner, useToast, Heading, useDisclosure, Box, SimpleGrid, Accordion, AccordionItem, AccordionButton, AccordionPanel, AccordionIcon } from '@chakra-ui/react';
 import { getdatafromdb, savedatatodb, deletedatafromdb } from '@/lib/firebase';
 
 const itemConfig = {
@@ -32,57 +32,45 @@ const showToast = (toast, title, description, status) => {
     });
 };
 
-const moveItem = async (item, action, setData, toast, onOpen) => {
+const moveItem = async (item, action, setData, toast) => {
     const paths = {
-        approve: [itemConfig[item.type].pending, itemConfig[item.type].approved],
-        archive: [itemConfig[item.type].approved, itemConfig[item.type].archived],
-        unarchive: [itemConfig[item.type].archived, itemConfig[item.type].approved],
-        unapprove: [itemConfig[item.type].approved, itemConfig[item.type].pending],
-        delete: [
-            `${itemConfig[item.type].pending}/${item.id}`,
-            `${itemConfig[item.type].approved}/${item.id}`,
-            `${itemConfig[item.type].archived}/${item.id}`,
-        ],
+        approve: ['pending', 'approved'],
+        archive: ['approved', 'archived'],
+        unarchive: ['archived', 'approved'],
+        unapprove: ['approved', 'pending'],
+        delete: ['pending', 'approved', 'archived'],
     };
 
+    if (action === 'delete') {
+        for (const state of paths[action]) {
+            await deletedatafromdb(`${itemConfig[item.type][state]}/${item.id}`);
+        }
+    } else {
+        const [sourceState, targetState] = paths[action];
+        await savedatatodb(`${itemConfig[item.type][targetState]}/${item.id}`, item);
+        await deletedatafromdb(`${itemConfig[item.type][sourceState]}/${item.id}`);
+    }
+
+    showToast(toast, `${action.charAt(0).toUpperCase() + action.slice(1)}d ${item.type}`, `The ${item.type.slice(0, -1)} has been ${action}d.`, "success");
+    setData(prevData => {
+        const updatedData = { ...prevData };
         if (action === 'delete') {
-            for (const path of paths[action]) {
-                await deletedatafromdb(path);
+            for (const state of paths[action]) {
+                updatedData[item.type][state] = updatedData[item.type][state].filter(i => i.id !== item.id);
             }
         } else {
-            const [sourcePath, targetPath] = paths[action];
-            await savedatatodb(`${targetPath}/${item.id}`, item);
-            await deletedatafromdb(`${sourcePath}/${item.id}`);
-        }
-
-        setData(prevData => {
-            const newData = { ...prevData };
-
-            // Ensure source and target states are initialized
-            const sourceState = paths[action][0].split('/').pop();
-            const targetState = paths[action][1].split('/').pop();
-
-            newData[item.type][sourceState] = newData[item.type][sourceState] || [];
-            newData[item.type][targetState] = newData[item.type][targetState] || [];
-
-            if (action === 'delete') {
-                ['pending', 'approved', 'archived'].forEach(state => {
-                    newData[item.type][state] = newData[item.type][state].filter(i => i.id !== item.id);
-                });
-            } else {
-                newData[item.type] = {
-                    ...newData[item.type],
-                    [sourceState]: newData[item.type][sourceState].filter(i => i.id !== item.id),
-                    [targetState]: [...newData[item.type][targetState], { ...item, state: targetState }]
-                };
+            const [sourceState, targetState] = paths[action];
+            if (!updatedData[item.type][targetState].some(i => i.id === item.id)) {
+                updatedData[item.type][sourceState] = updatedData[item.type][sourceState].filter(i => i.id !== item.id);
+                updatedData[item.type][targetState] = [...updatedData[item.type][targetState], item];
             }
-            return newData;
-        });
-
-        showToast(toast, `${action.charAt(0).toUpperCase() + action.slice(1)}d ${item.type}`, `The ${item.type.slice(0, -1)} has been ${action}d.`, "success");
+        }
+        return updatedData;
+    });
 };
 
-const AdminPanel = () => {
+
+const contentmanager = () => {
     const [data, setData] = useState({
         posts: { pending: [], approved: [], archived: [] },
         testimonials: { pending: [], approved: [], archived: [] },
@@ -123,49 +111,48 @@ const AdminPanel = () => {
         if (action === 'readMore') {
             setSelectedItem(item);
             onOpen();
-            
+        } else {
+            moveItem(item, action, setData, toast);
         }
-        else {
-        moveItem(item, action, setData, toast, onOpen);
-    }};
+    };
 
     const renderSections = () => {
         return (
-          <Accordion allowMultiple width={"100vw"}>
-            {Object.keys(itemConfig).map((itemType) => (
-              <AccordionItem key={itemType}>
-                <h2>
-                  <AccordionButton>
-                    <Box flex="1" textAlign="left">
-                      <Heading size="lg" color="teal.500">
-                        {itemType.charAt(0).toUpperCase() + itemType.slice(1)}
-                      </Heading>
-                    </Box>
-                    <AccordionIcon />
-                  </AccordionButton>
-                </h2>
-                <AccordionPanel pb={4}>
-                  <SimpleGrid columns={{ base: 1, md: 3 }} spacing={8}>
-                    {['pending', 'approved', 'archived'].map((state) => (
-                      <VStack key={state} align="start" spacing={4}>
-                        <Heading size="md">
-                          {`${state.charAt(0).toUpperCase() + state.slice(1)} ${itemType.charAt(0).toUpperCase() + itemType.slice(1)}`}
-                        </Heading>
-                        <RenderItems
-                          items={data[itemType][state]}
-                          handleMove={handleMove}
-                          itemState={state}
-                          itemType={itemType}
-                        />
-                      </VStack>
-                    ))}
-                  </SimpleGrid>
-                </AccordionPanel>
-              </AccordionItem>
-            ))}
-          </Accordion>
+            <Accordion allowMultiple width={"100vw"}>
+                {Object.keys(itemConfig).map((itemType) => (
+                    <AccordionItem key={itemType}>
+                        <h2>
+                            <AccordionButton>
+                                <Box flex="1" textAlign="left">
+                                    <Heading size="md" color="teal.500">
+                                        {itemType.charAt(0).toUpperCase() + itemType.slice(1)}
+                                    </Heading>
+                                </Box>
+                                <AccordionIcon />
+                            </AccordionButton>
+                        </h2>
+                        <AccordionPanel pb={4}>
+                            <SimpleGrid columns={{ base: 1, md: 3 }} spacing={5}>
+                                {['pending', 'approved', 'archived'].map((state) => (
+                                    <VStack key={state} align="start" spacing={4}>
+                                        <Heading size="md">
+                                            {`${state.charAt(0).toUpperCase() + state.slice(1)} ${itemType.charAt(0).toUpperCase() + itemType.slice(1)}`}
+                                        </Heading>
+                                        <RenderItems
+                                            items={data[itemType][state]}
+                                            handleMove={handleMove}
+                                            itemState={state}
+                                            itemType={itemType}
+                                        />
+                                    </VStack>
+                                ))}
+                            </SimpleGrid>
+                        </AccordionPanel>
+                    </AccordionItem>
+                ))}
+            </Accordion>
         );
-      };
+    };
 
     if (loading) {
         return (
@@ -185,4 +172,4 @@ const AdminPanel = () => {
     );
 };
 
-export default AdminPanel;
+export default contentmanager;

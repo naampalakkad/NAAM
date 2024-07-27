@@ -13,9 +13,6 @@ const MotionBox = motion(Box);
 const MotionImage = motion(Image);
 const MotionIconButton = motion(IconButton);
 
-const ImageManagerHeading = ({ title }) => {
-  return <Heading size="md">{title}</Heading>;
-};
 
 const ImageGrid = ({ images, loading, handleImageDelete, openImageModal, handleImageUpload, handleImageSelect, selectedImages }) => {
   return (
@@ -274,7 +271,6 @@ const ImageManager = ({ title, location }) => {
 
   return (
     <VStack align="start" spacing={5}>
-      <ImageManagerHeading title={title} />
       {uploadProgress > 0 && <Progress value={uploadProgress} size="xs" colorScheme="teal" width="100%" />}
       <ImageGrid
         images={images}

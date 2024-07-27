@@ -130,7 +130,6 @@ export async function deletedatafromdb  (path) {
   const reference = ref(db, path);
   try {
       await remove(reference);
-      console.log(`Data removed from path: ${path}`);
   } catch (error) {
       console.error(`Error removing data from path: ${path}`, error);
       throw error;
@@ -240,8 +239,6 @@ export async function uploadImageToStorage(userId, imageFile) {
   const folderPath = `profile_images/${userId}`;
   const folderRef = sref(storage, folderPath);
   const files = await listAll(folderRef);
-
-  // Delete existing files in the folder
   const deletePromises = files.items.map((fileRef) => deleteObject(fileRef));
   await Promise.all(deletePromises);
 
@@ -255,7 +252,6 @@ export async function uploadImageToStorage(userId, imageFile) {
         mimeType: 'image/webp',
       });
 
-      // Create a new file with the name 'profilepic.webp'
       const renamedFile = new File([compressedImage], 'profilepic.webp', {
         type: 'image/webp'
       });
@@ -310,7 +306,6 @@ export async function uploadadminImageToStorage(location, imageFile) {
       mimeType: 'image/webp',
     });
   console.log(compressedImage)
-    // Create a new file with the name 'compressedImage.webp'
     const originalFilename = imageFile.name.split('.').slice(0, -1).join('.');
     console.log("image named ",originalFilename," compressed")
     const renamedFile = new File([compressedImage], `${originalFilename}.webp`, {

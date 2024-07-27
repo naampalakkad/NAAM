@@ -318,7 +318,6 @@ const GalleryManager = () => {
 
     return (
         <VStack align="start" spacing={5}>
-            <Heading mb={5}>Photo Gallery</Heading>
             {isLoading && <Spinner />}
             <SimpleGrid minChildWidth="250px"
                 spacing={5}
