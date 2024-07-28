@@ -1,9 +1,9 @@
 'use client';
 import React, { useState, useEffect } from "react";
-import { Box, Heading, Button, IconButton, useToast } from "@chakra-ui/react";
+import { Box, Heading, Button, IconButton, useToast, Textarea, VStack, useColorMode } from "@chakra-ui/react";
 import { FaThumbsUp, FaRegThumbsUp } from 'react-icons/fa';
-import { getDatabase, ref, get } from 'firebase/database'; 
-import { update,remove } from 'firebase/database';
+import { getDatabase, ref, get, set, push, onValue } from 'firebase/database'; 
+import { update, remove } from 'firebase/database';
 import { getAuth } from 'firebase/auth';
 import { addLike, removeLike, getLikesCount } from '@/lib/firebase'; 
 import "./Modal.css"; 
@@ -12,6 +12,7 @@ const auth = getAuth();
 const db = getDatabase(); 
 
 export const BlogPost = ({ post }) => {
+    const { colorMode } = useColorMode();
     const postId = post[0]; 
     const postdata = post[1];
     const postDate = new Date(postdata.time);
@@ -20,6 +21,8 @@ export const BlogPost = ({ post }) => {
     const [modal, setModal] = useState(false);
     const [likes, setLikes] = useState(0);
     const [liked, setLiked] = useState(false);
+    const [comments, setComments] = useState([]);
+    const [newComment, setNewComment] = useState("");
     const toast = useToast();
 
     useEffect(() => {
@@ -39,6 +42,15 @@ export const BlogPost = ({ post }) => {
             }
         };
         fetchLikes();
+
+        const fetchComments = () => {
+            const commentsRef = ref(db, `posts/${postId}/comments`);
+            onValue(commentsRef, (snapshot) => {
+                const commentsData = snapshot.val() ? Object.values(snapshot.val()) : [];
+                setComments(commentsData);
+            });
+        };
+        fetchComments();
     }, [postId]);
 
     const handleLike = async () => {
@@ -78,6 +90,37 @@ export const BlogPost = ({ post }) => {
             console.error('Error handling like:', error);
         }
     };
+
+    const handleCommentSubmit = async () => {
+        try {
+            if (!auth.currentUser) {
+                toast({
+                    title: "You need to sign in to comment",
+                    status: 'warning',
+                    duration: 3000,
+                    isClosable: true,
+                });
+                return;
+            }
+            const user = auth.currentUser;
+            const newCommentRef = push(ref(db, `posts/${postId}/comments`));
+            await set(newCommentRef, {
+                username: user.displayName || 'Anonymous',
+                comment: newComment,
+                time: Date.now()
+            });
+            setNewComment("");
+            toast({
+                title: "Comment added",
+                status: 'success',
+                duration: 3000,
+                isClosable: true,
+            });
+        } catch (error) {
+            console.error('Error adding comment:', error);
+        }
+    };
+
     const toggleModal = () => {
         setModal(!modal);
     };
@@ -154,6 +197,34 @@ export const BlogPost = ({ post }) => {
                             </div>
                             <ReactQuill value={postdata.content} readOnly={true} modules={{ toolbar: false }} />
                         </div>
+                        <Box mt="4">
+                            <Heading size="md" mb="2" color="black">Comments</Heading>
+                            <Box mt="4" display="flex" alignItems="center">
+                                <Textarea
+                                    placeholder="Add a comment..."
+                                    value={newComment}
+                                    onChange={(e) => setNewComment(e.target.value)}
+                                    mb="2"
+                                    color="black"
+                                    className="comment-textarea"
+                                    borderColor={colorMode === 'dark' ? 'white' : 'black'} 
+                                    _placeholder={{ color: 'black' }} 
+                                />
+                                <Button onClick={handleCommentSubmit} colorScheme="teal" ml="2" className="submit-button">Submit</Button>
+                            </Box>
+                            <VStack align="stretch" spacing="4">
+                                {comments.map((comment, index) => (
+                                <Box key={index} p="4" className="comment-box" borderRadius="md">
+                                <div className="comment-content">
+                                    <span className="comment-username">{comment.username}</span>
+                                    <span className="comment-date">{new Date(comment.time).toLocaleString()}</span>
+                                </div>
+                                <p className="comment-text">{comment.comment}</p>
+                                </Box>
+                                ))}
+                            </VStack>
+
+                        </Box>
                     </div>
                 </div>
             )}
