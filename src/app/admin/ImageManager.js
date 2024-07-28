@@ -23,6 +23,8 @@ const ImageGrid = ({ images, loading, handleImageDelete, openImageModal, handleI
   justifyContent="center"
   width="100%"
   p={5} 
+  maxHeight="50vh" 
+  overflowY="auto"
 >
   {loading ? (
     Array(6).fill('').map((_, index) => (

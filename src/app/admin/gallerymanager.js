@@ -117,6 +117,8 @@ const PhotoTile = ({
             alignItems="center"
             justifyContent="space-between"
             minHeight="250px"
+            maxHeight="50vh"
+            overflowY="auto"
         >
             {isEditing === index ? (
                 <VStack spacing={3} width="full">

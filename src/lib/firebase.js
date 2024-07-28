@@ -1,7 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, signInWithPopup,onAuthStateChanged } from "firebase/auth";
 import { getStorage, ref as sref, uploadBytes, getDownloadURL, listAll, deleteObject } from "firebase/storage";
-import { getDatabase, set, get, ref,remove } from "firebase/database"
+import { getDatabase, set, get, ref,remove ,child} from "firebase/database"
 let ImageCompressor = null
 if (typeof window !== "undefined") {
   import('image-compressor.js')
@@ -218,6 +218,19 @@ export async function getdatafromStorage(location) {
   }
   return resurls;
 }
+
+// export const checkBatchRep = async (uid) => {
+//   const db = getDatabase();
+//   const dbRef = ref(db);
+  
+//   try {
+//     const snapshot = await get(child(dbRef, `userroles/batchreps/${uid}`));
+//     return snapshot.exists();
+//   } catch (error) {
+//     console.error("Error checking batch rep status:", error);
+//     return false;
+//   }
+// };
 
 export async function getuserdetailfromdb(uid) {
   const userRef = ref(db, "users/" + uid);

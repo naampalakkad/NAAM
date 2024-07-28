@@ -96,7 +96,7 @@ const RenderItems = ({ items, handleMove, itemState, itemType }) => {
     };
 
     return (
-        <Box width={"100%"}>
+        <Box width={"100%"} maxHeight="50vh" overflowY="auto">
             {items.map((item) => (
                 <Card key={item.id} p={4} shadow="md" borderWidth="1px" borderRadius="md" mb={4}>
                     {renderContent(item)}
