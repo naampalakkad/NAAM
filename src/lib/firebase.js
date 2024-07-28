@@ -1,7 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, signInWithPopup,onAuthStateChanged } from "firebase/auth";
 import { getStorage, ref as sref, uploadBytes, getDownloadURL, listAll, deleteObject } from "firebase/storage";
-import { getDatabase, set, get, ref, update, remove, child } from "firebase/database"; 
+import { getDatabase, set, get, ref, update, remove} from "firebase/database"; 
 let ImageCompressor = null
 if (typeof window !== "undefined") {
   import('image-compressor.js')
@@ -50,8 +50,6 @@ export const addLike = async (postId, userId) => {
     console.error('Error adding like:', error);
   }
 };
-
-// Function to remove a like
 export const removeLike = async (postId, userId) => {
   try {
     const postRef = ref(db, `posts/${postId}`);
@@ -75,8 +73,6 @@ export const removeLike = async (postId, userId) => {
     console.error('Error removing like:', error);
   }
 };
-
-// Function to get the likes count for a post
 export const getLikesCount = async (postId) => {
   try {
     const postRef = ref(db, `posts/${postId}`);
@@ -103,7 +99,6 @@ export const getLikesCount = async (postId) => {
     return 0;
   }
 };
-
 export function signInoutWithGoogle() {
   if (auth.currentUser) {
     auth.signOut();
@@ -122,7 +117,6 @@ export function signInoutWithGoogle() {
     });
   }
 }
-
 export const checkIfUserSignedIn = () => {
   return new Promise((resolve, reject) => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -135,8 +129,6 @@ export const checkIfUserSignedIn = () => {
     }, reject); 
   });
 };
-
-
 export async function checkuserrole(role) {
   return new Promise((resolve, reject) => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
@@ -166,7 +158,6 @@ export async function checkuserrole(role) {
     });
   });
 }
-
 export function savedatatodb(location, data) {
   if (auth.currentUser) {
     let dataRef = ref(db, location);
@@ -191,7 +182,6 @@ export const saveEmails = () => {
     savedatatodb('userroles/blogger', emailData);
   }
 };
-
 export function saveposttodb(data) {
   if (auth.currentUser) {
     let dataRef = ref(db, "posts/" + data.time);
@@ -201,7 +191,6 @@ export function saveposttodb(data) {
       });
   }
 }
-
 export async function deletedatafromdb  (path) {
   const db = getDatabase();
   const reference = ref(db, path);
@@ -212,7 +201,6 @@ export async function deletedatafromdb  (path) {
       throw error;
   }
 };
-
 export function savetesttodb(data) {
   if (auth.currentUser) {
     let dataRef = ref(db, "testimonials/" + data.time);
@@ -222,7 +210,6 @@ export function savetesttodb(data) {
       });
   }
 }
-
 export function eventSave(data) {
   if (auth.currentUser) {
     data.userId = auth.currentUser.uid;
@@ -295,19 +282,6 @@ export async function getdatafromStorage(location) {
   }
   return resurls;
 }
-
-// export const checkBatchRep = async (uid) => {
-//   const db = getDatabase();
-//   const dbRef = ref(db);
-  
-//   try {
-//     const snapshot = await get(child(dbRef, `userroles/batchreps/${uid}`));
-//     return snapshot.exists();
-//   } catch (error) {
-//     console.error("Error checking batch rep status:", error);
-//     return false;
-//   }
-// };
 
 export async function getuserdetailfromdb(uid) {
   const userRef = ref(db, "users/" + uid);

@@ -16,7 +16,7 @@ const itemConfig = {
         archived: 'content/archivedtestimonials',
     },
     events: {
-        pending: 'events',
+        pending: 'content/pendingevents',
         approved: 'content/approvedevents',
         archived: 'content/archivedevents',
     },

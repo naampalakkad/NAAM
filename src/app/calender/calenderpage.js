@@ -5,7 +5,7 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { Box, Flex, Button, Spinner, useMediaQuery, Card, Text } from "@chakra-ui/react";
-import { fetchEventsFromDB, auth, checkuserrole } from "@/lib/firebase";
+import { fetchEventsFromDB, getdatafromdb, auth, checkuserrole } from "@/lib/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import EventList from './eventlist';
 import AddEventDrawer from './addevent';
@@ -28,12 +28,19 @@ export default function Calendar() {
   useEffect(() => {
     const loadEventsFromFirebase = async () => {
       try {
-        const eventsData = await fetchEventsFromDB();
-        setEvents(eventsData);
+        const eventsData = await getdatafromdb('content/approvedevents');
+        const formattedEventsData = eventsData
+          ? Object.keys(eventsData).map(key => ({
+              ...eventsData[key],
+              id: key
+            }))
+          : [];
+        setEvents(formattedEventsData);
       } catch (error) {
         console.error("Error loading events from Firebase:", error);
       }
     };
+    
 
     const unsubscribeAuth = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
@@ -143,9 +150,9 @@ export default function Calendar() {
         <Box className='sidebar' flex={{ base: "1", md: "1" }} pl={{ base: 0, md: 4 }}>
           {isAdmin && <Flex justifyContent="center" alignItems="center"> <Button
   m={4}
-  colorScheme='green'  // Apply Chakra UI green color scheme
+  colorScheme='green'  
   onClick={handleAddEvent}
-  className='addbutton' // Custom class for additional styling
+  className='addbutton'
 >
   Add Event
 </Button></Flex>}
