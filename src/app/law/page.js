@@ -7,7 +7,7 @@ const MyPage = () => {
     return (
         
         <div className="page">
-            <h1>BYELAW</h1>
+            <h1>BYLAWS</h1>
             <div className="pdf-viewer">
             <PDFViewer pdfUrl={pdfUrl} />
             </div>

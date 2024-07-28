@@ -198,7 +198,9 @@ function Page() {
             type: formData.type,
             time: new Date().getTime(),
             authorName: auth.currentUser.displayName,
+            likes: {} 
           };
+          console.log('Post data to be saved:', postdata);
 
           // Save post data to database
           saveposttodb(postdata);
