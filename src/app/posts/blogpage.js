@@ -5,15 +5,14 @@ import { FaThumbsUp, FaRegThumbsUp } from 'react-icons/fa';
 import { getDatabase, ref, get } from 'firebase/database'; 
 import { update,remove } from 'firebase/database';
 import { getAuth } from 'firebase/auth';
-import { addLike, removeLike, getLikesCount } from '@/lib/firebase'; // Adjust the path accordingly
-import "./Modal.css"; // Import your custom CSS file here
+import { addLike, removeLike, getLikesCount } from '@/lib/firebase'; 
+import "./Modal.css"; 
 
-// Initialize Firebase
-const auth = getAuth(); // Initialize auth
+const auth = getAuth(); 
 const db = getDatabase(); 
 
 export const BlogPost = ({ post }) => {
-    const postId = post[0]; // Assuming the post ID is the first element
+    const postId = post[0]; 
     const postdata = post[1];
     const postDate = new Date(postdata.time);
     const formattedDate = postDate.toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' });
@@ -24,29 +23,37 @@ export const BlogPost = ({ post }) => {
     const toast = useToast();
 
     useEffect(() => {
-        // Fetch like status and count when the component mounts
         const fetchLikes = async () => {
             try {
-                // Replace with actual function to check if the user has liked the post
-                const currentUserId = auth.currentUser.uid;
-                const hasLiked = (await get(ref(db, `posts/${postId}/likes/${currentUserId}`))).exists();
-                setLiked(hasLiked);
-
+                const currentUserId = auth.currentUser ? auth.currentUser.uid : null;
+        
+                if (currentUserId) {
+                    const hasLiked = (await get(ref(db, `posts/${postId}/likes/${currentUserId}`))).exists();
+                    setLiked(hasLiked);
+                }
+        
                 const likeCount = await getLikesCount(postId);
                 setLikes(likeCount);
             } catch (error) {
                 console.error('Error fetching like data:', error);
             }
         };
-
         fetchLikes();
     }, [postId]);
 
     const handleLike = async () => {
         try {
+            if (!auth.currentUser) {
+                toast({
+                    title: "You need to sign in to like posts",
+                    status: 'warning',
+                    duration: 3000,
+                    isClosable: true,
+                });
+                return;
+            }
             const userId = auth.currentUser.uid;
             if (liked) {
-                // Remove like
                 await removeLike(postId, userId);
                 setLiked(false);
                 setLikes(prevLikes => prevLikes - 1);
@@ -57,7 +64,6 @@ export const BlogPost = ({ post }) => {
                     isClosable: true,
                 });
             } else {
-                // Add like
                 await addLike(postId, userId);
                 setLiked(true);
                 setLikes(prevLikes => prevLikes + 1);
@@ -72,7 +78,6 @@ export const BlogPost = ({ post }) => {
             console.error('Error handling like:', error);
         }
     };
-
     const toggleModal = () => {
         setModal(!modal);
     };
@@ -87,7 +92,6 @@ export const BlogPost = ({ post }) => {
         var ReactQuill = require('react-quill');
         require('react-quill/dist/quill.snow.css');
     }
-
     return (
         <Box
             mb={['20px', '0']}

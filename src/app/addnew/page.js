@@ -82,7 +82,6 @@ function Page() {
       matchVisual: false,
     },
   };
-   // Thumbnail handle
   const [isfile, setFile] = useState(null); 
   const onChangeHandler = (e) => {
     setFormData((prevFormData) => ({
@@ -113,8 +112,6 @@ function Page() {
   const handleSubmit = async (event) => {
     try {
       event.preventDefault();
-
-      // Validate form inputs
       if (!formData.type) {
         toast({
           title: "Type of post",
@@ -147,8 +144,6 @@ function Page() {
         });
         return;
       }
-
-      // Validate quill content
       const quillContent = quillRef.current?.getEditor().getContents();
       if (value.trim() === '') {
         toast({
@@ -160,8 +155,6 @@ function Page() {
         });
         return;
       }
-
-      // Compress image before uploading
       let file = isfile;
       const compressor = new ImageCompressor();
       const compressedImage = await compressor.compress(file, {
@@ -170,14 +163,10 @@ function Page() {
         quality: 0.8,
         mimeType: 'image/webp',
       });
-
-      // Upload compressed image to storage
       const storage = getStorage();
       var storagePath = 'thumbnail/' + file.name;
       const storageRef = ref(storage, storagePath);
       const uploadTask = uploadBytesResumable(storageRef, compressedImage);
-
-      // Handle upload progress
       uploadTask.on('state_changed', (snapshot) => {
         const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         console.log('Upload is ' + progress + '% done');
@@ -186,11 +175,8 @@ function Page() {
         console.log(error);
       },
       () => {
-        // Once upload is complete, get download URL
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           console.log('File available at', downloadURL);
-
-          // Prepare post data
           let postdata = {
             title: formData.title,
             thumbnail: downloadURL,
@@ -201,11 +187,7 @@ function Page() {
             likes: {} 
           };
           console.log('Post data to be saved:', postdata);
-
-          // Save post data to database
           saveposttodb(postdata);
-
-          // Show success toast
           toast({
             title: "Success",
             description: "Form submitted.",
@@ -213,8 +195,6 @@ function Page() {
             duration: 3000,
             isClosable: true,
           });
-
-          // Reset form fields and navigate to posts page
           resetForm();
           router.push("/posts");
         });
@@ -224,13 +204,9 @@ function Page() {
       throw error;
     }
   };
-
-  // Handle additional actions for testimonials
   const handleTestimonialExtraAction = async () => {
     try {
       const testimonialContent = value.trim();
-
-      // Validate testimonial content
       if (testimonialContent.split(/\s+/).length > 70) {
         toast({
           title: "Limit exceeded",
@@ -252,11 +228,7 @@ function Page() {
         });
         return;
       }
-
-      // Save testimonial to database
       await saveTestimonialToDb(testimonialContent, toast);
-
-      // Reset form fields and navigate to home page
       resetForm();
       router.push("/");
 
