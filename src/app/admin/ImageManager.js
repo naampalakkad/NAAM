@@ -5,7 +5,7 @@ import {
   Skeleton, useToast, Center, Modal, ModalOverlay, ModalContent,
   ModalCloseButton, ModalBody, useDisclosure, Progress, Checkbox, Button, Text, Flex
 } from '@chakra-ui/react';
-import { getdatafromStorage, uploadadminImageToStorage, deleteImageFromStorage } from '@/lib/firebase';
+import { getdatafromStorage, uploadImgToStorage, deleteImageFromStorage } from '@/lib/firebase';
 import { DeleteIcon, AddIcon } from '@chakra-ui/icons';
 import { motion } from 'framer-motion';
 
@@ -188,7 +188,7 @@ const ImageManager = ({ title, location }) => {
     if (file) {
       setLoading(true);
       try {
-        await uploadadminImageToStorage(location, file, (progress) => setUploadProgress(progress));
+        await  uploadImgToStorage(location, file, (progress) => setUploadProgress(progress));
         await fetchImages();
         toast({
           title: "Image uploaded.",

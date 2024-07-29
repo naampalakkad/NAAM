@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { savedatatodb, uploadImageToStorage,getdatafromdb } from "@/lib/firebase";
+import { savedatatodb, updateprofilepic,getdatafromdb } from "@/lib/firebase";
 import { Flex, useToast } from "@chakra-ui/react";
 import ProfileSection from './profilesection';
 import DetailsSection from './detailsection';
@@ -88,7 +88,7 @@ const SignedInBox = ({ user }) => {
     const file = event.target.files[0];
     if (file) {
       try {
-        const newImageUrl = await uploadImageToStorage(user.uid, file);
+        const newImageUrl = await updateprofilepic(user.uid, file);
         setProfileImage(newImageUrl);
         setUserdata((prevUserdata) => ({
           ...prevUserdata,

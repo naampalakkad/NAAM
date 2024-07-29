@@ -58,50 +58,33 @@ export const checkIfUserSignedIn = () => {
   });
 };
 export async function checkuserrole(role) {
-  return new Promise((resolve, reject) => {
-    const unsubscribe = auth.onAuthStateChanged(async (user) => {
+  return new Promise((resolve) => {
+    auth.onAuthStateChanged(async (user) => {
       if (user) {
         const userEmail = user.email.replace('.', '_');
-        const adminRef = ref(db, 'userroles/' + role);
+        const roleLocation = `userroles/${role}`;
 
         try {
-          const snapshot = await get(adminRef);
-
-          if (snapshot.exists()) {
-            const admins = snapshot.val();
-            resolve(admins[userEmail] ? true : false);
-          } else {
-            console.log("No data available");
-            resolve(false);
-          }
+          const data = await getdatafromdb(roleLocation);
+          resolve(data ? Boolean(data[userEmail]) : false);
         } catch (error) {
           console.error("Error getting document: ", error);
-          reject(false);
+          resolve(false);
         }
       } else {
         console.log("No user signed in");
         resolve(false);
       }
-      unsubscribe(); // Clean up the listener
     });
   });
 }
+
 export function savedatatodb(location, data) {
   if (auth.currentUser) {
     let dataRef = ref(db, location);
     set(dataRef, data)
       .catch((error) => {
         console.error("Error writing document: ", error);
-      });
-  }
-}
-
-export function saveposttodb(data) {
-  if (auth.currentUser) {
-    let dataRef = ref(db, "posts/" + data.time);
-    set(dataRef, data)
-      .catch((error) => {
-        console.error("Error writing post: ", error);
       });
   }
 }
@@ -115,7 +98,6 @@ export async function deletedatafromdb  (path) {
       throw error;
   }
 };
-
 export async function getdatafromdb(location) {
   const userRef = ref(db, location);
   return get(userRef)
@@ -142,58 +124,46 @@ export async function getdatafromStorage(location) {
   }
   return resurls;
 }
-
-export async function getuserdetailfromdb(uid) {
-  const userRef = ref(db, "users/" + uid);
-  return get(userRef)
-    .then((snapshot) => {
-      if (snapshot.exists()) {
-        return snapshot.val();
-      } else {
-        console.log("No data available");
-        return null;
-      }
-    })
-    .catch((error) => {
-      console.error("Error getting document: ", error);
-      throw error;
-    });
+async function compressImage(imageFile) {
+  const compressor = new ImageCompressor();
+  const compressedImage = await compressor.compress(imageFile, {
+    maxWidth: 720,
+    maxHeight: 540,
+    quality: 0.8,
+    mimeType: 'image/webp',
+  });
+  return new File([compressedImage], imageFile.name, {
+    type: 'image/webp'
+  });
 }
 
-export async function uploadImageToStorage(userId, imageFile) {
+export async function uploadImgToStorage(location, imageFile) {
+  try {
+    const renamedFile = await compressImage(imageFile);
+    const storageRef = sref(storage, `${location}/${renamedFile.name}`);
+    await uploadBytes(storageRef, renamedFile);
+    const imageUrl = await getDownloadURL(storageRef);
+    return imageUrl;
+  } catch (error) {
+    console.error("Error uploading image:", error);
+    throw error;
+  }
+}
+
+export async function updateprofilepic(userId, imageFile) {
   const folderPath = `profile_images/${userId}`;
   const folderRef = sref(storage, folderPath);
   const files = await listAll(folderRef);
   const deletePromises = files.items.map((fileRef) => deleteObject(fileRef));
   await Promise.all(deletePromises);
-
-  if (typeof window !== "undefined") {
-    try {
-      const compressor = new ImageCompressor();
-      const compressedImage = await compressor.compress(imageFile, {
-        maxWidth: 720,
-        maxHeight: 540,
-        quality: 0.8,
-        mimeType: 'image/webp',
-      });
-
-      const renamedFile = new File([compressedImage], 'profilepic.webp', {
-        type: 'image/webp'
-      });
-
-      const storageRef = sref(storage, `profile_images/${userId}/profilepic.webp`);
-      await uploadBytes(storageRef, renamedFile);
-      const imageUrl = await getDownloadURL(storageRef);
+  const imageBlob = imageFile.slice(0, imageFile.size, imageFile.type);
+       const newImageFile = new File([imageBlob], 'profilepic.webp', { type: imageFile.type });
+       const imageUrl = await uploadImgToStorage(folderPath, newImageFile);
       return imageUrl;
-    } catch (error) {
-      console.error("Error uploading image:", error);
-      throw error;
-    }
   }
-}
+
 export async function getImageUrlFromStorage(userId) {
   const storageRef = sref(storage, `profile_images/${userId}`);
-
   try {
     const imageUrl = await getDownloadURL(storageRef);
     return imageUrl;
@@ -206,7 +176,6 @@ export async function getImageUrlFromStorage(userId) {
     }
   }
 }
-
 export async function deleteImageFromStorage(location, imageUrl) {
   const storageRef = sref(storage, location);
   const res = await listAll(storageRef);
@@ -220,34 +189,31 @@ export async function deleteImageFromStorage(location, imageUrl) {
   }
 }
 
-export async function uploadadminImageToStorage(location, imageFile) {
-  console.log("saving image at",location)
-  try {
-    const compressor = new ImageCompressor();
-    const compressedImage = await compressor.compress(imageFile, {
-      maxWidth: 720,
-      maxHeight: 540,
-      quality: 0.8,
-      mimeType: 'image/webp',
-    });
-  console.log(compressedImage)
-    const originalFilename = imageFile.name.split('.').slice(0, -1).join('.');
-    console.log("image named ",originalFilename," compressed")
-    const renamedFile = new File([compressedImage], `${originalFilename}.webp`, {
-      type: 'image/webp'
-    });
-
-    const storageRef = sref(storage, `${location}/${renamedFile.name}`);
-    await uploadBytes(storageRef, renamedFile);
-    const imageUrl = await getDownloadURL(storageRef);
-    console.log("iamge url is",imageUrl)
-    return imageUrl;
-  } catch (error) {
-    console.error("Error uploading image:", error);
-    throw error;
-  }
-}
-
+// export function saveposttodb(data) {
+//   if (auth.currentUser) {
+//     let dataRef = ref(db, "posts/" + data.time);
+//     set(dataRef, data)
+//       .catch((error) => {
+//         console.error("Error writing post: ", error);
+//       });
+//   }
+// }
+// export async function getuserdetailfromdb(uid) {
+  //   const userRef = ref(db, "users/" + uid);
+  //   return get(userRef)
+  //     .then((snapshot) => {
+  //       if (snapshot.exists()) {
+  //         return snapshot.val();
+  //       } else {
+  //         console.log("No data available");
+  //         return null;
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error getting document: ", error);
+  //       throw error;
+  //     });
+  // }
 // const emails = [
 //   'sreejithksgupta2255@gmail.com',
 //   'ssuneebvishnu@gmail.com',

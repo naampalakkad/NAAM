@@ -10,7 +10,6 @@ import {
     IconButton,
     useToast,
     Spinner,
-    Flex,
     HStack,
     SimpleGrid,
 } from '@chakra-ui/react';
@@ -26,7 +25,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
     getdatafromdb,
     savedatatodb,
-    uploadadminImageToStorage,
+    uploadImgToStorage,
     deleteImageFromStorage,
 } from '@/lib/firebase';
 const MotionBox = motion(Box);
@@ -48,7 +47,7 @@ const PhotoTile = ({
         setIsLoading(true);
         try {
             if (newImage) {
-                const imageUrl = await uploadadminImageToStorage('galleryimgs', newImage);
+                const imageUrl = await  uploadImgToStorage('galleryimgs', newImage);
                 newEntry.imageUrl = imageUrl;
             }
             const updatedPhotoTiles = [...photoTiles];
