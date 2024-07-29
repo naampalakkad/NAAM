@@ -21,7 +21,7 @@ const AdminPage = () => {
       >
         Admin Panel
       </Heading>
-      <Accordion width={"100vw"}>
+      <Accordion width={"100vw"} allowMultiple>
         <AccordionItem>
           <h2>
             <AccordionButton>
@@ -102,5 +102,4 @@ export default AdminPage;
 // facility to approve teestimonials // testimonial management => Done
 // facility to approve events // event management => Done
 // facility to add batch rep emials [aka emails with roles] aka user management =>Done
-
-// Batch rep approve users of their batch
+// Batch rep approve users of their batch => Done
