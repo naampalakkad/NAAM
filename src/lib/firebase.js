@@ -188,6 +188,68 @@ export async function deleteImageFromStorage(location, imageUrl) {
     }
   }
 }
+export const addLike = async (postId, userId) => {
+  try {
+    const postRef = ref(db, `content/approvedposts/${postId}`);
+    const likesRef = ref(db, `content/approvedposts/${postId}/likes/${userId}`);
+    await set(likesRef, true);
+    const postSnapshot = await get(postRef);
+    if (postSnapshot.exists()) {
+      const postData = postSnapshot.val();
+      const currentLikesCount = postData.likesCount || 0;
+      await update(postRef, {
+        likesCount: currentLikesCount + 1
+      });
+    }
+    console.log('Like added successfully');
+  } catch (error) {
+    console.error('Error adding like:', error);
+  }
+};
+
+export const removeLike = async (postId, userId) => {
+  try {
+    const postRef = ref(db, `content/approvedposts/${postId}`);
+    const likesRef = ref(db, `content/approvedposts/${postId}/likes/${userId}`);
+    await remove(likesRef);
+    const postSnapshot = await get(postRef);
+    if (postSnapshot.exists()) {
+      const postData = postSnapshot.val();
+      const currentLikesCount = postData.likesCount || 0;
+      await update(postRef, {
+        likesCount: Math.max(currentLikesCount - 1, 0) 
+      });
+    }
+
+    console.log('Like removed successfully');
+  } catch (error) {
+    console.error('Error removing like:', error);
+  }
+};
+export const getLikesCount = async (postId) => {
+  try {
+    const postRef = ref(db, `posts/${postId}`);
+    const postSnapshot = await get(postRef);
+    
+    if (postSnapshot.exists()) {
+      const postData = postSnapshot.val();
+      const likesSnapshot = await get(ref(db, `content/approvedposts/${postId}/likes`));
+
+      if (likesSnapshot.exists()) {
+        const likesCount = Object.keys(likesSnapshot.val()).length;
+        return likesCount;
+      } else {
+        return 0;
+      }
+    } else {
+      
+      return 0;
+    }
+  } catch (error) {
+    console.error('Error getting likes count:', error);
+    return 0;
+  }
+};
 
 // export function saveposttodb(data) {
 //   if (auth.currentUser) {

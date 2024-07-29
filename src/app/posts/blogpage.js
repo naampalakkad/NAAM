@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { Box, Heading, Button, IconButton, useToast, Textarea, VStack, useColorMode } from "@chakra-ui/react";
 import { FaThumbsUp, FaRegThumbsUp } from 'react-icons/fa';
-import { savedatatodb, getdatafromdb,auth } from '@/lib/firebase';
+import { savedatatodb, getdatafromdb,auth ,getLikesCount,removeLike,addLike} from '@/lib/firebase';
 import "./Modal.css";
 
 export const BlogPost = ({ post }) => {
@@ -224,19 +224,5 @@ export const BlogPost = ({ post }) => {
         </Box>
     );
 
-    async function addLike(postId, userId) {
-        const postLikesRef = `posts/${postId}/likes/${userId}`;
-        await savedatatodb(postLikesRef, true);
-    }
 
-    async function removeLike(postId, userId) {
-        const postLikesRef = `posts/${postId}/likes/${userId}`;
-        await savedatatodb(postLikesRef, null);
-    }
-
-    async function getLikesCount(postId) {
-        const postLikesRef = `posts/${postId}/likes`;
-        const snapshot = await getdatafromdb(postLikesRef);
-        return snapshot ? Object.keys(snapshot).length : 0;
-    }
 };
