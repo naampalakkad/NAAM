@@ -26,6 +26,7 @@ const ProfileSection = ({ user, userdata, profileImage, handleImageChange, onEdi
                     fallbackSrc="./assets/usericon.webp"
                     borderRadius="full"
                     width={"150px"}
+                    height={"150px"}
                     objectFit="cover"
                     mx="auto"
                     mb={4}

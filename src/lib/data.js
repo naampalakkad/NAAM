@@ -63,8 +63,8 @@ export const FooterMenuItems = [
 export const socialMediaUrls = [
   "https://www.linkedin.com/groups/4107176/",
   "https://www.facebook.com/groups/jnvitesalumni/",
-  "https://www.x.com",
-  "https://www.instagram.com",
+  // "https://www.x.com",
+  // "https://www.instagram.com",
   "https://www.youtube.com"
 ];
 

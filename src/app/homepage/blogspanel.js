@@ -67,10 +67,10 @@ export default function Blogspanel() {
 
   return (
     <Grid
-      templateColumns={{ base: '1fr', md: 'repeat(2, 1fr)', lg: 'repeat(3, 1fr)' }} gap={4} >
+      templateColumns={{ base: '1fr', md: 'repeat(2, 1fr)', lg: 'repeat(3, 1fr)' }} gap={4} width={"80vw"} >
       {loading
         ? Array.from({ length: 4 }).map((_, index) => (
-            <Card key={index} minBlockSize={250} variant="elevated" size="sm">
+            <Card key={index} minBlockSize={250} width={"300px"} variant="elevated" size="sm">
               <Skeleton height="250px" />
               <CardHeader>
                 <SkeletonText mt="4" noOfLines={1} spacing="4" />
@@ -93,8 +93,8 @@ export default function Blogspanel() {
               <CardHeader>{post.title}</CardHeader>
               <CardBody>{post.description}</CardBody>
               <Stack direction="row">
-                <Badge colorScheme="yellow">{post.authorName}</Badge>
-                <Badge colorScheme="blue">{post.type}</Badge>
+                <Badge m={1} p={1} colorScheme="yellow">{post.authorName}</Badge>
+                <Badge  m={1} p={1} colorScheme="blue">{post.type}</Badge>
               </Stack>
               <Button variant="solid" colorScheme="blue" m={3} onClick={() => openModal(post)}>
                 Read More
