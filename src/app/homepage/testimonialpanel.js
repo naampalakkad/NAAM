@@ -27,27 +27,27 @@ export default function TestimonialPanel() {
     }, []);
 
     return (
-        <Flex className='cardcontainer scroll'>
-        <Box width="100%" overflowX="auto" whiteSpace="nowrap" >
-            <Flex>
-                {testimonials.map((item, index) => (
-                    <Card key={index} m={2} minWidth="260px" display="inline-block">
-                        <CardHeader>
-                            <Box display="flex" alignItems="center">
-                                <Image src={item.photo} alt={item.authorName} borderRadius="full" boxSize="50px" />
-                                <VStack align="start" ml={4}>
-                                    <Text fontWeight="bold">{item.authorName}</Text>
-                                    <Text color="gray.500">{item.batch}</Text>
-                                </VStack>
-                            </Box>
-                        </CardHeader>
-                        <CardBody>
-                        <Text whiteSpace="normal">{item.content}</Text>
-                        </CardBody>
-                    </Card>
-                ))}
-            </Flex>
+        <Flex overflowX="auto" py={4}>
+        <Box minWidth="100%">
+          <Flex wrap="nowrap">
+            {testimonials.map((item, index) => (
+              <Card key={index} m={2} minWidth="260px" maxWidth="300px" flex="0 0 auto">
+                <CardHeader>
+                  <Box display="flex" alignItems="center">
+                    <Image src={item.photo} alt={item.authorName} borderRadius="full" boxSize="50px" />
+                    <VStack align="start" ml={4}>
+                      <Text fontWeight="bold">{item.authorName}</Text>
+                      <Text color="gray.500">{item.batch}</Text>
+                    </VStack>
+                  </Box>
+                </CardHeader>
+                <CardBody>
+                  <Text>{item.content}</Text>
+                </CardBody>
+              </Card>
+            ))}
+          </Flex>
         </Box>
-        </Flex>
+      </Flex>
     );
 }
