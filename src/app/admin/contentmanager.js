@@ -6,12 +6,12 @@ import { getdatafromdb, savedatatodb, deletedatafromdb } from '@/lib/firebase';
 
 const itemConfig = {
     posts: {
-        pending: 'posts',
+        pending: 'content/pendingposts',
         approved: 'content/approvedposts',
         archived: 'content/archivedposts',
     },
     testimonials: {
-        pending: 'testimonials',
+        pending: 'content/pendingtestimonials',
         approved: 'content/approvedtestimonials',
         archived: 'content/archivedtestimonials',
     },

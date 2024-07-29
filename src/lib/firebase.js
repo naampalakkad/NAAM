@@ -27,68 +27,6 @@ export const auth = getAuth(app);
 export const storage = getStorage(app);
 export const db = getDatabase(app);
 
-export const addLike = async (postId, userId) => {
-  try {
-    const postRef = ref(db, `posts/${postId}`);
-    const likesRef = ref(db, `posts/${postId}/likes/${userId}`);
-    await set(likesRef, true);
-    const postSnapshot = await get(postRef);
-    if (postSnapshot.exists()) {
-      const postData = postSnapshot.val();
-      const currentLikesCount = postData.likesCount || 0;
-      await update(postRef, {
-        likesCount: currentLikesCount + 1
-      });
-    }
-    console.log('Like added successfully');
-  } catch (error) {
-    console.error('Error adding like:', error);
-  }
-};
-
-export const removeLike = async (postId, userId) => {
-  try {
-    const postRef = ref(db, `posts/${postId}`);
-    const likesRef = ref(db, `posts/${postId}/likes/${userId}`);
-    await remove(likesRef);
-    const postSnapshot = await get(postRef);
-    if (postSnapshot.exists()) {
-      const postData = postSnapshot.val();
-      const currentLikesCount = postData.likesCount || 0;
-      await update(postRef, {
-        likesCount: Math.max(currentLikesCount - 1, 0) 
-      });
-    }
-
-    console.log('Like removed successfully');
-  } catch (error) {
-    console.error('Error removing like:', error);
-  }
-};
-export const getLikesCount = async (postId) => {
-  try {
-    const postRef = ref(db, `posts/${postId}`);
-    const postSnapshot = await get(postRef);
-    
-    if (postSnapshot.exists()) {
-      const postData = postSnapshot.val();
-      const likesSnapshot = await get(ref(db, `posts/${postId}/likes`));
-
-      if (likesSnapshot.exists()) {
-        const likesCount = Object.keys(likesSnapshot.val()).length;
-        return likesCount;
-      } else {
-        return 0;
-      }
-    } else {
-      
-      return 0;
-    }
-  } catch (error) {
-    console.error('Error getting likes count:', error);
-    return 0;
-  }
-};
 export function signInoutWithGoogle() {
   if (auth.currentUser) {
     auth.signOut();
@@ -157,21 +95,7 @@ export function savedatatodb(location, data) {
       });
   }
 }
-const emails = [
-  'sreejithksgupta2255@gmail.com',
-  'ssuneebvishnu@gmail.com',
-  'unnimayat01@gmail.com',
-  'niranjanasunilkumar2003@gmail.com'
-];
-export const saveEmails = () => {
-  if (auth.currentUser) {
-    const emailData = emails.reduce((acc, email) => {
-      acc[email.replace('.', '_')] = true;
-      return acc;
-    }, {});
-    savedatatodb('userroles/blogger', emailData);
-  }
-};
+
 export function saveposttodb(data) {
   if (auth.currentUser) {
     let dataRef = ref(db, "posts/" + data.time);
@@ -191,61 +115,7 @@ export async function deletedatafromdb  (path) {
       throw error;
   }
 };
-export function savetesttodb(data) {
-  if (auth.currentUser) {
-    let dataRef = ref(db, "testimonials/" + data.time);
-    set(dataRef, data)
-      .catch((error) => {
-        console.error("Error writing testimonial: ", error);
-      });
-  }
-}
-export function eventSave(data) {
-  if (auth.currentUser) {
-    data.userId = auth.currentUser.uid;
-    data.userName = auth.currentUser.displayName;
-    let dataRef = ref(db, "events/" + data.timestamp);
-    set(dataRef, data)
-      .catch((error) => {
-        console.error("Error writing event: ", error);
-      });
-  }
-}
-export async function fetchEventsFromDB() {
-  const eventsRef = ref(db, 'events');
-  try {
-    const snapshot = await get(eventsRef);
-    if (snapshot.exists()) {
-      const eventData = snapshot.val();
-      return Object.keys(eventData).map(key => ({
-        ...eventData[key],
-        id: key
-      }));
-    } else {
-      console.log("No events available");
-      return [];
-    }
-  } catch (error) {
-    console.error("Error fetching events:", error);
-    throw error;
-  }
-}
-export async function getpostsfromdb() {
-  const userRef = ref(db, "posts");
-  return get(userRef)
-    .then((snapshot) => {
-      if (snapshot.exists()) {
-        return snapshot.val();
-      } else {
-        console.log("No data available");
-        return null;
-      }
-    })
-    .catch((error) => {
-      console.error("Error getting document: ", error);
-      throw error;
-    });
-}
+
 export async function getdatafromdb(location) {
   const userRef = ref(db, location);
   return get(userRef)
@@ -289,6 +159,7 @@ export async function getuserdetailfromdb(uid) {
       throw error;
     });
 }
+
 export async function uploadImageToStorage(userId, imageFile) {
   const folderPath = `profile_images/${userId}`;
   const folderRef = sref(storage, folderPath);
@@ -376,3 +247,136 @@ export async function uploadadminImageToStorage(location, imageFile) {
     throw error;
   }
 }
+
+// const emails = [
+//   'sreejithksgupta2255@gmail.com',
+//   'ssuneebvishnu@gmail.com',
+//   'unnimayat01@gmail.com',
+//   'niranjanasunilkumar2003@gmail.com'
+// ];
+// export const saveEmails = () => {
+//   if (auth.currentUser) {
+//     const emailData = emails.reduce((acc, email) => {
+//       acc[email.replace('.', '_')] = true;
+//       return acc;
+//     }, {});
+//     savedatatodb('userroles/blogger', emailData);
+//   }
+// };
+// export const addLike = async (postId, userId) => {
+//   try {
+//     const postRef = ref(db, `posts/${postId}`);
+//     const likesRef = ref(db, `posts/${postId}/likes/${userId}`);
+//     await set(likesRef, true);
+//     const postSnapshot = await get(postRef);
+//     if (postSnapshot.exists()) {
+//       const postData = postSnapshot.val();
+//       const currentLikesCount = postData.likesCount || 0;
+//       await update(postRef, {
+//         likesCount: currentLikesCount + 1
+//       });
+//     }
+//     console.log('Like added successfully');
+//   } catch (error) {
+//     console.error('Error adding like:', error);
+//   }
+// };
+
+// export const removeLike = async (postId, userId) => {
+//   try {
+//     const postRef = ref(db, `posts/${postId}`);
+//     const likesRef = ref(db, `posts/${postId}/likes/${userId}`);
+//     await remove(likesRef);
+//     const postSnapshot = await get(postRef);
+//     if (postSnapshot.exists()) {
+//       const postData = postSnapshot.val();
+//       const currentLikesCount = postData.likesCount || 0;
+//       await update(postRef, {
+//         likesCount: Math.max(currentLikesCount - 1, 0) 
+//       });
+//     }
+
+//     console.log('Like removed successfully');
+//   } catch (error) {
+//     console.error('Error removing like:', error);
+//   }
+// };
+// export const getLikesCount = async (postId) => {
+//   try {
+//     const postRef = ref(db, `posts/${postId}`);
+//     const postSnapshot = await get(postRef);
+    
+//     if (postSnapshot.exists()) {
+//       const postData = postSnapshot.val();
+//       const likesSnapshot = await get(ref(db, `posts/${postId}/likes`));
+
+//       if (likesSnapshot.exists()) {
+//         const likesCount = Object.keys(likesSnapshot.val()).length;
+//         return likesCount;
+//       } else {
+//         return 0;
+//       }
+//     } else {
+      
+//       return 0;
+//     }
+//   } catch (error) {
+//     console.error('Error getting likes count:', error);
+//     return 0;
+//   }
+// };
+// export function savetesttodb(data) {
+//   if (auth.currentUser) {
+//     let dataRef = ref(db, "testimonials/" + data.time);
+//     set(dataRef, data)
+//       .catch((error) => {
+//         console.error("Error writing testimonial: ", error);
+//       });
+//   }
+// }
+// export function eventSave(data) {
+//   if (auth.currentUser) {
+//     data.userId = auth.currentUser.uid;
+//     data.userName = auth.currentUser.displayName;
+//     let dataRef = ref(db, "events/" + data.timestamp);
+//     set(dataRef, data)
+//       .catch((error) => {
+//         console.error("Error writing event: ", error);
+//       });
+//   }
+// }
+// export async function fetchEventsFromDB() {
+//   const eventsRef = ref(db, 'events');
+//   try {
+//     const snapshot = await get(eventsRef);
+//     if (snapshot.exists()) {
+//       const eventData = snapshot.val();
+//       return Object.keys(eventData).map(key => ({
+//         ...eventData[key],
+//         id: key
+//       }));
+//     } else {
+//       console.log("No events available");
+//       return [];
+//     }
+//   } catch (error) {
+//     console.error("Error fetching events:", error);
+//     throw error;
+//   }
+// }
+// export async function getpostsfromdb() {
+//   const userRef = ref(db, "posts");
+//   return get(userRef)
+//     .then((snapshot) => {
+//       if (snapshot.exists()) {
+//         return snapshot.val();
+//       } else {
+//         console.log("No data available");
+//         return null;
+//       }
+//     })
+//     .catch((error) => {
+//       console.error("Error getting document: ", error);
+//       throw error;
+//     });
+// }

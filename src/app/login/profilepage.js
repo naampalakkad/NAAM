@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getuserdetailfromdb, savedatatodb, uploadImageToStorage } from "@/lib/firebase";
+import { savedatatodb, uploadImageToStorage,getdatafromdb } from "@/lib/firebase";
 import { Flex, useToast } from "@chakra-ui/react";
 import ProfileSection from './profilesection';
 import DetailsSection from './detailsection';
@@ -16,7 +16,7 @@ const SignedInBox = ({ user }) => {
     const setuserdetails = async () => {
       if (user) {
         setProfileImage(user.photoURL);
-        let userdataa = await getuserdetailfromdb(user.uid);
+        let userdataa = await getdatafromdb('approvedUsers/'+user.uid);
         if (!userdataa) {
           userdataa = {
             name: "",

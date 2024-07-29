@@ -2,18 +2,12 @@
 import React, { useState, useEffect } from "react";
 import { Box, Heading, Button, IconButton, useToast, Textarea, VStack, useColorMode } from "@chakra-ui/react";
 import { FaThumbsUp, FaRegThumbsUp } from 'react-icons/fa';
-import { getDatabase, ref, get, set, push, onValue } from 'firebase/database'; 
-import { update, remove } from 'firebase/database';
-import { getAuth } from 'firebase/auth';
-import { addLike, removeLike, getLikesCount } from '@/lib/firebase'; 
-import "./Modal.css"; 
-
-const auth = getAuth(); 
-const db = getDatabase(); 
+import { savedatatodb, getdatafromdb,auth } from '@/lib/firebase';
+import "./Modal.css";
 
 export const BlogPost = ({ post }) => {
     const { colorMode } = useColorMode();
-    const postId = post[0]; 
+    const postId = post[0];
     const postdata = post[1];
     const postDate = new Date(postdata.time);
     const formattedDate = postDate.toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' });
@@ -29,12 +23,12 @@ export const BlogPost = ({ post }) => {
         const fetchLikes = async () => {
             try {
                 const currentUserId = auth.currentUser ? auth.currentUser.uid : null;
-        
+
                 if (currentUserId) {
-                    const hasLiked = (await get(ref(db, `posts/${postId}/likes/${currentUserId}`))).exists();
-                    setLiked(hasLiked);
+                    const hasLiked = await getdatafromdb(`content/approvedposts/${postId}/likes/${currentUserId}`);
+                    setLiked(!!hasLiked);
                 }
-        
+
                 const likeCount = await getLikesCount(postId);
                 setLikes(likeCount);
             } catch (error) {
@@ -43,12 +37,13 @@ export const BlogPost = ({ post }) => {
         };
         fetchLikes();
 
-        const fetchComments = () => {
-            const commentsRef = ref(db, `posts/${postId}/comments`);
-            onValue(commentsRef, (snapshot) => {
-                const commentsData = snapshot.val() ? Object.values(snapshot.val()) : [];
-                setComments(commentsData);
-            });
+        const fetchComments = async () => {
+            try {
+                const commentsData = await getdatafromdb(`content/approved/${postId}/comments`);
+                setComments(commentsData ? Object.values(commentsData) : []);
+            } catch (error) {
+                console.error('Error fetching comments:', error);
+            }
         };
         fetchComments();
     }, [postId]);
@@ -103,12 +98,12 @@ export const BlogPost = ({ post }) => {
                 return;
             }
             const user = auth.currentUser;
-            const newCommentRef = push(ref(db, `posts/${postId}/comments`));
-            await set(newCommentRef, {
+            const newComment = {
                 username: user.displayName || 'Anonymous',
                 comment: newComment,
                 time: Date.now()
-            });
+            };
+            await savedatatodb(`content/approved/${postId}/comments`, newComment);
             setNewComment("");
             toast({
                 title: "Comment added",
@@ -164,7 +159,6 @@ export const BlogPost = ({ post }) => {
                     textOverflow="ellipsis"
                     whiteSpace="normal"
                     lineHeight="1.5em"
-                    maxLines={3}
                     mb="2"
                 >
                 </Box>
@@ -207,27 +201,42 @@ export const BlogPost = ({ post }) => {
                                     mb="2"
                                     color="black"
                                     className="comment-textarea"
-                                    borderColor={colorMode === 'dark' ? 'white' : 'black'} 
-                                    _placeholder={{ color: 'black' }} 
+                                    borderColor={colorMode === 'dark' ? 'white' : 'black'}
+                                    _placeholder={{ color: 'black' }}
                                 />
                                 <Button onClick={handleCommentSubmit} colorScheme="teal" ml="2" className="submit-button">Submit</Button>
                             </Box>
                             <VStack align="stretch" spacing="4">
                                 {comments.map((comment, index) => (
-                                <Box key={index} p="4" className="comment-box" borderRadius="md">
-                                <div className="comment-content">
-                                    <span className="comment-username">{comment.username}</span>
-                                    <span className="comment-date">{new Date(comment.time).toLocaleString()}</span>
-                                </div>
-                                <p className="comment-text">{comment.comment}</p>
-                                </Box>
+                                    <Box key={index} p="4" className="comment-box" borderRadius="md">
+                                        <div className="comment-content">
+                                            <span className="comment-username">{comment.username}</span>
+                                            <span className="comment-date">{new Date(comment.time).toLocaleString()}</span>
+                                        </div>
+                                        <p className="comment-text">{comment.comment}</p>
+                                    </Box>
                                 ))}
                             </VStack>
-
                         </Box>
                     </div>
                 </div>
             )}
         </Box>
     );
+
+    async function addLike(postId, userId) {
+        const postLikesRef = `posts/${postId}/likes/${userId}`;
+        await savedatatodb(postLikesRef, true);
+    }
+
+    async function removeLike(postId, userId) {
+        const postLikesRef = `posts/${postId}/likes/${userId}`;
+        await savedatatodb(postLikesRef, null);
+    }
+
+    async function getLikesCount(postId) {
+        const postLikesRef = `posts/${postId}/likes`;
+        const snapshot = await getdatafromdb(postLikesRef);
+        return snapshot ? Object.keys(snapshot).length : 0;
+    }
 };

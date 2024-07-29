@@ -24,7 +24,7 @@ import {
   List,
 } from '@chakra-ui/react';
 import Link from 'next/link';
-import { getpostsfromdb } from '@/lib/firebase';
+import { getdatafromdb } from '@/lib/firebase';
 
 const defaultImage = "./assets/logo.webp";
 
@@ -35,7 +35,7 @@ export default function Blogspanel() {
 
   useEffect(() => {
     const fetchPosts = async () => {
-      const postsFromDb = await getpostsfromdb();
+      const postsFromDb = await getdatafromdb('content/approvedposts');
       if (postsFromDb) {
         const postsArray = Object.entries(postsFromDb);
         postsArray.sort((a, b) => a[1].timestamp - b[1].timestamp);

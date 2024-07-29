@@ -9,7 +9,7 @@ export default function TestimonialPanel() {
     useEffect(() => {
         async function fetchData() {
             try {
-                const data = await getdatafromdb('/testimonials');
+                const data = await getdatafromdb('content/approvedtestimonials');
                 if (data) {
                     const formattedData = Object.keys(data).map(key => ({
                         ...data[key],
