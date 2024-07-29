@@ -31,11 +31,7 @@ export const addLike = async (postId, userId) => {
   try {
     const postRef = ref(db, `posts/${postId}`);
     const likesRef = ref(db, `posts/${postId}/likes/${userId}`);
-
-    // Add the user to the likes node
     await set(likesRef, true);
-
-    // Increment the like count for the post
     const postSnapshot = await get(postRef);
     if (postSnapshot.exists()) {
       const postData = postSnapshot.val();
@@ -44,27 +40,23 @@ export const addLike = async (postId, userId) => {
         likesCount: currentLikesCount + 1
       });
     }
-
     console.log('Like added successfully');
   } catch (error) {
     console.error('Error adding like:', error);
   }
 };
+
 export const removeLike = async (postId, userId) => {
   try {
     const postRef = ref(db, `posts/${postId}`);
     const likesRef = ref(db, `posts/${postId}/likes/${userId}`);
-
-    // Remove the user from the likes node
     await remove(likesRef);
-
-    // Decrement the like count for the post
     const postSnapshot = await get(postRef);
     if (postSnapshot.exists()) {
       const postData = postSnapshot.val();
       const currentLikesCount = postData.likesCount || 0;
       await update(postRef, {
-        likesCount: Math.max(currentLikesCount - 1, 0) // Ensure likesCount doesn't go below 0
+        likesCount: Math.max(currentLikesCount - 1, 0) 
       });
     }
 
@@ -83,15 +75,13 @@ export const getLikesCount = async (postId) => {
       const likesSnapshot = await get(ref(db, `posts/${postId}/likes`));
 
       if (likesSnapshot.exists()) {
-        // Count the number of likes
         const likesCount = Object.keys(likesSnapshot.val()).length;
         return likesCount;
       } else {
-        // No likes found
         return 0;
       }
     } else {
-      // Post not found
+      
       return 0;
     }
   } catch (error) {
