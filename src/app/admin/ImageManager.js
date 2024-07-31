@@ -286,7 +286,7 @@ const ImageManager = ({ title, location }) => {
       {selectedImages.length > 0 && (
         <Flex
           position="fixed"
-          bottom={4}
+          bottom={85}
           left="50%"
           transform="translateX(-50%)"
           align="center"
@@ -294,7 +294,7 @@ const ImageManager = ({ title, location }) => {
           width="auto"
           zIndex="tooltip"
         >
-          <Button colorScheme="red" onClick={handleBulkDelete} leftIcon={<DeleteIcon />}>
+          <Button p={15} colorScheme="red" fontSize={"x-large"} fontWeight={"bold"} onClick={handleBulkDelete} leftIcon={<DeleteIcon />}>
             Delete {selectedImages.length} selected images
           </Button>
         </Flex>
