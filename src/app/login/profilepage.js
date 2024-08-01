@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { savedatatodb, updateprofilepic,getdatafromdb } from "@/lib/firebase";
+import { savedatatodb, updateprofilepic, getdatafromdb } from "@/lib/firebase";
 import { Flex, useToast } from "@chakra-ui/react";
 import ProfileSection from './profilesection';
 import DetailsSection from './detailsection';
@@ -11,30 +11,37 @@ const SignedInBox = ({ user }) => {
   const [userdata, setUserdata] = useState({});
   const [profileImage, setProfileImage] = useState(user.photoURL);
   const [editing, setEditing] = useState(false);
+  const [verifiedProfile, setVerifiedProfile] = useState(false);
 
   useEffect(() => {
     const setuserdetails = async () => {
       if (user) {
         setProfileImage(user.photoURL);
-        let userdataa = await getdatafromdb('approvedUsers/'+user.uid);
-        if (!userdataa) {
-          userdataa = {
-            name: "",
-            email: "",
-            batch: "",
-            number: "",
-            alternate: "",
-            rollno: "",
-            linkedIn: "",
-            facebook: "",
-            location: "",
-            nativelocation: "",
-            profession: "",
-            specialization: "",
-            about: "",
-            phoneperm: "",
-            photoURL: user.photoURL,
-          };
+        let userdataa = await getdatafromdb('approvedUsers/' + user.uid);
+        if (userdataa) {
+          setVerifiedProfile(true);
+        } else {
+          userdataa = await getdatafromdb('users/' + user.uid);
+          if (!userdataa) {
+            userdataa = {
+              name: "",
+              email: "",
+              batch: "",
+              number: "",
+              alternate: "",
+              rollno: "",
+              linkedIn: "",
+              facebook: "",
+              location: "",
+              nativelocation: "",
+              profession: "",
+              specialization: "",
+              about: "",
+              phoneperm: "",
+              photoURL: user.photoURL,
+            };
+          }
+          setVerifiedProfile(false);
         }
         setUserdata(userdataa);
         setProfileImage(userdataa.photoURL);
@@ -94,7 +101,7 @@ const SignedInBox = ({ user }) => {
           ...prevUserdata,
           photoURL: newImageUrl,
         }));
-        await savedatatodb("users/" + user.uid, {
+        savedatatodb((verifiedProfile ? "approvedUsers/" : "users/") + user.uid, {
           ...userdata,
           photoURL: newImageUrl,
         });
@@ -132,7 +139,7 @@ const SignedInBox = ({ user }) => {
       });
     } else {
       try {
-        await savedatatodb("users/" + user.uid, userdata);
+        savedatatodb((verifiedProfile ? "approvedUsers/" : "users/") + user.uid, userdata);
         toast({
           title: "Profile updated.",
           description: "Your profile information has been saved.",
@@ -167,13 +174,12 @@ const SignedInBox = ({ user }) => {
     >
       <ProfileSection
         user={user}
-        userdata={userdata}
         profileImage={profileImage}
         handleImageChange={handleImageChange}
+        verified={verifiedProfile}
         onEdit={toggleEdit}
-        personaldetailsdata={personaldetailsdata}
       />
-      {!editing && <ProfileDetails personaldetailsdata={personaldetailsdata} userdata={userdata} />}
+      {!editing && <ProfileDetails personaldetailsdata={personaldetailsdata} userdata={userdata} verifiedProfile={verifiedProfile} />}
       {editing && (
         <DetailsSection
           personaldetailsdata={personaldetailsdata}

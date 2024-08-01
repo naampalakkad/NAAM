@@ -67,6 +67,7 @@ const BatchRepPanel = ({ batchRepUID }) => {
 
     const handleUnapproveUser = async (user) => {
         try {
+            console.log(user);
             await savedatatodb(`users/${user.uid}`, user);
             await deletedatafromdb(`approvedUsers/${user.uid}`);
             setApprovedUsers(prev => prev.filter(u => u.uid !== user.uid));
