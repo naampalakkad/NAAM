@@ -98,12 +98,12 @@ export const BlogPost = ({ post }) => {
                 return;
             }
             const user = auth.currentUser;
-            const newComment = {
+            const cmtData = {
                 username: user.displayName || 'Anonymous',
                 comment: newComment,
                 time: Date.now()
             };
-            await savedatatodb(`content/approved/${postId}/comments`, newComment);
+            await savedatatodb(`content/approved/${postId}/comments`, cmtData);
             setNewComment("");
             toast({
                 title: "Comment added",
