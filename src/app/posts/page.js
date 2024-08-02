@@ -34,7 +34,7 @@ const Blog = () => {
     const filteredPosts = filter === "all" ? posts : posts.filter(post => post[1].type === filter);
 
     return (
-        <Box marginTop={100}>
+        <Box marginTop={"10vh"}>
             <Box
                 display="flex"
                 flexDirection="column"

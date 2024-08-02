@@ -39,7 +39,7 @@ export const BlogPost = ({ post }) => {
 
         const fetchComments = async () => {
             try {
-                const commentsData = await getdatafromdb(`content/approved/${postId}/comments`);
+                const commentsData = await getdatafromdb(`content/approvedposts/${postId}/comments`);
                 setComments(commentsData ? Object.values(commentsData) : []);
             } catch (error) {
                 console.error('Error fetching comments:', error);
@@ -103,7 +103,7 @@ export const BlogPost = ({ post }) => {
                 comment: newComment,
                 time: Date.now()
             };
-            await savedatatodb(`content/approved/${postId}/comments`, cmtData);
+            savedatatodb(`content/approvedposts/${postId}/comments/${cmtData.time}`, cmtData);
             setNewComment("");
             toast({
                 title: "Comment added",
