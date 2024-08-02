@@ -7,10 +7,11 @@ import {
 import { savedatatodb } from "@/lib/firebase";
 import { auth } from '@/lib/firebase'; // Ensure you import auth correctly from your Firebase config
 
-const AddEventDrawer = ({ isOpen, onClose, selectedDate, selectedTime, setSelectedDate, setSelectedTime, events, setEvents }) => {
+const AddEventDrawer = ({ isOpen, onClose, selectedDate, setSelectedDate, events, setEvents }) => {
   const [eventTitle, setEventTitle] = useState('');
   const [eventDesc, setEventDesc] = useState('');
   const [eventVenue, setEventVenue] = useState('');
+  const [selectedTime, setSelectedTime] = useState('00:00');
   const toast = useToast();
 
   const formatDate = useCallback((date) => {
@@ -26,7 +27,7 @@ const AddEventDrawer = ({ isOpen, onClose, selectedDate, selectedTime, setSelect
     setEventVenue('');
     setSelectedDate(new Date());
     setSelectedTime('00:00');
-  }, [setSelectedDate, setSelectedTime]);
+  }, [setSelectedDate]);
 
   const addEvent = useCallback(async () => {
     if (!eventTitle || !eventDesc || !eventVenue || !selectedDate || !selectedTime) {
@@ -46,6 +47,7 @@ const AddEventDrawer = ({ isOpen, onClose, selectedDate, selectedTime, setSelect
       date: selectedDate.toISOString().split('T')[0],
       time: selectedTime,
       timestamp: new Date().getTime(),
+      id: new Date().getTime(),
       userId: auth.currentUser.uid,
       userName: auth.currentUser.displayName
     };

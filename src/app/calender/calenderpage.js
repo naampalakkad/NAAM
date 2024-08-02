@@ -1,11 +1,12 @@
 'use client';
-import React, { useState, useRef, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
+import { useSearchParams } from 'next/navigation'; // Note: If your Next.js version supports it
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
-import { Box, Flex, Button, Spinner, useMediaQuery, Card, Text } from "@chakra-ui/react";
-import { fetchEventsFromDB, getdatafromdb, auth, checkuserrole } from "@/lib/firebase";
+import { Box, Flex, Button, Spinner, Card, Text } from "@chakra-ui/react";
+import { getdatafromdb, auth, checkuserrole } from "@/lib/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import EventList from './eventlist';
 import AddEventDrawer from './addevent';
@@ -13,15 +14,14 @@ import EventDetailModal from './eventpopup';
 import './calendar.css';
 
 export default function Calendar() {
+  const searchParams = useSearchParams();
   const calendarRef = useRef(null);
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [selectedTime, setSelectedTime] = useState('00:00');
-  const [showAddEventModal, setShowAddEventModal] = useState(false);
   const [events, setEvents] = useState([]);
   const [user, setUser] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [isMobile] = useMediaQuery("(max-width: 768px)");
+  const [showAddEventModal, setShowAddEventModal] = useState(false);
   const [showEventDetailModal, setShowEventDetailModal] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
 
@@ -29,76 +29,88 @@ export default function Calendar() {
     const loadEventsFromFirebase = async () => {
       try {
         const eventsData = await getdatafromdb('content/approvedevents');
-        const formattedEventsData = eventsData
-          ? Object.keys(eventsData).map(key => ({
-              ...eventsData[key],
-              id: key
-            }))
-          : [];
-        setEvents(formattedEventsData);
+        setEvents(Object.values(eventsData || {}));
       } catch (error) {
         console.error("Error loading events from Firebase:", error);
       }
     };
-    
 
     const unsubscribeAuth = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
       setLoading(false);
       if (currentUser) {
-        const isUserAdmin = await checkuserrole('admin');
-        setIsAdmin(isUserAdmin);
+        setIsAdmin(await checkuserrole('admin'));
       }
     });
 
     loadEventsFromFirebase();
-
-    return () => {
-      unsubscribeAuth();
-    };
+    return () => unsubscribeAuth();
   }, []);
 
-  const handleDateClick = (arg) => {
+  useEffect(() => {
+    const eventId = searchParams.get('eventId');
+    if (eventId) {
+      const event = events.find(event => event.id === eventId);
+      if (event) {
+        setSelectedEvent({
+          title: event.title,
+          id: event.id,
+          startStr: `${event.date}T${event.time}`,
+          extendedProps: {
+            description: event.description,
+            time: event.time,
+            venue: event.venue,
+          }
+        });
+        setShowEventDetailModal(true);
+      }
+    }
+  }, [events, searchParams]);
+  
+
+  const handleDateClick = useCallback((arg) => {
     if (user && isAdmin) {
       setSelectedDate(arg.date);
       setShowAddEventModal(true);
     } else {
       alert('Please log in to add events.');
     }
-  };
+  }, [user, isAdmin]);
 
-  const handleEventClick = (arg) => {
+  const handleEventClick = useCallback((arg) => {
     setSelectedEvent(arg.event);
     setShowEventDetailModal(true);
-  };
+  }, []);
 
-  const handleAddEvent = () => {
+  const handleAddEvent = useCallback(() => {
     if (user) {
       setSelectedDate(new Date());
       setShowAddEventModal(true);
     } else {
       alert('Please log in to add events.');
     }
-  };
+  }, [user]);
 
-  const futureEvents = useMemo(() => {
-    return events.filter(event => new Date(event.date + 'T' + event.time) > new Date());
-  }, [events]);
+  const futureEvents = useMemo(() => 
+    events.filter(event => new Date(`${event.date}T${event.time}`) > new Date()), 
+    [events]
+  );
 
-  const eventList = useMemo(() => {
-    return events.map((event) => ({
+  const eventList = useMemo(() => 
+    events.map(event => ({
       title: event.title,
-      start: event.date + 'T' + event.time,
-      time: event.time,
-      venue: event.venue,
+      id: event.id,
+      start: `${event.date}T${event.time}`,
       extendedProps: {
         description: event.description,
         time: event.time,
+        venue: event.venue,
       },
-    }));
-  }, [events]);
+    })), 
+    [events]
+  );
 
-  const handleEventContent = (arg) => (
+  const handleEventContent = useCallback((arg) => (
     <Box
       className="custom-event"
       p={1}
@@ -113,7 +125,7 @@ export default function Calendar() {
         {arg.event.title}
       </Text>
     </Box>
-  );
+  ), []);
 
   if (loading) {
     return (
@@ -137,9 +149,7 @@ export default function Calendar() {
                 center: "title",
                 end: ""
               }}
-              buttonText={{
-                today: 'Today'
-              }}
+              buttonText={{ today: 'Today' }}
               dateClick={handleDateClick}
               eventClick={handleEventClick}
               eventContent={handleEventContent}
@@ -148,23 +158,25 @@ export default function Calendar() {
           </Card>
         </Box>
         <Box className='sidebar' flex={{ base: "1", md: "1" }} pl={{ base: 0, md: 4 }}>
-          {isAdmin && <Flex justifyContent="center" alignItems="center"> <Button
-  m={4}
-  colorScheme='green'  
-  onClick={handleAddEvent}
-  className='addbutton'
->
-  Add Event
-</Button></Flex>}
+          {isAdmin && (
+            <Flex justifyContent="center" alignItems="center">
+              <Button
+                m={4}
+                colorScheme='green'
+                onClick={handleAddEvent}
+                className='addbutton'
+              >
+                Add Event
+              </Button>
+            </Flex>
+          )}
           <EventList futureEvents={futureEvents} />
         </Box>
         <AddEventDrawer
           isOpen={showAddEventModal}
           onClose={() => setShowAddEventModal(false)}
           selectedDate={selectedDate}
-          selectedTime={selectedTime}
           setSelectedDate={setSelectedDate}
-          setSelectedTime={setSelectedTime}
           events={events}
           setEvents={setEvents}
         />
