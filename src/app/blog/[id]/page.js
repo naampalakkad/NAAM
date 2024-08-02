@@ -1,8 +1,8 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { auth, getdatafromdb } from '@/lib/firebase';
-import { Box, Badge, Heading, Text, VStack, HStack, Image, Flex, Spinner, List, ListItem, useToast } from '@chakra-ui/react';
+import { Box, Badge, Heading, Text, VStack, HStack, Image, Flex, Spinner, Button, List, ListItem, useToast } from '@chakra-ui/react';
 import CommentSection from './CommentSection';
 import LatestPostsPanel from './LatestPostsPanel';
 
@@ -10,7 +10,10 @@ export default function BlogPost() {
   const { id } = useParams();
   const [post, setPost] = useState(null);
   const [loadingPost, setLoadingPost] = useState(true);
+  const [nextPostId, setNextPostId] = useState(null);
+  const [previousPostId, setPreviousPostId] = useState(null);
   const toast = useToast();
+  const router = useRouter();
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -18,11 +21,25 @@ export default function BlogPost() {
         console.log('Fetching post:', id);
         const post = await getdatafromdb(`content/approvedposts/${id}`);
         setPost(post);
+
+        // Fetch adjacent posts
+        const allPosts = await getdatafromdb('content/approvedposts');
+        const postIds = Object.keys(allPosts).sort((a, b) => allPosts[b].timestamp - allPosts[a].timestamp);
+        const currentIndex = postIds.indexOf(id);
+
+        setNextPostId(postIds[currentIndex - 1] || null);
+        setPreviousPostId(postIds[currentIndex + 1] || null);
         setLoadingPost(false);
       }
     };
     fetchPost();
   }, [id]);
+
+  const handleNavigation = (postId) => {
+    if (postId) {
+      router.push(`/blog/${postId}`);
+    }
+  };
 
   if (loadingPost) {
     return (
@@ -30,10 +47,8 @@ export default function BlogPost() {
         <Spinner size="xl" color="blue.500" />
         <Heading mt={4} fontSize="xl" color="gray.600" textAlign="center">Loading...</Heading>
       </Flex>
-    )
+    );
   }
-
-  
 
   // Generate Table of Contents
   const generateTOC = () => {
@@ -90,14 +105,36 @@ export default function BlogPost() {
               );
             } else if (op.insert && op.insert.image) {
               return (
-                <Image key={idx} src={op.insert.image} alt="Post content" mx="auto" />
-              
+                <Image
+                  key={idx}
+                  src={op.insert.image}
+                  alt="Post content"
+                  mx="auto"
+                  // fallbackSrc="/path/to/loading-image.gif" 
+                  loading="lazy" 
+                />
               );
             }
             return null;
           })}
         </VStack>
-        <CommentSection/>
+        <CommentSection postId={id} />
+        <HStack mt={4} spacing={4}>
+          <Button
+            onClick={() => handleNavigation(previousPostId)}
+            disabled={!previousPostId}
+            colorScheme="blue"
+          >
+            Previous
+          </Button>
+          <Button
+            onClick={() => handleNavigation(nextPostId)}
+            disabled={!nextPostId}
+            colorScheme="blue"
+          >
+            Next
+          </Button>
+        </HStack>
       </Box>
       <LatestPostsPanel />
     </Flex>

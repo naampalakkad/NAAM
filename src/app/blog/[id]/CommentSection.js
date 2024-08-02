@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { auth, savedatatodb, getdatafromdb } from '@/lib/firebase';
+import { auth, getdatafromdb, savedatatodb } from '@/lib/firebase';
 import { Box, Textarea, Button, VStack, Text, HStack, Spinner, useToast } from '@chakra-ui/react';
 
 export default function CommentSection({ postId }) {
@@ -20,8 +20,8 @@ export default function CommentSection({ postId }) {
           }));
           setComments(commentsArray);
         }
+        setLoadingComments(false);
       }
-      setLoadingComments(false);
     };
     fetchComments();
   }, [postId]);
@@ -88,10 +88,10 @@ export default function CommentSection({ postId }) {
             <HStack justifyContent="space-between">
               <Text fontWeight="bold">{comment.username}</Text>
               <Text fontSize="sm" color="gray.500">
-                {new Date(comment.timestamp).toLocaleString()}
+                {new Date(comment.time).toLocaleString()}
               </Text>
             </HStack>
-            <Text>{comment.content}</Text>
+            <Text>{comment.comment}</Text>
           </Box>
         ))
       )}
