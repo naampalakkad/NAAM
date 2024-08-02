@@ -67,8 +67,10 @@ const BlogsPanel = () => {
   }, [posts]);
 
   const openModal = (post) => {
-    setSelectedPost(post);
-    setIsOpen(true);
+    // setSelectedPost(post);
+    // setIsOpen(true);
+    const postId = post[0];
+    window.location=`/blog/${postId}`;
   };
 
   const closeModal = () => {
