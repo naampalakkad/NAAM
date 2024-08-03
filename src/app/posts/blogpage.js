@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { Box, Heading, Button, IconButton, useToast, Textarea, VStack, useColorMode } from "@chakra-ui/react";
 import { FaThumbsUp, FaRegThumbsUp } from 'react-icons/fa';
-import { savedatatodb, getdatafromdb,auth ,getLikesCount,removeLike,addLike} from '@/lib/firebase';
+import { savedatatodb, getdatafromdb, auth, getLikesCount, removeLike, addLike } from '@/lib/firebase';
 import "./Modal.css";
 
 export const BlogPost = ({ post }) => {
@@ -103,8 +103,11 @@ export const BlogPost = ({ post }) => {
                 comment: newComment,
                 time: Date.now()
             };
-            savedatatodb(`content/approvedposts/${postId}/comments/${cmtData.time}`, cmtData);
+            await savedatatodb(`content/approvedposts/${postId}/comments/${cmtData.time}`, cmtData);
+            
+            setComments(prevComments => [...prevComments, cmtData]);
             setNewComment("");
+
             toast({
                 title: "Comment added",
                 status: 'success',
@@ -130,6 +133,7 @@ export const BlogPost = ({ post }) => {
         var ReactQuill = require('react-quill');
         require('react-quill/dist/quill.snow.css');
     }
+
     return (
         <Box
             mb={['20px', '0']}
@@ -223,6 +227,4 @@ export const BlogPost = ({ post }) => {
             )}
         </Box>
     );
-
-
 };
