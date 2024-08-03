@@ -69,7 +69,6 @@ const moveItem = async (item, action, setData, toast) => {
     });
 };
 
-
 const contentmanager = () => {
     const [data, setData] = useState({
         posts: { pending: [], approved: [], archived: [] },
@@ -78,6 +77,7 @@ const contentmanager = () => {
     });
     const [loading, setLoading] = useState(true);
     const [selectedItem, setSelectedItem] = useState(null);
+    const [currentPath, setCurrentPath] = useState('');
     const { isOpen, onOpen, onClose } = useDisclosure();
     const toast = useToast();
 
@@ -110,6 +110,7 @@ const contentmanager = () => {
     const handleMove = (item, action) => {
         if (action === 'readMore') {
             setSelectedItem(item);
+            setCurrentPath(itemConfig[item.type][item.state]);
             onOpen();
         } else {
             moveItem(item, action, setData, toast);
@@ -166,7 +167,7 @@ const contentmanager = () => {
         <VStack>
             {renderSections()}
             {selectedItem && (
-                <ItemModal isOpen={isOpen} onClose={onClose} selectedItem={selectedItem} />
+                <ItemModal isOpen={isOpen} onClose={onClose} selectedItem={selectedItem} currentPath={currentPath} />
             )}
         </VStack>
     );
