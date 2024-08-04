@@ -15,6 +15,7 @@ if (typeof window !== "undefined") {
 const firebaseConfig = {
   apiKey: "AIzaSyAwBCJsji0R5UeZuKkroe4JsS3RSrVHrsA",
   authDomain: "naamsiteprod.firebaseapp.com",
+  databaseURL: "https://naamsiteprod-default-rtdb.asia-southeast1.firebasedatabase.app",
   projectId: "naamsiteprod",
   storageBucket: "naamsiteprod.appspot.com",
   messagingSenderId: "441558746731",
