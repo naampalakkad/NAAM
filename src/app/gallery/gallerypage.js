@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { SimpleGrid, Skeleton } from "@chakra-ui/react";
 import PhotoAlbum from "react-photo-album";
-import { getGalleryImageUrls } from '../homepage/data';
+import { getGalleryImageUrls } from '@/lib/data';
 import './gallery.css';
 import LightboxComponent from './lightbox'; 
 import Quotebox from './quotesbox';

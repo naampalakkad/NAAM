@@ -18,6 +18,7 @@ const ProfileDetails = ({ personaldetailsdata, userdata }) => {
                     .map((detail, index) => (
                         <Box
                             key={detail.name}
+                            id={'detailitem'+detail+index}
                             mb={2}
                             p={2}
                             borderRadius="md"

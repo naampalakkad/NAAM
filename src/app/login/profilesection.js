@@ -1,9 +1,9 @@
 import React from 'react';
 import { signInoutWithGoogle } from "@/lib/firebase";
-import { Box, Heading, Image, Flex, Button, Card } from "@chakra-ui/react";
+import { Box, Heading, Image, Flex, Button, Card,Badge } from "@chakra-ui/react";
 import { FaEdit, FaSignOutAlt, FaUpload } from "react-icons/fa";
 
-const ProfileSection = ({ user, userdata, profileImage, handleImageChange, onEdit, personaldetailsdata, editing }) => {
+const ProfileSection = ({ user, profileImage, handleImageChange, onEdit,verified }) => {
     const handleSignOut = () => {
         signInoutWithGoogle();
     };
@@ -26,6 +26,7 @@ const ProfileSection = ({ user, userdata, profileImage, handleImageChange, onEdi
                     fallbackSrc="./assets/usericon.webp"
                     borderRadius="full"
                     width={"150px"}
+                    height={"150px"}
                     objectFit="cover"
                     mx="auto"
                     mb={4}
@@ -36,6 +37,13 @@ const ProfileSection = ({ user, userdata, profileImage, handleImageChange, onEdi
                 <Box fontSize="sm" color="gray.600" mb={4}>
                     {user.email}
                 </Box>
+               {verified? 
+                <Badge colorScheme={"green"} p={3} mb={4}>
+                    verified
+                </Badge>:
+                 <Badge  colorScheme={"yellow"} p={3} mb={4} >
+                 pending Approval
+                </Badge>}
                 <Button onClick={handleSignOut} colorScheme="blue" size="sm" mb={2} leftIcon={<FaSignOutAlt />}>
                     Sign out
                 </Button>

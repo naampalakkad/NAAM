@@ -83,7 +83,7 @@ export default function AlumniList() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await getdatafromdb('users');
+      const data = await getdatafromdb('approvedUsers');
       if (data) {
         setAlumnidata(Object.values(data));
       } else {

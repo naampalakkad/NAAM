@@ -1,10 +1,9 @@
 'use client'
 import { useState, useEffect } from 'react';
 import { Box, Heading, Button, Select, Flex, Text } from "@chakra-ui/react";
-import { getpostsfromdb, checkuserrole } from "@/lib/firebase";
+import {auth, getdatafromdb } from "@/lib/firebase";
 import { BlogPost } from './blogpage';
 import Link from 'next/link';
-import { auth } from "@/lib/firebase"; 
 const Blog = () => {
     const [posts, setPosts] = useState([]);
     const [filter, setFilter] = useState("all");
@@ -14,7 +13,7 @@ const Blog = () => {
 
     useEffect(() => {
         const fetchPosts = async () => {
-            const postsFromDb = await getpostsfromdb();
+            const postsFromDb = await  getdatafromdb('content/approvedposts');
             
             if (postsFromDb) {
                 setPosts(Object.entries(postsFromDb));
@@ -35,7 +34,7 @@ const Blog = () => {
     const filteredPosts = filter === "all" ? posts : posts.filter(post => post[1].type === filter);
 
     return (
-        <Box marginTop={100}>
+        <Box marginTop={"10vh"}>
             <Box
                 display="flex"
                 flexDirection="column"

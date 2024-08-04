@@ -4,7 +4,7 @@ import { Input, Button, Select, FormControl, FormLabel, FormHelperText, useToast
 import { ChevronDownIcon } from '@chakra-ui/icons';
 import './page.css';
 import dynamic from 'next/dynamic';
-import { saveposttodb, auth, savetesttodb, getuserdetailfromdb } from '@/lib/firebase';
+import { saveposttodb, auth, savetesttodb,getdatafromdb, getuserdetailfromdb,savedatatodb } from '@/lib/firebase';
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { useRouter } from 'next/navigation';
 
@@ -24,37 +24,7 @@ if (typeof window !== "undefined") {
     });
 }
 
-const saveTestimonialToDb = async (testimonialContent, toast) => {
-  let user = await getuserdetailfromdb(auth.currentUser.uid);
 
-  try {
-    let testimonialData = {
-      authorName: user.name,
-      content: testimonialContent,
-      photo: user.photoURL,
-      batch: user.batch,
-      time: new Date().getTime(),
-    };
-
-    savetesttodb(testimonialData); 
-
-    toast({
-      title: "Testimonial saved successfully!",
-      status: 'success',
-      duration: 3000,
-      isClosable: true,
-    });
-
-  } catch (error) {
-    console.error('Error saving testimonial:', error);
-    toast({
-      title: "Error saving testimonial.",
-      status: 'error',
-      duration: 3000,
-      isClosable: true,
-    });
-  }
-};
 
 function Page() {
   const [value, setValue] = useState('');
@@ -63,6 +33,8 @@ function Page() {
     thumbnail: '',
     type: '',
   });
+
+
 
   const quillRef = useRef();
   const fileInputRef = useRef();
@@ -83,6 +55,39 @@ function Page() {
     },
   };
   const [isfile, setFile] = useState(null); 
+
+  const saveTestimonialToDb = async (testimonialContent) => {
+    let user = await getdatafromdb("approvedUsers/"+auth.currentUser.uid);
+    console.log(user)
+    try {
+      let testimonialData = {
+        authorName: user.name,
+        content: testimonialContent,
+        photo: user.photoURL,
+        batch: user.batch,
+        time: new Date().getTime(),
+      };
+  
+      savedatatodb("content/pendingtestimonials/" +testimonialData.time,testimonialData)
+  
+      toast({
+        title: "Testimonial saved successfully!",
+        status: 'success',
+        duration: 3000,
+        isClosable: true,
+      });
+  
+    } catch (error) {
+      console.error('Error saving testimonial:', error);
+      toast({
+        title: "Error saving testimonial.",
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  };
+
   const onChangeHandler = (e) => {
     setFormData((prevFormData) => ({
       ...prevFormData,
@@ -187,7 +192,7 @@ function Page() {
             likes: {} 
           };
           console.log('Post data to be saved:', postdata);
-          saveposttodb(postdata);
+          savedatatodb('content/pendingposts/'+postdata.time,postdata)
           toast({
             title: "Success",
             description: "Form submitted.",
@@ -228,7 +233,7 @@ function Page() {
         });
         return;
       }
-      await saveTestimonialToDb(testimonialContent, toast);
+      await saveTestimonialToDb(testimonialContent);
       resetForm();
       router.push("/");
 
