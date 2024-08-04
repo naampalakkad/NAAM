@@ -228,7 +228,7 @@ export const removeLike = async (postId, userId) => {
 };
 export const getLikesCount = async (postId) => {
   try {
-    const postRef = ref(db, `posts/${postId}`);
+    const postRef = ref(db, `content/approvedposts/${postId}`);
     const postSnapshot = await get(postRef);
     
     if (postSnapshot.exists()) {
