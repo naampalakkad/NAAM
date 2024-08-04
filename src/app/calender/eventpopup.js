@@ -14,21 +14,24 @@ import {
   VStack,
   HStack,
   useBreakpointValue,
+  useToast,
 } from '@chakra-ui/react';
-import { FaCalendarAlt, FaClock, FaInfoCircle, FaLocationArrow } from 'react-icons/fa';
+import { FaCalendarAlt, FaClock, FaInfoCircle, FaLocationArrow, FaShareAlt } from 'react-icons/fa';
 import { useMemo } from 'react';
 
 const EventDetailModal = ({ showEventDetailModal, setShowEventDetailModal, selectedEvent }) => {
   const modalSize = useBreakpointValue({ base: 'full', md: 'lg' });
+  const toast = useToast();
 
   const eventDetails = useMemo(() => {
     if (!selectedEvent) return {};
+  
 
-    const { title, extendedProps, startStr } = selectedEvent;
+    const { title, extendedProps, startStr, id } = selectedEvent;
     const { description, time, venue } = extendedProps || {};
     const date = startStr?.split('T')[0];
-
     return {
+      id,
       title,
       description,
       date,
@@ -36,6 +39,26 @@ const EventDetailModal = ({ showEventDetailModal, setShowEventDetailModal, selec
       venue,
     };
   }, [selectedEvent]);
+
+  const handleShare = () => {
+    const url = `${window.location.origin}/calender?eventId=${eventDetails.id}`;
+
+    navigator.clipboard.writeText(url).then(() => {
+      toast({
+        title: "Link copied to clipboard.",
+        status: "success",
+        duration: 2000,
+        isClosable: true,
+      });
+    }).catch(err => {
+      toast({
+        title: "Failed to copy link.",
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      });
+    });
+  };
 
   return (
     <Modal isOpen={showEventDetailModal} onClose={() => setShowEventDetailModal(false)} size={modalSize}>
@@ -82,7 +105,12 @@ const EventDetailModal = ({ showEventDetailModal, setShowEventDetailModal, selec
           </VStack>
         </ModalBody>
         <ModalFooter>
-          <Button colorScheme="blue" onClick={() => setShowEventDetailModal(false)}>Close</Button>
+          <Button colorScheme="blue" onClick={handleShare} leftIcon={<FaShareAlt />}>
+            Share
+          </Button>
+          <Button colorScheme="blue" onClick={() => setShowEventDetailModal(false)} ml={3}>
+            Close
+          </Button>
         </ModalFooter>
       </ModalContent>
     </Modal>

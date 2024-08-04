@@ -1,15 +1,17 @@
 import React, { useState, useMemo, useCallback } from 'react';
-import { 
-  Drawer, DrawerBody, DrawerFooter, DrawerHeader, DrawerOverlay, DrawerContent, 
-  DrawerCloseButton, FormControl, FormLabel, Input, Button, useToast, 
+import {
+  Drawer, DrawerBody, DrawerFooter, DrawerHeader, DrawerOverlay, DrawerContent,
+  DrawerCloseButton, FormControl, FormLabel, Input, Button, useToast,
   Textarea
 } from "@chakra-ui/react";
-import { eventSave } from "@/lib/firebase";
+import { savedatatodb } from "@/lib/firebase";
+import { auth } from '@/lib/firebase'; // Ensure you import auth correctly from your Firebase config
 
-const AddEventDrawer = ({ isOpen, onClose, selectedDate, selectedTime, setSelectedDate, setSelectedTime, events, setEvents }) => {
+const AddEventDrawer = ({ isOpen, onClose, selectedDate, setSelectedDate, events, setEvents }) => {
   const [eventTitle, setEventTitle] = useState('');
   const [eventDesc, setEventDesc] = useState('');
   const [eventVenue, setEventVenue] = useState('');
+  const [selectedTime, setSelectedTime] = useState('00:00');
   const toast = useToast();
 
   const formatDate = useCallback((date) => {
@@ -25,9 +27,9 @@ const AddEventDrawer = ({ isOpen, onClose, selectedDate, selectedTime, setSelect
     setEventVenue('');
     setSelectedDate(new Date());
     setSelectedTime('00:00');
-  }, [setSelectedDate, setSelectedTime]);
+  }, [setSelectedDate]);
 
-  const addEvent = useCallback(() => {
+  const addEvent = useCallback(async () => {
     if (!eventTitle || !eventDesc || !eventVenue || !selectedDate || !selectedTime) {
       toast({
         title: "All fields are required.",
@@ -44,19 +46,34 @@ const AddEventDrawer = ({ isOpen, onClose, selectedDate, selectedTime, setSelect
       description: eventDesc,
       date: selectedDate.toISOString().split('T')[0],
       time: selectedTime,
-      timestamp: new Date().getTime()
+      timestamp: new Date().getTime(),
+      id: new Date().getTime(),
+      userId: auth.currentUser.uid,
+      userName: auth.currentUser.displayName
     };
-    eventSave(newEvent);
-    setEvents([...events, newEvent]);
-    toast({
-      title: 'Event Added',
-      description: 'Your event has been successfully added.',
-      status: 'success',
-      duration: 3000, // Toast will close after 3 seconds
-      isClosable: true,
-    });
-    resetForm();
-    onClose();
+
+    try {
+      await savedatatodb(`content/pendingevents/${newEvent.timestamp}`, newEvent);
+      setEvents([...events, newEvent]);
+      toast({
+        title: 'Event Added',
+        description: 'Your event has been successfully added.',
+        status: 'success',
+        duration: 3000,
+        isClosable: true,
+      });
+      resetForm();
+      onClose();
+    } catch (error) {
+      console.error("Error saving event:", error);
+      toast({
+        title: 'Error',
+        description: 'There was an error saving your event. Please try again.',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+    }
   }, [eventTitle, eventDesc, eventVenue, selectedDate, selectedTime, events, setEvents, onClose, resetForm, toast]);
 
   const handleSubmit = (e) => {
@@ -103,7 +120,6 @@ const AddEventDrawer = ({ isOpen, onClose, selectedDate, selectedTime, setSelect
           <FormControl mb={4} isRequired>
             <FormLabel>Event Description</FormLabel>
             <Textarea
-              type="text"
               value={eventDesc}
               onChange={(e) => setEventDesc(e.target.value)}
               focusBorderColor="blue.500"

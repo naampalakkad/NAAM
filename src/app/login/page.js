@@ -23,7 +23,7 @@ export default function ProfilePage() {
   }, []);
 
   return (
-    <Flex flexDirection="column" alignItems="center" pt={"10vh"}>
+    <Flex flexDirection="column" alignItems="center"  pt={"15vh"}>
       {user === "loading" ? (
         <Flex justifyContent="center" alignItems="center" h="60vh" flexDirection="column">
           <Spinner size="xl" color="blue.500" />

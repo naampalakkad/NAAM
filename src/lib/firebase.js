@@ -1,9 +1,7 @@
-'use client'
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, signInWithPopup,onAuthStateChanged } from "firebase/auth";
 import { getStorage, ref as sref, uploadBytes, getDownloadURL, listAll, deleteObject } from "firebase/storage";
-import { getDatabase, set, get, ref } from "firebase/database"
-import { useEffect, useState } from 'react';
+import { getDatabase, set, get, ref, update, remove} from "firebase/database"; 
 let ImageCompressor = null
 if (typeof window !== "undefined") {
   import('image-compressor.js')
@@ -47,7 +45,6 @@ export function signInoutWithGoogle() {
     });
   }
 }
-
 export const checkIfUserSignedIn = () => {
   return new Promise((resolve, reject) => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -60,34 +57,24 @@ export const checkIfUserSignedIn = () => {
     }, reject); 
   });
 };
-
-
 export async function checkuserrole(role) {
-  return new Promise((resolve, reject) => {
-    const unsubscribe = auth.onAuthStateChanged(async (user) => {
+  return new Promise((resolve) => {
+    auth.onAuthStateChanged(async (user) => {
       if (user) {
         const userEmail = user.email.replace('.', '_');
-        const adminRef = ref(db, 'userroles/' + role);
+        const roleLocation = `userroles/${role}`;
 
         try {
-          const snapshot = await get(adminRef);
-
-          if (snapshot.exists()) {
-            const admins = snapshot.val();
-            resolve(admins[userEmail] ? true : false);
-          } else {
-            console.log("No data available");
-            resolve(false);
-          }
+          const data = await getdatafromdb(roleLocation);
+          resolve(data ? Boolean(data[userEmail]) : false);
         } catch (error) {
           console.error("Error getting document: ", error);
-          reject(false);
+          resolve(false);
         }
       } else {
         console.log("No user signed in");
         resolve(false);
       }
-      unsubscribe(); // Clean up the listener
     });
   });
 }
@@ -101,88 +88,16 @@ export function savedatatodb(location, data) {
       });
   }
 }
-const emails = [
-  'sreejithksgupta2255@gmail.com',
-  'ssuneebvishnu@gmail.com',
-  'unnimayat01@gmail.com',
-  'niranjanasunilkumar2003@gmail.com'
-];
-export const saveEmails = () => {
-  if (auth.currentUser) {
-    const emailData = emails.reduce((acc, email) => {
-      acc[email.replace('.', '_')] = true;
-      return acc;
-    }, {});
-    savedatatodb('userroles/blogger', emailData);
+export async function deletedatafromdb  (path) {
+  const db = getDatabase();
+  const reference = ref(db, path);
+  try {
+      await remove(reference);
+  } catch (error) {
+      console.error(`Error removing data from path: ${path}`, error);
+      throw error;
   }
 };
-
-export function saveposttodb(data) {
-  if (auth.currentUser) {
-    let dataRef = ref(db, "posts/" + data.time);
-    set(dataRef, data)
-      .catch((error) => {
-        console.error("Error writing post: ", error);
-      });
-  }
-}
-
-export function savetesttodb(data) {
-  if (auth.currentUser) {
-    let dataRef = ref(db, "testimonials/" + data.time);
-    set(dataRef, data)
-      .catch((error) => {
-        console.error("Error writing testimonial: ", error);
-      });
-  }
-}
-
-export function eventSave(data) {
-  if (auth.currentUser) {
-    data.userId = auth.currentUser.uid;
-    data.userName = auth.currentUser.displayName;
-    let dataRef = ref(db, "events/" + data.timestamp);
-    set(dataRef, data)
-      .catch((error) => {
-        console.error("Error writing event: ", error);
-      });
-  }
-}
-export async function fetchEventsFromDB() {
-  const eventsRef = ref(db, 'events');
-  try {
-    const snapshot = await get(eventsRef);
-    if (snapshot.exists()) {
-      const eventData = snapshot.val();
-      return Object.keys(eventData).map(key => ({
-        ...eventData[key],
-        id: key
-      }));
-    } else {
-      console.log("No events available");
-      return [];
-    }
-  } catch (error) {
-    console.error("Error fetching events:", error);
-    throw error;
-  }
-}
-export async function getpostsfromdb() {
-  const userRef = ref(db, "posts");
-  return get(userRef)
-    .then((snapshot) => {
-      if (snapshot.exists()) {
-        return snapshot.val();
-      } else {
-        console.log("No data available");
-        return null;
-      }
-    })
-    .catch((error) => {
-      console.error("Error getting document: ", error);
-      throw error;
-    });
-}
 export async function getdatafromdb(location) {
   const userRef = ref(db, location);
   return get(userRef)
@@ -209,59 +124,46 @@ export async function getdatafromStorage(location) {
   }
   return resurls;
 }
-export async function getuserdetailfromdb(uid) {
-  const userRef = ref(db, "users/" + uid);
-  return get(userRef)
-    .then((snapshot) => {
-      if (snapshot.exists()) {
-        return snapshot.val();
-      } else {
-        console.log("No data available");
-        return null;
-      }
-    })
-    .catch((error) => {
-      console.error("Error getting document: ", error);
-      throw error;
-    });
+async function compressImage(imageFile) {
+  const compressor = new ImageCompressor();
+  const compressedImage = await compressor.compress(imageFile, {
+    maxWidth: 720,
+    maxHeight: 540,
+    quality: 0.8,
+    mimeType: 'image/webp',
+  });
+  return new File([compressedImage], imageFile.name, {
+    type: 'image/webp'
+  });
 }
-export async function uploadImageToStorage(userId, imageFile) {
+
+export async function uploadImgToStorage(location, imageFile) {
+  try {
+    const renamedFile = await compressImage(imageFile);
+    const storageRef = sref(storage, `${location}/${renamedFile.name}`);
+    await uploadBytes(storageRef, renamedFile);
+    const imageUrl = await getDownloadURL(storageRef);
+    return imageUrl;
+  } catch (error) {
+    console.error("Error uploading image:", error);
+    throw error;
+  }
+}
+
+export async function updateprofilepic(userId, imageFile) {
   const folderPath = `profile_images/${userId}`;
   const folderRef = sref(storage, folderPath);
   const files = await listAll(folderRef);
-
-  // Delete existing files in the folder
   const deletePromises = files.items.map((fileRef) => deleteObject(fileRef));
   await Promise.all(deletePromises);
-
-  if (typeof window !== "undefined") {
-    try {
-      const compressor = new ImageCompressor();
-      const compressedImage = await compressor.compress(imageFile, {
-        maxWidth: 720,
-        maxHeight: 540,
-        quality: 0.8,
-        mimeType: 'image/webp',
-      });
-
-      // Create a new file with the name 'profilepic.webp'
-      const renamedFile = new File([compressedImage], 'profilepic.webp', {
-        type: 'image/webp'
-      });
-
-      const storageRef = sref(storage, `profile_images/${userId}/profilepic.webp`);
-      await uploadBytes(storageRef, renamedFile);
-      const imageUrl = await getDownloadURL(storageRef);
+  const imageBlob = imageFile.slice(0, imageFile.size, imageFile.type);
+       const newImageFile = new File([imageBlob], 'profilepic.webp', { type: imageFile.type });
+       const imageUrl = await uploadImgToStorage(folderPath, newImageFile);
       return imageUrl;
-    } catch (error) {
-      console.error("Error uploading image:", error);
-      throw error;
-    }
   }
-}
+
 export async function getImageUrlFromStorage(userId) {
   const storageRef = sref(storage, `profile_images/${userId}`);
-
   try {
     const imageUrl = await getDownloadURL(storageRef);
     return imageUrl;
@@ -274,3 +176,235 @@ export async function getImageUrlFromStorage(userId) {
     }
   }
 }
+export async function deleteImageFromStorage(location, imageUrl) {
+  const storageRef = sref(storage, location);
+  const res = await listAll(storageRef);
+  for (let i = 0; i < res.items.length; i++) {
+    const fileRef = res.items[i];
+    const fileUrl = await getDownloadURL(fileRef);
+    if (fileUrl === imageUrl) {
+      await deleteObject(fileRef);
+      break;
+    }
+  }
+}
+export const addLike = async (postId, userId) => {
+  try {
+    const postRef = ref(db, `content/approvedposts/${postId}`);
+    const likesRef = ref(db, `content/approvedposts/${postId}/likes/${userId}`);
+    await set(likesRef, true);
+    const postSnapshot = await get(postRef);
+    if (postSnapshot.exists()) {
+      const postData = postSnapshot.val();
+      const currentLikesCount = postData.likesCount || 0;
+      await update(postRef, {
+        likesCount: currentLikesCount + 1
+      });
+    }
+    console.log('Like added successfully');
+  } catch (error) {
+    console.error('Error adding like:', error);
+  }
+};
+
+export const removeLike = async (postId, userId) => {
+  try {
+    const postRef = ref(db, `content/approvedposts/${postId}`);
+    const likesRef = ref(db, `content/approvedposts/${postId}/likes/${userId}`);
+    await remove(likesRef);
+    const postSnapshot = await get(postRef);
+    if (postSnapshot.exists()) {
+      const postData = postSnapshot.val();
+      const currentLikesCount = postData.likesCount || 0;
+      await update(postRef, {
+        likesCount: Math.max(currentLikesCount - 1, 0) 
+      });
+    }
+
+    console.log('Like removed successfully');
+  } catch (error) {
+    console.error('Error removing like:', error);
+  }
+};
+export const getLikesCount = async (postId) => {
+  try {
+    const postRef = ref(db, `content/approvedposts/${postId}`);
+    const postSnapshot = await get(postRef);
+    
+    if (postSnapshot.exists()) {
+      const postData = postSnapshot.val();
+      const likesSnapshot = await get(ref(db, `content/approvedposts/${postId}/likes`));
+
+      if (likesSnapshot.exists()) {
+        const likesCount = Object.keys(likesSnapshot.val()).length;
+        return likesCount;
+      } else {
+        return 0;
+      }
+    } else {
+      
+      return 0;
+    }
+  } catch (error) {
+    console.error('Error getting likes count:', error);
+    return 0;
+  }
+};
+
+// export function saveposttodb(data) {
+//   if (auth.currentUser) {
+//     let dataRef = ref(db, "posts/" + data.time);
+//     set(dataRef, data)
+//       .catch((error) => {
+//         console.error("Error writing post: ", error);
+//       });
+//   }
+// }
+// export async function getuserdetailfromdb(uid) {
+  //   const userRef = ref(db, "users/" + uid);
+  //   return get(userRef)
+  //     .then((snapshot) => {
+  //       if (snapshot.exists()) {
+  //         return snapshot.val();
+  //       } else {
+  //         console.log("No data available");
+  //         return null;
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error getting document: ", error);
+  //       throw error;
+  //     });
+  // }
+// const emails = [
+//   'sreejithksgupta2255@gmail.com',
+//   'ssuneebvishnu@gmail.com',
+//   'unnimayat01@gmail.com',
+//   'niranjanasunilkumar2003@gmail.com'
+// ];
+// export const saveEmails = () => {
+//   if (auth.currentUser) {
+//     const emailData = emails.reduce((acc, email) => {
+//       acc[email.replace('.', '_')] = true;
+//       return acc;
+//     }, {});
+//     savedatatodb('userroles/blogger', emailData);
+//   }
+// };
+// export const addLike = async (postId, userId) => {
+//   try {
+//     const postRef = ref(db, `posts/${postId}`);
+//     const likesRef = ref(db, `posts/${postId}/likes/${userId}`);
+//     await set(likesRef, true);
+//     const postSnapshot = await get(postRef);
+//     if (postSnapshot.exists()) {
+//       const postData = postSnapshot.val();
+//       const currentLikesCount = postData.likesCount || 0;
+//       await update(postRef, {
+//         likesCount: currentLikesCount + 1
+//       });
+//     }
+//     console.log('Like added successfully');
+//   } catch (error) {
+//     console.error('Error adding like:', error);
+//   }
+// };
+
+// export const removeLike = async (postId, userId) => {
+//   try {
+//     const postRef = ref(db, `posts/${postId}`);
+//     const likesRef = ref(db, `posts/${postId}/likes/${userId}`);
+//     await remove(likesRef);
+//     const postSnapshot = await get(postRef);
+//     if (postSnapshot.exists()) {
+//       const postData = postSnapshot.val();
+//       const currentLikesCount = postData.likesCount || 0;
+//       await update(postRef, {
+//         likesCount: Math.max(currentLikesCount - 1, 0) 
+//       });
+//     }
+
+//     console.log('Like removed successfully');
+//   } catch (error) {
+//     console.error('Error removing like:', error);
+//   }
+// };
+// export const getLikesCount = async (postId) => {
+//   try {
+//     const postRef = ref(db, `posts/${postId}`);
+//     const postSnapshot = await get(postRef);
+    
+//     if (postSnapshot.exists()) {
+//       const postData = postSnapshot.val();
+//       const likesSnapshot = await get(ref(db, `posts/${postId}/likes`));
+
+//       if (likesSnapshot.exists()) {
+//         const likesCount = Object.keys(likesSnapshot.val()).length;
+//         return likesCount;
+//       } else {
+//         return 0;
+//       }
+//     } else {
+      
+//       return 0;
+//     }
+//   } catch (error) {
+//     console.error('Error getting likes count:', error);
+//     return 0;
+//   }
+// };
+// export function savetesttodb(data) {
+//   if (auth.currentUser) {
+//     let dataRef = ref(db, "testimonials/" + data.time);
+//     set(dataRef, data)
+//       .catch((error) => {
+//         console.error("Error writing testimonial: ", error);
+//       });
+//   }
+// }
+// export function eventSave(data) {
+//   if (auth.currentUser) {
+//     data.userId = auth.currentUser.uid;
+//     data.userName = auth.currentUser.displayName;
+//     let dataRef = ref(db, "events/" + data.timestamp);
+//     set(dataRef, data)
+//       .catch((error) => {
+//         console.error("Error writing event: ", error);
+//       });
+//   }
+// }
+// export async function fetchEventsFromDB() {
+//   const eventsRef = ref(db, 'events');
+//   try {
+//     const snapshot = await get(eventsRef);
+//     if (snapshot.exists()) {
+//       const eventData = snapshot.val();
+//       return Object.keys(eventData).map(key => ({
+//         ...eventData[key],
+//         id: key
+//       }));
+//     } else {
+//       console.log("No events available");
+//       return [];
+//     }
+//   } catch (error) {
+//     console.error("Error fetching events:", error);
+//     throw error;
+//   }
+// }
+// export async function getpostsfromdb() {
+//   const userRef = ref(db, "posts");
+//   return get(userRef)
+//     .then((snapshot) => {
+//       if (snapshot.exists()) {
+//         return snapshot.val();
+//       } else {
+//         console.log("No data available");
+//         return null;
+//       }
+//     })
+//     .catch((error) => {
+//       console.error("Error getting document: ", error);
+//       throw error;
+//     });
+// }
