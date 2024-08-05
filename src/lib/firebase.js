@@ -47,14 +47,23 @@ export function signInoutWithGoogle() {
 }
 export const checkIfUserSignedIn = () => {
   return new Promise((resolve, reject) => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      unsubscribe(); 
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      unsubscribe();
       if (user) {
-        resolve(user); 
+        try {
+          const approvedUsers = await getdatafromdb('approvedUsers');
+          if (approvedUsers && approvedUsers[user.uid]) {
+            resolve(user); 
+          } else {
+            resolve(null); 
+          }
+        } catch (error) {
+          reject(error); 
+        }
       } else {
-        resolve(null); 
+        resolve(null);
       }
-    }, reject); 
+    }, reject);
   });
 };
 export async function checkuserrole(role) {
