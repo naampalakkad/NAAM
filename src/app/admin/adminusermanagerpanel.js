@@ -118,7 +118,7 @@ const AdminUserManagerPanel = () => {
     return (
         <VStack spacing={6} align="stretch">
             <Box>
-                <Heading size="xl" textAlign="center" p={2} m={5} borderRadius="md">Approved Users</Heading>
+                <Heading size="xl" textAlign="center" p={2} m={2} borderRadius="md">Approved Users</Heading>
                 <List spacing={2} maxHeight="50vh" overflowY="auto">
                     {approvedUsers.map(user => (
                         <ListItem key={user.uid} borderRadius="md" boxShadow="md" bg={cardBg}>
@@ -141,7 +141,7 @@ const AdminUserManagerPanel = () => {
                 </List>
             </Box>
             <Box>
-                <Heading size="xl" textAlign="center" p={2} m={5} borderRadius="md">Pending Users</Heading>
+                <Heading size="xl" textAlign="center" p={2} m={2} borderRadius="md">Pending Users</Heading>
                 <List spacing={2} maxHeight="50vh" overflowY="auto">
                     {allUsers.map(user => (
                         <ListItem key={user.uid} borderRadius="md" boxShadow="md" bg={cardBg}>
