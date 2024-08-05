@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { Box, Input, Textarea, Button, Heading, Grid, Card, FormControl, FormErrorMessage, FormLabel } from "@chakra-ui/react";
+import { Box, Input, Textarea, Button, Heading, Grid, Card, FormControl, FormErrorMessage, FormLabel,Switch  } from "@chakra-ui/react";
 import { FaSave } from "react-icons/fa";
 import RenderDropdown from './dropdown';
 
@@ -30,10 +30,11 @@ const DetailsSection = ({ personaldetailsdata, updateFirebaseUserData, userdata,
 
   const renderSwitch = useCallback((detail) => (
     <label>
-      <input
-        type='checkbox'
+      <Switch 
+        colorScheme='teal' 
+        size='lg'
         id={"profile" + detail.name}
-        checked={userdata[detail.name] || false}
+        isChecked={userdata[detail.name] || false}
         onChange={(e) => handleChange(detail.name, e.target.checked)}
       />
     </label>
