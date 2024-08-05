@@ -58,7 +58,6 @@ function Page() {
 
   const saveTestimonialToDb = async (testimonialContent) => {
     let user = await getdatafromdb("approvedUsers/"+auth.currentUser.uid);
-    console.log(user)
     try {
       let testimonialData = {
         authorName: user.name,
@@ -174,14 +173,12 @@ function Page() {
       const uploadTask = uploadBytesResumable(storageRef, compressedImage);
       uploadTask.on('state_changed', (snapshot) => {
         const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        console.log('Upload is ' + progress + '% done');
       },
       (error) => {
-        console.log(error);
+        console.error(error);
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          console.log('File available at', downloadURL);
           let postdata = {
             title: formData.title,
             thumbnail: downloadURL,
@@ -191,7 +188,6 @@ function Page() {
             authorName: auth.currentUser.displayName,
             likes: {} 
           };
-          console.log('Post data to be saved:', postdata);
           savedatatodb('content/pendingposts/'+postdata.time,postdata)
           toast({
             title: "Success",

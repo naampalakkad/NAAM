@@ -6,7 +6,6 @@ import { getdatafromdb } from "@/lib/firebase";
 import { SocialIcon } from 'react-social-icons';
 import SearchBox from './searchbox';
 import ModelBox from './modelbox';
-import "./alumni.css";
 
 
 
