@@ -67,7 +67,7 @@ const SignedInBox = ({ user }) => {
     }
     const batch = Number(userdata.batch);
     if (isNaN(batch) || batch <= 0 || batch >= 100) {
-      errors.batch = "Enter a valid batch name";
+      errors.batch = "Enter a valid batch number";
     }
     const phoneRegex = /^\d{10}$/;
     if (!phoneRegex.test(userdata.number)) {
