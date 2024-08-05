@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { savedatatodb, updateprofilepic, getdatafromdb } from "@/lib/firebase";
-import { Flex, useToast } from "@chakra-ui/react";
+import { Flex, useToast, Modal, ModalOverlay,Heading, ModalContent, ModalHeader, Center, ModalBody, ModalCloseButton, Button } from "@chakra-ui/react";
 import ProfileSection from './profilesection';
 import DetailsSection from './detailsection';
 import ProfileDetails from './detailsdisplay';
@@ -12,6 +12,7 @@ const SignedInBox = ({ user }) => {
   const [profileImage, setProfileImage] = useState(user.photoURL);
   const [editing, setEditing] = useState(false);
   const [verifiedProfile, setVerifiedProfile] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const setuserdetails = async () => {
@@ -40,6 +41,7 @@ const SignedInBox = ({ user }) => {
               phoneperm: "",
               photoURL: user.photoURL,
             };
+            setIsModalOpen(true);
           }
           setVerifiedProfile(false);
         }
@@ -148,6 +150,7 @@ const SignedInBox = ({ user }) => {
           isClosable: true,
         });
         setEditing(false); // Hide details section after saving
+        setIsModalOpen(false); // Close the modal after saving
       } catch (error) {
         console.error('Error updating profile:', error.message);
         toast({
@@ -166,29 +169,53 @@ const SignedInBox = ({ user }) => {
   };
 
   return (
-    <Flex
-      direction={{ base: "column", md: "row" }}
-      alignItems="center"
-      justifyContent="center"
-      w={"90vw"}
-    >
-      <ProfileSection
-        user={user}
-        profileImage={profileImage}
-        handleImageChange={handleImageChange}
-        verified={verifiedProfile}
-        onEdit={toggleEdit}
-      />
-      {!editing && <ProfileDetails personaldetailsdata={personaldetailsdata} userdata={userdata} verifiedProfile={verifiedProfile} />}
-      {editing && (
+    <>
+      <Flex
+        direction={{ base: "column", md: "row" }}
+        alignItems="center"
+        justifyContent="center"
+        w={"90vw"}
+      >
+        <ProfileSection
+          user={user}
+          profileImage={profileImage}
+          handleImageChange={handleImageChange}
+          verified={verifiedProfile}
+          onEdit={toggleEdit}
+        />
+        {!editing && <ProfileDetails personaldetailsdata={personaldetailsdata} userdata={userdata} verifiedProfile={verifiedProfile} />}
+        {editing && (
+          <DetailsSection
+            personaldetailsdata={personaldetailsdata}
+            updateFirebaseUserData={updateFirebaseUserData}
+            userdata={userdata}
+            handleChange={handleChange}
+          />
+        )}
+      </Flex>
+      <Modal size={"full"} isOpen={isModalOpen} onClose={() => {}}>
+  <ModalOverlay />
+  <ModalContent>
+    <ModalHeader>
+      <Center>
+        <Heading size="xl">Complete Your Profile to Login</Heading>
+      </Center>
+    </ModalHeader>
+    <ModalCloseButton />
+    <ModalBody>
+      <Center flexDirection="column">
         <DetailsSection
           personaldetailsdata={personaldetailsdata}
           updateFirebaseUserData={updateFirebaseUserData}
           userdata={userdata}
           handleChange={handleChange}
         />
-      )}
-    </Flex>
+      </Center>
+    </ModalBody>
+  </ModalContent>
+</Modal>
+
+    </>
   );
 };
 
