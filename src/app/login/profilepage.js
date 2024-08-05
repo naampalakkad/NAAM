@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { savedatatodb, updateprofilepic, getdatafromdb } from "@/lib/firebase";
-import { Flex, useToast, Modal, ModalOverlay,Heading, ModalContent, ModalHeader, Center, ModalBody, ModalCloseButton, Button } from "@chakra-ui/react";
+import { Flex, useToast, Modal, ModalOverlay, Heading, ModalContent, ModalHeader, Center, ModalBody, ModalCloseButton, Button } from "@chakra-ui/react";
 import ProfileSection from './profilesection';
 import DetailsSection from './detailsection';
 import ProfileDetails from './detailsdisplay';
@@ -13,6 +13,7 @@ const SignedInBox = ({ user }) => {
   const [editing, setEditing] = useState(false);
   const [verifiedProfile, setVerifiedProfile] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [formerrors, setFormErrors] = useState({});
 
   useEffect(() => {
     const setuserdetails = async () => {
@@ -62,36 +63,71 @@ const SignedInBox = ({ user }) => {
   };
 
   const validateData = (userdata) => {
-    const errors = {};
+    let errors = {};
+    if(userdata.name == "") {
+      errors.name = "Name is required";
+    }
+    // Validate email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(userdata.email)) {
+    if (!userdata.email) {
+      errors.email = "Email is required";
+    } else if (!emailRegex.test(userdata.email)) {
       errors.email = "Invalid email format";
     }
+  
+    // Validate batch
     const batch = Number(userdata.batch);
-    if (isNaN(batch) || batch <= 0 || batch >= 100) {
-      errors.batch = "Enter a valid batch number";
+    if (!userdata.batch) {
+      errors.batch = "Batch number is required";
+    } else if (isNaN(batch)) {
+      errors.batch = "Batch number must be a number";
+    } else if (batch <= 0) {
+      errors.batch = "Batch number must be greater than 0";
+    } else if (batch >= 100) {
+      errors.batch = "Batch number must be less than 100";
     }
+  
+    // Validate phone number
     const phoneRegex = /^\d{10}$/;
-    if (!phoneRegex.test(userdata.number)) {
-      errors.number = "Invalid phone number format";
+    if (!userdata.number) {
+      errors.number = "Phone number is required";
+    } else if (!phoneRegex.test(userdata.number)) {
+      errors.number = "Phone number must be a 10-digit number";
     }
+  
+    // Validate alternate phone number
     if (userdata.alternate && !phoneRegex.test(userdata.alternate)) {
-      errors.alternate = "Invalid alternate phone number format";
+      errors.alternate = "Alternate phone number must be a 10-digit number";
     }
+  
+    // Validate roll number
     const rollNumber = Number(userdata.rollno);
-    if (isNaN(rollNumber) || rollNumber <= 0 || rollNumber >= 10000) {
-      errors.rollno = "Enter a valid JNV roll number";
+    if (!userdata.rollno) {
+      errors.rollno = "Roll number is required";
+    } else if (isNaN(rollNumber)) {
+      errors.rollno = "Roll number must be a number";
+    } else if (rollNumber < 0) {
+      errors.rollno = "Roll number must be greater than 0";
+    } else if (rollNumber >= 10000) {
+      errors.rollno = "Roll number must be less than 10000";
     }
+  
+    // Validate LinkedIn URL
     const urlRegex = /^(https?:\/\/)?(www\.)?([a-zA-Z0-9-]{1,256}\.[a-zA-Z0-9]{2,6})(:[0-9]{1,5})?(\/.*)?$/;
     if (userdata.linkedIn && !urlRegex.test(userdata.linkedIn)) {
-      errors.linkedIn = "Invalid LinkedIn URL";
+      errors.linkedIn = "Invalid LinkedIn URL format";
     }
+  
+    // Validate Facebook URL
     if (userdata.facebook && !urlRegex.test(userdata.facebook)) {
-      errors.facebook = "Invalid Facebook URL";
+      errors.facebook = "Invalid Facebook URL format";
     }
 
-    return Object.keys(errors).length > 0 ? errors : true;
+  
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
   };
+  
 
   const handleImageChange = async (event) => {
     const file = event.target.files[0];
@@ -128,20 +164,9 @@ const SignedInBox = ({ user }) => {
   };
 
   const updateFirebaseUserData = async () => {
-    const validationResult = validateData(userdata);
-    if (validationResult !== true) {
-      const errorMessages = Object.keys(validationResult)
-        .map((key, index) => `${index + 1}. ${validationResult[key]}`).join("  \n");
-      toast({
-        title: 'Invalid Data Entered',
-        description: <pre>{errorMessages}</pre>,
-        status: 'error',
-        duration: 2000,
-        isClosable: true,
-      });
-    } else {
+    if (validateData(userdata)) {
       try {
-        savedatatodb((verifiedProfile ? "approvedUsers/" : "users/") + user.uid, userdata);
+        await savedatatodb((verifiedProfile ? "approvedUsers/" : "users/") + user.uid, userdata);
         toast({
           title: "Profile updated.",
           description: "Your profile information has been saved.",
@@ -161,6 +186,15 @@ const SignedInBox = ({ user }) => {
           isClosable: true,
         });
       }
+    } else {
+      const errorMessages = Object.values(formerrors).map((error, index) => `${index + 1}. ${error}`).join("  \n");
+      toast({
+        title: 'Invalid Data Entered',
+        description: <pre>{errorMessages}</pre>,
+        status: 'error',
+        duration: 2000,
+        isClosable: true,
+      });
     }
   };
 
@@ -190,31 +224,32 @@ const SignedInBox = ({ user }) => {
             updateFirebaseUserData={updateFirebaseUserData}
             userdata={userdata}
             handleChange={handleChange}
+            errors={formerrors}
           />
         )}
       </Flex>
       <Modal size={"full"} isOpen={isModalOpen} onClose={() => {}}>
-  <ModalOverlay />
-  <ModalContent>
-    <ModalHeader>
-      <Center>
-        <Heading size="xl">Complete Your Profile to Login</Heading>
-      </Center>
-    </ModalHeader>
-    <ModalCloseButton />
-    <ModalBody>
-      <Center flexDirection="column">
-        <DetailsSection
-          personaldetailsdata={personaldetailsdata}
-          updateFirebaseUserData={updateFirebaseUserData}
-          userdata={userdata}
-          handleChange={handleChange}
-        />
-      </Center>
-    </ModalBody>
-  </ModalContent>
-</Modal>
-
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>
+            <Center>
+              <Heading size="xl">Complete Your Profile to Login</Heading>
+            </Center>
+          </ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Center flexDirection="column">
+              <DetailsSection
+                personaldetailsdata={personaldetailsdata}
+                updateFirebaseUserData={updateFirebaseUserData}
+                userdata={userdata}
+                handleChange={handleChange}
+                errors={formerrors}
+              />
+            </Center>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
     </>
   );
 };
