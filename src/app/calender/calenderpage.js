@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
-import { useSearchParams } from 'next/navigation'; // Note: If your Next.js version supports it
+import { useSearchParams } from 'next/navigation';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
@@ -11,7 +11,6 @@ import { onAuthStateChanged } from "firebase/auth";
 import EventList from './eventlist';
 import AddEventDrawer from './addevent';
 import EventDetailModal from './eventpopup';
-import './calendar.css';
 
 export default function Calendar() {
   const searchParams = useSearchParams();
@@ -112,9 +111,9 @@ export default function Calendar() {
 
   const handleEventContent = useCallback((arg) => (
     <Box
-      className="custom-event"
+      width={'full'}
       p={1}
-      m={1}
+      m={0.1  }
       bg="blue.500"
       borderRadius="md"
       color="white"

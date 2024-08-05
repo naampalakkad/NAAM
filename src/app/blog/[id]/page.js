@@ -18,7 +18,6 @@ export default function BlogPost() {
   useEffect(() => {
     const fetchPost = async () => {
       if (id) {
-        console.log('Fetching post:', id);
         const post = await getdatafromdb(`content/approvedposts/${id}`);
         setPost(post);
 

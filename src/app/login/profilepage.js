@@ -49,7 +49,7 @@ const SignedInBox = ({ user }) => {
         setUserdata(userdataa);
         setProfileImage(userdataa.photoURL);
       } else {
-        console.log("user not available");
+        console.error("user not available");
       }
     };
     setuserdetails();
