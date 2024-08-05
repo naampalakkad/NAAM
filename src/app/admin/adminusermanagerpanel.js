@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { VStack, Button, List, ListItem, useToast, Box, Heading, Text, Avatar, Spinner, Card, useColorModeValue } from '@chakra-ui/react';
 import { savedatatodb, deletedatafromdb, getdatafromdb } from '@/lib/firebase';
 
-const BatchRepPanel = ({ batchRepUID }) => {
-    const [batchUsers, setBatchUsers] = useState([]);
+const AdminUserManagerPanel = () => {
+    const [allUsers, setAllUsers] = useState([]);
     const [approvedUsers, setApprovedUsers] = useState([]);
     const [loading, setLoading] = useState(true);
     const toast = useToast();
@@ -14,16 +14,13 @@ const BatchRepPanel = ({ batchRepUID }) => {
         const fetchData = async () => {
             try {
                 const usersData = await getdatafromdb('users');
-                const batchRepData = await getdatafromdb(`userroles/batchreps/${batchRepUID}`);
-                if (usersData && batchRepData) {
+                const approvedUsers = await getdatafromdb('approvedUsers');
+                if (usersData) {
                     const usersArray = Object.keys(usersData).map(uid => ({
                         uid,
                         ...usersData[uid],
                     }));
-                    const batch = batchRepData.batch;
-                    const filteredUsers = usersArray.filter(user => user.batch === batch);
-                    const approvedUsers = await getdatafromdb('approvedUsers');
-                    setBatchUsers(filteredUsers.filter(user => !approvedUsers[user.uid]));
+                    setAllUsers(usersArray.filter(user => !approvedUsers[user.uid]));
                     setApprovedUsers(Object.values(approvedUsers || {}));
                 }
             } catch (error) {
@@ -40,13 +37,13 @@ const BatchRepPanel = ({ batchRepUID }) => {
         };
 
         fetchData();
-    }, [toast, batchRepUID]);
+    }, [toast]);
 
     const handleApproveUser = async (user) => {
         try {
             await savedatatodb(`approvedUsers/${user.uid}`, user);
             await deletedatafromdb(`users/${user.uid}`);
-            setBatchUsers(prev => prev.filter(u => u.uid !== user.uid));
+            setAllUsers(prev => prev.filter(u => u.uid !== user.uid));
             setApprovedUsers(prev => [...prev, user]);
             toast({
                 title: "User approved.",
@@ -70,7 +67,7 @@ const BatchRepPanel = ({ batchRepUID }) => {
             await savedatatodb(`users/${user.uid}`, user);
             await deletedatafromdb(`approvedUsers/${user.uid}`);
             setApprovedUsers(prev => prev.filter(u => u.uid !== user.uid));
-            setBatchUsers(prev => [...prev, user]);
+            setAllUsers(prev => [...prev, user]);
             toast({
                 title: "User unapproved.",
                 status: "success",
@@ -91,7 +88,7 @@ const BatchRepPanel = ({ batchRepUID }) => {
     const handleRemoveUser = async (id) => {
         try {
             await deletedatafromdb(`users/${id}`);
-            setBatchUsers(prev => prev.filter(user => user.uid !== id));
+            setAllUsers(prev => prev.filter(user => user.uid !== id));
             toast({
                 title: "User removed.",
                 status: "success",
@@ -120,9 +117,8 @@ const BatchRepPanel = ({ batchRepUID }) => {
 
     return (
         <VStack spacing={6} align="stretch">
-            <Heading size="3xl" textAlign="center"  p={1} mt={3} borderRadius="md">Batch Management</Heading>
             <Box>
-                <Heading size="2xl" textAlign="center"  p={2} m={5} borderRadius="md">Approved Users</Heading>
+                <Heading size="xl" textAlign="center" p={2} m={2} borderRadius="md">Approved Users</Heading>
                 <List spacing={2} maxHeight="50vh" overflowY="auto">
                     {approvedUsers.map(user => (
                         <ListItem key={user.uid} borderRadius="md" boxShadow="md" bg={cardBg}>
@@ -145,9 +141,9 @@ const BatchRepPanel = ({ batchRepUID }) => {
                 </List>
             </Box>
             <Box>
-                <Heading size="2xl" textAlign="center" p={2} m={5} borderRadius="md">Non-Approved Users</Heading>
+                <Heading size="xl" textAlign="center" p={2} m={2} borderRadius="md">Pending Users</Heading>
                 <List spacing={2} maxHeight="50vh" overflowY="auto">
-                    {batchUsers.map(user => (
+                    {allUsers.map(user => (
                         <ListItem key={user.uid} borderRadius="md" boxShadow="md" bg={cardBg}>
                             <Card p={4}>
                                 <Box display="flex" alignItems="center">
@@ -174,4 +170,4 @@ const BatchRepPanel = ({ batchRepUID }) => {
     );
 };
 
-export default BatchRepPanel;
+export default AdminUserManagerPanel;
