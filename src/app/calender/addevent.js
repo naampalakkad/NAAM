@@ -5,7 +5,7 @@ import {
   Textarea
 } from "@chakra-ui/react";
 import { savedatatodb } from "@/lib/firebase";
-import { auth } from '@/lib/firebase'; // Ensure you import auth correctly from your Firebase config
+import { auth } from '@/lib/firebase';
 
 const AddEventDrawer = ({ isOpen, onClose, selectedDate, setSelectedDate, events, setEvents }) => {
   const [eventTitle, setEventTitle] = useState('');
@@ -57,7 +57,7 @@ const AddEventDrawer = ({ isOpen, onClose, selectedDate, setSelectedDate, events
       setEvents([...events, newEvent]);
       toast({
         title: 'Event Added',
-        description: 'Your event has been successfully added.',
+        description: 'Your event has been successfully Submitted for Review, Kindly wait for the administrator to Approve it.',
         status: 'success',
         duration: 3000,
         isClosable: true,
@@ -65,7 +65,6 @@ const AddEventDrawer = ({ isOpen, onClose, selectedDate, setSelectedDate, events
       resetForm();
       onClose();
     } catch (error) {
-      console.error("Error saving event:", error);
       toast({
         title: 'Error',
         description: 'There was an error saving your event. Please try again.',

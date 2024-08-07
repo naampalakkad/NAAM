@@ -39,10 +39,6 @@ function RenderDropdown({ detail, userdata, handleChange }) {
     fetchData();
   }, [optionname]);
 
-  const printUpdatedLocations = (locations) => {
-    console.log('Updated locations:', locations.map((loc) => loc.label));
-  };
-
   const handleCreate = useCallback(
     (inputValue) => {
       setIsLoading(true);
@@ -51,8 +47,7 @@ function RenderDropdown({ detail, userdata, handleChange }) {
         setIsLoading(false);
         setOptions((prev) => {
           const newOptions = [...prev, newOption];
-          const sortedOptions = newOptions.sort((a, b) => a.label.localeCompare(b.label)); // Sort options alphabetically
-          printUpdatedLocations(sortedOptions);
+          const sortedOptions = newOptions.sort((a, b) => a.label.localeCompare(b.label)); 
           const updatedData = sortedOptions.map((option) => option.label);
           const dataKey = optionname+"list";
           getdatafromdb('otherdata/locationdata').then((data) => {
