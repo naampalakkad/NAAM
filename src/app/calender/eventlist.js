@@ -6,7 +6,7 @@ const EventList = React.memo(({ futureEvents }) => {
   const toast = useToast();
 
   const handleShare = (eventId) => {
-    const url = `${window.location.origin}/calendar?eventId=${eventId}`;
+    const url = `${window.location.origin}/calender?eventId=${eventId}`;
     navigator.clipboard.writeText(url).then(() => {
       toast({
         title: "Link copied to clipboard.",
