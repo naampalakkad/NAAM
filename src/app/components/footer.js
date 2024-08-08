@@ -1,59 +1,82 @@
-'use client'
-import "./footer.css";
-import { SocialIcon } from 'react-social-icons'
-import Image from 'next/image'
-import { FooterMenuItems, socialMediaUrls } from "@/lib/data";
-
+'use client';
+import { Box, Flex, Text, Image, Stack, IconButton, useColorModeValue } from '@chakra-ui/react';
+import { SocialIcon } from 'react-social-icons';
+import { FooterMenuItems, socialMediaUrls } from '@/lib/data';
+import { ChevronRightIcon } from '@chakra-ui/icons';
 
 const MenuItem = ({ item }) => (
   <a href={item.link}>
-    <div className="footer-menu-item">{item.name}</div>
+    <Text fontSize="md" color="white" p={4} _hover={{ textDecoration: 'underline' }}>
+      {item.name}
+    </Text>
   </a>
 );
 
-const gotohome = () => {
-  window.location.href = '/';
-}
-
-const Socials = () => {
-  return (
-    <div id="social">
-      {socialMediaUrls.map(url => (
-        <div className="social_icons" key={url}>
-          <SocialIcon url={url} className="soc_icons" />
-        </div>
-      ))}
-    </div>
-  );
-
-}
-
+const Socials = () => (
+  <Flex spacing={4} width={{ base: 'full', md: '30%' }} mb={{ base: 2, md: 0 }} justifyContent={"space-evenly"} alignContent={"center"}>
+    {socialMediaUrls.map((url) => (
+      <IconButton
+        m={5}
+        key={url}
+        as={SocialIcon}
+        url={url}
+        aria-label="Social media icon"
+        size="lg"
+        borderRadius={"full"}
+        colorScheme="teal"
+        _hover={{ filter: 'brightness(115%)' }}
+      />
+    ))}
+  </Flex>
+);
 
 const Footer = () => {
+  const footerBg = useColorModeValue('rgb(0, 19, 59)', 'rgb(0, 19, 59)');
+  const textColor = useColorModeValue('white', 'white');
+  const copyrightColor = useColorModeValue('rgb(185, 185, 185)', 'rgb(185, 185, 185)');
+  const hoverColor = useColorModeValue('rgb(211, 168, 168)', 'rgb(211, 168, 168)');
 
   return (
-    <div id="footer">
-      <div id="foooter">
-        <div id="footer_text">
-          <Image id="logo" src={`/assets/logo.png`} alt={"Main logo"} width="250" height="250" onClick={gotohome} />
-          <div>
-            <div id="footer_heading">NAAM</div>
-            <div id="footer_subhead">Navodaya Alumni Association</div>
-            <div id="footer_subhead">Malampuzha, Palakkad, kerala, India</div>
-          </div>
-        </div>
-        <div id="footer_links">
-          {FooterMenuItems.map(item => <MenuItem key={item.name} item={item} />)}
-        </div>
+    <Box bg={footerBg} color={textColor} >
+      <Flex
+        direction={{ base: 'column', md: 'row' }}
+        justify="space-between"
+        align="center"
+        px={{ base: 4, md: 8 }}
+      >
+        <Flex direction="row" align="center" width={{ base: 'full', md: '30%' }} mb={{ base: 4, md: 0 }}>
+          <Image
+            src={`/assets/logo.png`}
+            alt="Main logo"
+            boxSize={{ base: '100px', md: '150px' }}
+            borderRadius={"full"}
+            m={5}
+            onClick={() => window.location.href = '/'}
+            cursor="pointer"
+          />
+          <Stack spacing={1} ml={4}>
+            <Text fontSize={{ base: 'lg', md: '2xl' }}>NAAM</Text>
+            <Text fontSize={{ base: 'sm', md: 'md' }}>Navodaya Alumni Association</Text>
+            <Text fontSize={{ base: 'sm', md: 'md' }}>Malampuzha, Palakkad, Kerala, India</Text>
+          </Stack>
+        </Flex>
+        <Flex direction={{ base: 'column', md: 'row' }} align="center" justifyContent={"space-evenly"} width={{ base: 'full', md: '30%' }} mb={{ base: 2, md: 0 }}>
+          {FooterMenuItems.map(item => (
+            <MenuItem key={item.name} item={item} />
+          ))}
+        </Flex>
         <Socials />
-      </div>
-      <div id="copyright">
-        copyright@2024
-      </div>
-    </div>
-
-
-
+      </Flex>
+      <Box textAlign="center" bg="rgb(0, 7, 22)" py={2} color={copyrightColor}>
+        <Text
+          fontSize="sm"
+          _hover={{ color: hoverColor }}
+        >
+          copyright@2024
+        </Text>
+      </Box>
+    </Box>
   );
 };
+
 export default Footer;

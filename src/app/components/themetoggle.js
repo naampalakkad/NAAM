@@ -15,7 +15,7 @@ export const ThemeToggleButton = () => {
     : "/assets/sun.svg";
 
   return (
-    <HStack alignItems="center" spacing={4}>
+    <HStack alignItems="center"  ml={4} >
       <Box position="relative">
         <Switch
           isChecked={colorMode === "dark"}
