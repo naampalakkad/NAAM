@@ -13,8 +13,8 @@ const BatchRepPanel = ({ batchRepUID }) => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const usersData = await getdatafromdb('users');
-                const batchRepData = await getdatafromdb(`userroles/batchreps/${batchRepUID}`);
+                const usersData = await getdatafromdb('users') || {};
+                const batchRepData = await getdatafromdb(`userroles/batchreps/${batchRepUID}`) || {};
                 if (usersData && batchRepData) {
                     const usersArray = Object.keys(usersData).map(uid => ({
                         uid,
@@ -22,9 +22,16 @@ const BatchRepPanel = ({ batchRepUID }) => {
                     }));
                     const batch = batchRepData.batch;
                     const filteredUsers = usersArray.filter(user => user.batch === batch);
-                    const approvedUsers = await getdatafromdb('approvedUsers');
-                    setBatchUsers(filteredUsers.filter(user => !approvedUsers[user.uid]));
-                    setApprovedUsers(Object.values(approvedUsers || {}));
+    
+                    const approvedUsersData = await getdatafromdb('approvedUsers');
+                    const approvedUsersArray = Object.keys(approvedUsersData || {}).map(uid => ({
+                        uid,
+                        ...approvedUsersData[uid],
+                    }));
+                    const filteredApprovedUsers = approvedUsersArray.filter(user => user.batch === batch);
+    
+                    setBatchUsers(filteredUsers.filter(user => !filteredApprovedUsers.some(approvedUser => approvedUser.uid === user.uid)));
+                    setApprovedUsers(filteredApprovedUsers);
                 }
             } catch (error) {
                 toast({
@@ -38,9 +45,10 @@ const BatchRepPanel = ({ batchRepUID }) => {
                 setLoading(false);
             }
         };
-
+    
         fetchData();
     }, [toast, batchRepUID]);
+    
 
     const handleApproveUser = async (user) => {
         try {
@@ -128,7 +136,7 @@ const BatchRepPanel = ({ batchRepUID }) => {
                         <ListItem key={user.uid} borderRadius="md" boxShadow="md" bg={cardBg}>
                             <Card p={4}>
                                 <Box display="flex" alignItems="center">
-                                    <Avatar size="lg" src={user.photoURL} />
+                                    <Avatar size="lg" src={user.photoURL || `/assets/usericon.webp`} />
                                     <Box ml={4} flex="1">
                                         <Text fontWeight="bold" fontSize="lg">{user.email}</Text>
                                         {user.batch && <Text>{`Batch: ${user.batch}`}</Text>}
@@ -151,7 +159,7 @@ const BatchRepPanel = ({ batchRepUID }) => {
                         <ListItem key={user.uid} borderRadius="md" boxShadow="md" bg={cardBg}>
                             <Card p={4}>
                                 <Box display="flex" alignItems="center">
-                                    <Avatar size="lg" src={user.photoURL} />
+                                    <Avatar size="lg" src={user.photoURL || `/assets/usericon.webp`} />
                                     <Box ml={4} flex="1">
                                         <Text fontWeight="bold" fontSize="lg">{user.email}</Text>
                                         {user.batch && <Text>{`Batch: ${user.batch}`}</Text>}

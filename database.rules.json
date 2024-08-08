@@ -1,24 +1,8 @@
 {
   "rules": {
-    "aboutnaam": {
-      ".read": "true",
-      ".write": false
-    },
-    "menuitems": {
-      ".read": "true",
-      ".write": false
-    },
-    "posts": {
-      ".read": "true",
-      ".write": "auth != null && root.child('userroles/blogger').child(auth.token.email.replace('.', '_')).val() == true"
-    },
-    "events": {
-      ".read": "auth != null",
-      ".write": "auth != null && root.child('userroles/admin').child(auth.token.email.replace('.', '_')).val() == true"
-    },
     "userroles": {
-      ".read": "auth != null",
-      ".write": "auth != null"
+      ".read": "true",
+      ".write": "true"
     },
     "users": {
       ".read": "auth != null",
@@ -28,7 +12,71 @@
       ".read": "auth != null",
       ".write": "auth != null"
     },
-    ".read": false,
-    ".write": false
+    "approvedUsers": {
+      ".read": "true",
+      ".write": "auth != null && (root.child('userroles/admin').child(auth.token.email.replace('.', '_')).val() == true || root.child('userroles/batchreplist').child(auth.token.email.replace('.', '_')).val() == true)"
+    },
+      "phototilesData" : {
+      ".read": "true",
+      ".write": "auth != null && root.child('userroles/admin').child(auth.token.email.replace('.', '_')).val() == true"
+      },
+        "content": {
+      ".read": "auth != null",
+      ".write": "auth != null",
+      "approvedevents": {
+        ".read": "auth != null",
+        ".write": "auth != null && root.child('userroles/admin').child(auth.token.email.replace('.', '_')).val() == true"
+      },
+      "approvedposts": {
+        ".read": "true",
+        ".write": "auth != null && root.child('userroles/admin').child(auth.token.email.replace('.', '_')).val() == true"
+      },
+      "approvedtestimonials": {
+        ".read": "true",
+        ".write": "auth != null && root.child('userroles/admin').child(auth.token.email.replace('.', '_')).val() == true"
+      },
+      "archivedevents": {
+        ".read": "auth != null && root.child('userroles/admin').child(auth.token.email.replace('.', '_')).val() == true",
+        ".write": "auth != null && root.child('userroles/admin').child(auth.token.email.replace('.', '_')).val() == true"
+      },
+      "archivedposts": {
+       ".read": "auth != null && root.child('userroles/admin').child(auth.token.email.replace('.', '_')).val() == true",
+        ".write": "auth != null && root.child('userroles/admin').child(auth.token.email.replace('.', '_')).val() == true"
+      },
+      "archivedtestimonials": {
+        ".read": "auth != null && root.child('userroles/admin').child(auth.token.email.replace('.', '_')).val() == true",
+        ".write": "auth != null && root.child('userroles/admin').child(auth.token.email.replace('.', '_')).val() == true"
+      },
+      "pendingevents": {
+        ".read": "auth != null",
+        ".write": "auth != null"
+      },
+      "pendingtestimonials": {
+        ".read": "auth != null",
+        ".write": "auth != null"
+      },
+         "pendingposts": {
+        ".read": "auth != null",
+        ".write": "auth != null"
+      }
+    },
+    "posts": {
+      "$postId": {
+        "comments": {
+          ".read": "true",
+          ".write": "auth != null"
+        },
+           "likes": {
+          ".read": "true",
+          ".write": "auth != null"
+        },
+           "likesCount": {
+          ".read": "true",
+          ".write": "auth != null"
+        }
+      },
+    ".read":"auth != null",
+    ".write": "auth != null"
   }
+}
 }

@@ -216,7 +216,7 @@ const AddNewTileButton = ({
         setIsLoading(true);
         try {
             if (newImage) {
-                const imageUrl = await uploadadminImageToStorage('gallerythumbnails', newImage);
+                const imageUrl = await uploadImgToStorage('gallerythumbnails', newImage);
                 newEntry.imageUrl = imageUrl;
             }
             const updatedPhotoTiles = [...photoTiles, newEntry];
@@ -254,7 +254,8 @@ const AddNewTileButton = ({
             flexDirection="column"
             minHeight="250px"
         >
-            {!isEditing && <Button
+            {!isEditing && 
+            <Button
                 leftIcon={<AddIcon />}
                 colorScheme="teal"
                 onClick={handleAddNewEntry}

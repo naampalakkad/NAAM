@@ -10,7 +10,7 @@ if (typeof window !== "undefined") {
     })
     .catch((err) => {
       console.error('Error loading ImageCompressor:', err);
-    });
+    }); 
 }
 const firebaseConfig = {
   apiKey: "AIzaSyAwBCJsji0R5UeZuKkroe4JsS3RSrVHrsA",
@@ -22,7 +22,16 @@ const firebaseConfig = {
   appId: "1:441558746731:web:da6e9e5f18396ac0bd132e",
   measurementId: "G-PPQBL6FYQT"
 };
-
+// const firebaseConfig = {
+//   apiKey: "AIzaSyD3teEBN7Ai6JXlvtbGaE6r_NTLK0Kpm4A",
+//   authDomain: "naam-751a5.firebaseapp.com",
+//   projectId: "naam-751a5",
+//   storageBucket: "naam-751a5.appspot.com",
+//   messagingSenderId: "635247227682",
+//   appId: "1:635247227682:web:01891d1adee715c4f7ab7b",
+//   measurementId: "G-1DCGC388NY",
+//   databaseURL: "https://naam-751a5-default-rtdb.asia-southeast1.firebasedatabase.app"
+// };
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const storage = getStorage(app);
@@ -78,11 +87,11 @@ export async function checkuserrole(role) {
           const data = await getdatafromdb(roleLocation);
           resolve(data ? Boolean(data[userEmail]) : false);
         } catch (error) {
-          console.error("Error getting document: ", error);
+          console.error("Error checking user role: ", error);
           resolve(false);
         }
       } else {
-        console.error("No user signed in");
+        console.error("User not signed in");
         resolve(false);
       }
     });
@@ -94,7 +103,7 @@ export function savedatatodb(location, data) {
     let dataRef = ref(db, location);
     set(dataRef, data)
       .catch((error) => {
-        console.error("Error writing document: ", error);
+        console.error("Error saving data ", error);
       });
   }
 }
@@ -120,7 +129,7 @@ export async function getdatafromdb(location) {
       }
     })
     .catch((error) => {
-      console.error("Error getting document: ", error);
+      console.error("Error getting data from DB: ", error);
       throw error;
     });
 }

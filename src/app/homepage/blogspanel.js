@@ -1,26 +1,60 @@
 'use client';
-import React, { useState, useEffect } from 'react';
-import {
-  Grid,
-  Card,
-  CardHeader,
-  Image,
-  CardBody,
-  Stack,
-  Badge,
-  Button,
-  HStack,
-  Skeleton,
-  SkeletonText,
-  Heading,
-  useToast,
-  IconButton
-} from '@chakra-ui/react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import { Grid, Card, CardHeader, Image, CardBody, Stack, Badge, Button, HStack, Skeleton, SkeletonText, Heading, useToast, IconButton } from '@chakra-ui/react';
 import { getdatafromdb, auth, getLikesCount, addLike, removeLike } from '@/lib/firebase';
 import { FaThumbsUp, FaRegThumbsUp } from 'react-icons/fa';
 import PostModal from './postmodel';
 
 const defaultImage = "./assets/logo.webp";
+
+const LoadingSkeleton = () => (
+  <Card  variant="elevated" size="sm">
+    <Skeleton height="150px" />
+    <CardBody>
+      <SkeletonText noOfLines={2} spacing={4} />
+    </CardBody>
+  </Card>
+);
+
+const PostCard = ({ post, onOpen, liked, onLike, likesCount }) => (
+  <Card   variant="elevated" size="sm">
+    <CardHeader>
+      <Image
+        src={post[1]?.thumbnail || defaultImage}
+        alt="Cover Image"
+        borderRadius="lg"
+        maxH="150px"
+        width={"100%"}
+        objectFit="cover"
+        cursor="pointer"
+        onClick={() => onOpen(post)}
+      />
+    </CardHeader>
+    <CardBody>
+      <Stack>
+        <HStack>
+          <Badge colorScheme="blue">{post[1]?.type}</Badge>
+          <Badge colorScheme="yellow">{post[1]?.authorName}</Badge>
+        </HStack>
+        <Heading size={"md"}>{post[1]?.title}</Heading>
+        <HStack justifyContent={"space-between"}>
+          <Button fontWeight="bold"  colorScheme="blue" onClick={() => onOpen(post)}>
+            Read More
+          </Button>
+          <HStack>
+          <IconButton
+            aria-label="Like button"
+            icon={liked ? <FaThumbsUp /> : <FaRegThumbsUp />}
+            variant="link"
+            onClick={() => onLike(post[0])}
+          />
+          <span>{likesCount}</span>
+        </HStack>
+        </HStack>
+      </Stack>
+    </CardBody>
+  </Card>
+);
 
 const BlogsPanel = () => {
   const [posts, setPosts] = useState([]);
@@ -31,46 +65,46 @@ const BlogsPanel = () => {
   const [likedPosts, setLikedPosts] = useState({});
   const toast = useToast();
 
-  useEffect(() => {
-    const fetchPosts = async () => {
-      const postsFromDb = await getdatafromdb('content/approvedposts');
-      if (postsFromDb) {
-        const postsArray = Object.entries(postsFromDb);
-        postsArray.sort((a, b) => b[1].timestamp - a[1].timestamp);
-        setPosts(postsArray);
-      }
-      setLoading(false);
-    };
-    fetchPosts();
+  const fetchPosts = useCallback(async () => {
+    const postsFromDb = await getdatafromdb('content/approvedposts');
+    if (postsFromDb) {
+      const postsArray = Object.entries(postsFromDb);
+      postsArray.sort((a, b) => b[1].timestamp - a[1].timestamp);
+      setPosts(postsArray);
+    }
+    setLoading(false);
   }, []);
 
   useEffect(() => {
-    const fetchLikes = async () => {
-      const likesData = {};
-      const likedData = {};
-      for (const [id, post] of posts) {
-        const likeCount = await getLikesCount(id);
-        likesData[id] = likeCount;
+    fetchPosts();
+  }, [fetchPosts]);
 
-        if (auth.currentUser) {
-          const userId = auth.currentUser.uid;
-          const hasLiked = await getdatafromdb(`content/approvedposts/${id}/likes/${userId}`);
-          likedData[id] = !!hasLiked;
-        }
+  const fetchLikes = useCallback(async () => {
+    const likesData = {};
+    const likedData = {};
+    for (const [id, post] of posts) {
+      const likeCount = await getLikesCount(id);
+      likesData[id] = likeCount;
+
+      if (auth.currentUser) {
+        const userId = auth.currentUser.uid;
+        const hasLiked = await getdatafromdb(`content/approvedposts/${id}/likes/${userId}`);
+        likedData[id] = !!hasLiked;
       }
-      setLikes(likesData);
-      setLikedPosts(likedData);
-    };
+    }
+    setLikes(likesData);
+    setLikedPosts(likedData);
+  }, [posts]);
+
+  useEffect(() => {
     if (posts.length) {
       fetchLikes();
     }
-  }, [posts]);
+  }, [posts, fetchLikes]);
 
   const openModal = (post) => {
-    // setSelectedPost(post);
-    // setIsOpen(true);
-    const postId = post[0];
-    window.location=`/blog/${postId}`;
+    setSelectedPost(post);
+    setIsOpen(true);
   };
 
   const closeModal = () => {
@@ -79,17 +113,17 @@ const BlogsPanel = () => {
   };
 
   const handleLike = async (postId) => {
+    if (!auth.currentUser) {
+      toast({
+        title: "You need to sign in to like posts",
+        status: 'warning',
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+    const userId = auth.currentUser.uid;
     try {
-      if (!auth.currentUser) {
-        toast({
-          title: "You need to sign in to like posts",
-          status: 'warning',
-          duration: 3000,
-          isClosable: true,
-        });
-        return;
-      }
-      const userId = auth.currentUser.uid;
       if (likedPosts[postId]) {
         await removeLike(postId, userId);
         setLikedPosts((prev) => ({ ...prev, [postId]: false }));
@@ -116,67 +150,24 @@ const BlogsPanel = () => {
     }
   };
 
-  const handleOpenPost = (post) => {
-    openModal(post);
-  };
-
   return (
     <>
       <Grid
-        templateColumns={{ base: '1fr', md: 'repeat(2, 1fr)', lg: 'repeat(3, 1fr)' }}
+        templateColumns={{ base: '1fr', md: 'repeat(2, 1fr)', lg: 'repeat(4, 1fr)' }}
         gap={4}
         width={"80vw"}
       >
         {loading
-          ? Array.from({ length: 4 }).map((_, index) => (
-            <Card key={index} minBlockSize={250} width={"300px"} variant="elevated" size="sm">
-              <Skeleton height="150px" />
-              <CardBody>
-                <SkeletonText noOfLines={2} spacing={4} />
-              </CardBody>
-            </Card>
-          ))
+          ? Array.from({ length: 4 }).map((_, index) => <LoadingSkeleton key={index} />)
           : posts.map((post, index) => (
-            <Card
+            <PostCard
               key={index}
-              minBlockSize={250}
-              width={"300px"}
-              variant="elevated"
-              size="sm"
-            >
-              <CardHeader>
-                <Image
-                  src={post[1]?.coverImage || defaultImage}
-                  alt="Cover Image"
-                  borderRadius="lg"
-                  maxH="150px"
-                  width={"100%"}
-                  objectFit="cover"
-                  cursor="pointer"
-                />
-              </CardHeader>
-              <CardBody>
-                <Stack>
-                  <HStack>
-                    <Badge colorScheme="blue">{post[1]?.type}</Badge>
-                    <Badge colorScheme="yellow">{post[1]?.authorName}</Badge>
-                  </HStack>
-                  <Heading size={"md"}>{post[1]?.title}</Heading>
-                  <HStack justifyContent={"space-evenly"}>
-                    <Button fontWeight="bold" onClick={() => handleOpenPost(post)}>
-                      Read More
-                    </Button>
-                    <IconButton
-                      aria-label="Like button"
-                      icon={likedPosts[post[0]] ? <FaThumbsUp /> : <FaRegThumbsUp />}
-                      variant="link"
-                      onClick={() => handleLike(post[0])}
-                    />
-                    <span>{likes[post[0]] || 0}</span>
-                  </HStack>
-                </Stack>
-              </CardBody>
-            </Card>
+              post={post}
+              onOpen={openModal}
+              liked={likedPosts[post[0]]}
+              onLike={handleLike}
+              likesCount={likes[post[0]] || 0}
+            />
           ))}
       </Grid>
       {selectedPost && (
