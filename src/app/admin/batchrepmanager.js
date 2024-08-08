@@ -17,7 +17,7 @@ const BatchRepManager = () => {
                 if (repsData) {
                     setBatchReps(Object.values(repsData));
                 }
-                const usersData = await getdatafromdb('users');
+                const usersData = await getdatafromdb('approvedUsers');
                 if (usersData) {
                     const usersArray = Object.keys(usersData).map(uid => ({
                         uid,
