@@ -13,8 +13,8 @@ const BatchRepPanel = ({ batchRepUID }) => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const usersData = await getdatafromdb('users');
-                const batchRepData = await getdatafromdb(`userroles/batchreps/${batchRepUID}`);
+                const usersData = await getdatafromdb('users') || {};
+                const batchRepData = await getdatafromdb(`userroles/batchreps/${batchRepUID}`) || {};
                 if (usersData && batchRepData) {
                     const usersArray = Object.keys(usersData).map(uid => ({
                         uid,

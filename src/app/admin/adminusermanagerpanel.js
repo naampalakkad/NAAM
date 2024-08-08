@@ -9,20 +9,20 @@ const AdminUserManagerPanel = () => {
     const toast = useToast();
     const cardBg = useColorModeValue('gray.50', 'gray.700');
     const tealTint = useColorModeValue('teal.100', 'teal.900');
-
+    
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const usersData = await getdatafromdb('users');
-                const approvedUsers = await getdatafromdb('approvedUsers');
-                if (usersData) {
-                    const usersArray = Object.keys(usersData).map(uid => ({
-                        uid,
-                        ...usersData[uid],
-                    }));
-                    setAllUsers(usersArray.filter(user => !approvedUsers[user.uid]));
-                    setApprovedUsers(Object.values(approvedUsers || {}));
-                }
+                const usersData = await getdatafromdb('users') || {};
+                const approvedUsers = await getdatafromdb('approvedUsers') || {};
+    
+                const usersArray = Object.keys(usersData).map(uid => ({
+                    uid,
+                    ...usersData[uid],
+                }));
+    
+                setAllUsers(usersArray.filter(user => !approvedUsers[user.uid]));
+                setApprovedUsers(Object.values(approvedUsers));
             } catch (error) {
                 toast({
                     title: "Error fetching data.",
@@ -35,9 +35,10 @@ const AdminUserManagerPanel = () => {
                 setLoading(false);
             }
         };
-
+    
         fetchData();
     }, [toast]);
+    
 
     const handleApproveUser = async (user) => {
         try {
