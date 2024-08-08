@@ -27,12 +27,15 @@ export const ThemeToggleButton = () => {
           colorScheme="teal"
           sx={{
             '.chakra-switch__track': {
-              bg: useColorModeValue(colors.teal[600], colors.teal[600]),
-              _checked: {
-                bg: useColorModeValue(colors.teal[900], colors.teal[900]),
-              },
+              // width:"40px",
+              height:"30px",
+              width:"50px",
             },
             '.chakra-switch__thumb': {
+              padding: "0px",
+              backgroundColor: colors.teal[50],
+              width:"30px",
+              height:"30px",
               '&:before': {
                 content: `url(${themeIcon})`,
               },
