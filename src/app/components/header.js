@@ -26,8 +26,8 @@ import { MenuItems } from '@/lib/data';
 import { ThemeToggleButton } from './themetoggle';
 
 const MenuItem = memo(({ item }) => (
-  <Link href={item.link} passHref>
-    <Text  className="main_icons" ml={4}>
+  <Link href={item.link} passHref >
+    <Text  className="main_icons" _hover={{ color: 'teal' }} ml={4}>
       {item.name}
     </Text>
   </Link>
@@ -82,7 +82,7 @@ export default function Header() {
         color={headerColor}
         transition="background-color 0.3s ease"
       >
-        <Box id="heading" onClick={gotohome} display="flex" alignItems="center">
+        <Box id="heading" onClick={gotohome} display="flex" alignItems="center" cursor="pointer"  >
           <Image
             src={`/assets/logo.webp`}
             alt="Main logo"
@@ -90,7 +90,7 @@ export default function Header() {
             height={isMobile ? 70 : 64}
             style={{ borderRadius: '50%' }}
           />
-          <Box ml={4} textAlign="left">
+          <Box ml={4} textAlign="left" _hover={{ color: 'teal' }}>
             <Text fontSize="xl" fontWeight="bold">NAAM</Text>
             <Text fontSize="sm">Navodaya Alumni Association, Malampuzha</Text>
           </Box>

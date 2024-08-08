@@ -87,11 +87,11 @@ export async function checkuserrole(role) {
           const data = await getdatafromdb(roleLocation);
           resolve(data ? Boolean(data[userEmail]) : false);
         } catch (error) {
-          console.error("Error getting document: ", error);
+          console.error("Error checking user role: ", error);
           resolve(false);
         }
       } else {
-        console.error("No user signed in");
+        console.error("User not signed in");
         resolve(false);
       }
     });
@@ -103,7 +103,7 @@ export function savedatatodb(location, data) {
     let dataRef = ref(db, location);
     set(dataRef, data)
       .catch((error) => {
-        console.error("Error writing document: ", error);
+        console.error("Error saving data ", error);
       });
   }
 }
@@ -129,7 +129,7 @@ export async function getdatafromdb(location) {
       }
     })
     .catch((error) => {
-      console.error("Error getting document: ", error);
+      console.error("Error getting data from DB: ", error);
       throw error;
     });
 }
