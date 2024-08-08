@@ -8,7 +8,7 @@ import PostModal from './postmodel';
 const defaultImage = "./assets/logo.webp";
 
 const LoadingSkeleton = () => (
-  <Card minBlockSize={250} width={"300px"} variant="elevated" size="sm">
+  <Card  variant="elevated" size="sm">
     <Skeleton height="150px" />
     <CardBody>
       <SkeletonText noOfLines={2} spacing={4} />
