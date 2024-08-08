@@ -19,6 +19,7 @@ import {
   DrawerCloseButton,
   IconButton,
   HStack,
+  position,
 } from '@chakra-ui/react';
 import { HamburgerIcon } from '@chakra-ui/icons';
 import { MenuItems } from '@/lib/data';
@@ -26,7 +27,7 @@ import { ThemeToggleButton } from './themetoggle';
 
 const MenuItem = memo(({ item }) => (
   <Link href={item.link} passHref>
-    <Text as="a" className="main_icons" ml={4}>
+    <Text  className="main_icons" ml={4}>
       {item.name}
     </Text>
   </Link>
@@ -71,7 +72,7 @@ export default function Header() {
   };
 
   return (
-    <header>
+    <header style={{display:"block", position:"fixed", width:"100%", zIndex:"999", top:0, left:0}}>
       <Flex
         id="header"
         alignItems="center"
@@ -83,7 +84,7 @@ export default function Header() {
       >
         <Box id="heading" onClick={gotohome} display="flex" alignItems="center">
           <Image
-            src={`/assets/logo.png`}
+            src={`/assets/logo.webp`}
             alt="Main logo"
             width={isMobile ? 70 : 64}
             height={isMobile ? 70 : 64}
