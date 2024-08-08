@@ -10,7 +10,7 @@ if (typeof window !== "undefined") {
     })
     .catch((err) => {
       console.error('Error loading ImageCompressor:', err);
-    });
+    }); 
 }
 const firebaseConfig = {
   apiKey: "AIzaSyAwBCJsji0R5UeZuKkroe4JsS3RSrVHrsA",
