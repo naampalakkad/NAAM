@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Text, Center, Flex, IconButton } from "@chakra-ui/react";
+import { Box, Text, Center, Flex, IconButton, useColorModeValue } from "@chakra-ui/react";
 import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
 
 const quotes = [
@@ -25,7 +25,7 @@ const quotes = [
     }
 ];
 
-export default function QuoteBox() {
+const QuoteBox = () => {
     const [index, setIndex] = useState(0);
 
     useEffect(() => {
@@ -43,23 +43,29 @@ export default function QuoteBox() {
         setIndex((index - 1 + quotes.length) % quotes.length);
     };
 
+    const boxBg = useColorModeValue("gray.100", "gray.700");
+    const textColor = useColorModeValue("gray.800", "white");
+    const authorColor = useColorModeValue("gray.600", "gray.300");
+
     return (
-        <Center>
+        <Center p={5}>
             <Box 
-                maxW="80vw" 
+                width="100%" 
+                maxW="600px" 
                 borderWidth="1px" 
                 borderRadius="lg" 
                 overflow="hidden" 
                 boxShadow="lg" 
-                bgGradient="linear(to-r, teal.500, green.500)" 
-                color="white"
-                p="6"
+                bg={boxBg} 
+                p={6}
             >
                 <Center>
-                    <Text fontSize="xl" fontWeight="bold" mb="4">"{quotes[index].text}"</Text>
+                    <Text fontSize="xl" fontWeight="bold"  minH="150px" mb={4} color={textColor} textAlign="center">
+                        "{quotes[index].text}"
+                    </Text>
                 </Center>
-                <Text fontSize="md" color="gray.300" textAlign="right">- {quotes[index].author}</Text>
-                <Flex justifyContent="space-between" mt="4">
+                <Text fontSize="md" color={authorColor} textAlign="right">- {quotes[index].author}</Text>
+                <Flex justifyContent="space-between" mt={4}>
                     <IconButton
                         icon={<ChevronLeftIcon />}
                         aria-label="Previous"
@@ -77,3 +83,5 @@ export default function QuoteBox() {
         </Center>
     );
 }
+
+export default QuoteBox;

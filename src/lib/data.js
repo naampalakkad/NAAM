@@ -47,6 +47,7 @@ export const statistics = [
 ]
 
 export const MenuItems = [
+  { name: 'Home', link: '/' },
   { name: 'Gallery', link: '/gallery' },
   { name: 'Alumni', link: '/alumni' },
   { name: 'News', link: '/posts' },

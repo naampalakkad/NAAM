@@ -1,14 +1,25 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { Box, SimpleGrid, Image, Text, Link, Center, Skeleton, useToast } from '@chakra-ui/react';
+import { Box, SimpleGrid, Image, Text, Link, Center, Skeleton, useToast, keyframes, usePrefersReducedMotion, Heading } from '@chakra-ui/react';
+import { ArrowForwardIcon } from '@chakra-ui/icons';
 import { getdatafromdb } from '@/lib/firebase';
-import './gallery.css';
+
+const fadeIn = keyframes`
+  from { opacity: 0; }
+  to { opacity: 1; }
+`;
+
+const slideIn = keyframes`
+  from { transform: translateY(50%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+`;
 
 const GalleryTiles = () => {
   const [photoTiles, setPhotoTiles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const toast = useToast();
+  const prefersReducedMotion = usePrefersReducedMotion();
 
   useEffect(() => {
     const fetchPhotoTiles = async () => {
@@ -35,12 +46,14 @@ const GalleryTiles = () => {
     fetchPhotoTiles();
   }, [toast]);
 
+  const animation = prefersReducedMotion ? undefined : `${fadeIn} 0.5s ease-out`;
+
   if (loading) {
     return (
-      <Box className="gallery-container">
+      <Box p={5}>
         <SimpleGrid columns={{ base: 1, sm: 2, md: 3, lg: 4 }} spacing={4}>
           {Array.from({ length: 8 }).map((_, index) => (
-            <Skeleton key={index} height="250px" />
+            <Skeleton key={index} height="250px" width="100%" borderRadius="md" />
           ))}
         </SimpleGrid>
       </Box>
@@ -49,26 +62,49 @@ const GalleryTiles = () => {
 
   if (error) {
     return (
-      <Box className="gallery-container">
+      <Box p={5}>
         <Text color="red.500">Failed to load gallery tiles.</Text>
       </Box>
     );
   }
 
   return (
-    <Box className="gallery-container">
+    <Box p={5}>
       <SimpleGrid columns={{ base: 1, sm: 2, md: 3, lg: 4 }} spacing={4}>
         {photoTiles.map((tile, index) => (
           <Link href={tile.link} isExternal key={index}>
-            <Box className="gallery-item">
+            <Box 
+              position="relative" 
+              height="250px" 
+              borderRadius="md" 
+              overflow="hidden" 
+              boxShadow="md"
+              animation={animation}
+            >
               <Image 
-                src={tile.imageUrl} 
+                src={tile.imageUrl || `/assets/logo.webp`} 
                 alt={tile.text} 
-                className="gallery-img" 
-                fallbackSrc="https://via.placeholder.com/150"
+                objectFit="cover" 
+                width="100%" 
+                height="100%"
+                transition="transform 0.3s ease"
+                _hover={{
+                  transform: 'scale(1.05)'
+                }}
               />
-              <Center className="overlay">
-                {tile.text}
+              <Center 
+                position="absolute" 
+                bottom={0} 
+                width="100%" 
+                bg="rgba(0, 0, 0, 0.9)" 
+                p={2}
+                className="overlay"
+                animation={animation}
+                flexDirection="row"
+                justifyContent="space-between"
+              >
+                <Heading size="md">{tile.text}</Heading>
+                <ArrowForwardIcon w={6} h={6} />
               </Center>
             </Box>
           </Link>

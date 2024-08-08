@@ -19,8 +19,6 @@ const ImageGrid = ({ images, loading, handleImageDelete, openImageModal, handleI
     <SimpleGrid
   minChildWidth="250px"
   spacing={5}
-  alignContent="center"
-  justifyContent="center"
   width="100%"
   p={5} 
   maxHeight="50vh" 
@@ -140,7 +138,7 @@ const ImageGrid = ({ images, loading, handleImageDelete, openImageModal, handleI
 
 const ImageModal = ({ isOpen, onClose, selectedImage }) => {
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal size={"3xl"} isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
         <ModalCloseButton />
