@@ -11,7 +11,7 @@ export default function AboutNaam() {
                 <CardBody>
                     <Grid templateColumns={{ base: "1fr", md: "150px auto" }} gap={6} alignItems="center">
                         <Box display="flex" justifyContent="center">
-                            <Image boxSize='150px' src={"/assets/logo.png"} alt="NAAM logo" loading="lazy" />
+                            <Image boxSize='150px' src={"/assets/logo.webp"} alt="NAAM logo" loading="lazy" />
                         </Box>
                         <Text>{aboutnaam.about}</Text>
                     </Grid>
@@ -24,7 +24,7 @@ export default function AboutNaam() {
                 <CardBody>
                     <Grid templateColumns={{ base: "1fr", md: "150px auto" }} gap={6} alignItems="center">
                         <Box display="flex" justifyContent="center">
-                            <Image boxSize='150px' src={"/assets/logo.png"} alt="NAAM logo" loading="lazy" />
+                            <Image boxSize='150px' src={"/assets/logo.webp"} alt="NAAM logo" loading="lazy" />
                         </Box>
                         <Text>{aboutnaam.mission}</Text>
                     </Grid>

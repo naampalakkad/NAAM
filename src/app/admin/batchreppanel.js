@@ -128,7 +128,7 @@ const BatchRepPanel = ({ batchRepUID }) => {
                         <ListItem key={user.uid} borderRadius="md" boxShadow="md" bg={cardBg}>
                             <Card p={4}>
                                 <Box display="flex" alignItems="center">
-                                    <Avatar size="lg" src={user.photoURL} />
+                                    <Avatar size="lg" src={user.photoURL || `/assets/usericon.webp`} />
                                     <Box ml={4} flex="1">
                                         <Text fontWeight="bold" fontSize="lg">{user.email}</Text>
                                         {user.batch && <Text>{`Batch: ${user.batch}`}</Text>}
@@ -151,7 +151,7 @@ const BatchRepPanel = ({ batchRepUID }) => {
                         <ListItem key={user.uid} borderRadius="md" boxShadow="md" bg={cardBg}>
                             <Card p={4}>
                                 <Box display="flex" alignItems="center">
-                                    <Avatar size="lg" src={user.photoURL} />
+                                    <Avatar size="lg" src={user.photoURL || `/assets/usericon.webp`} />
                                     <Box ml={4} flex="1">
                                         <Text fontWeight="bold" fontSize="lg">{user.email}</Text>
                                         {user.batch && <Text>{`Batch: ${user.batch}`}</Text>}

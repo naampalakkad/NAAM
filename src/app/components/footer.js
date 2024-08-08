@@ -46,7 +46,7 @@ const Footer = () => {
       >
         <Flex direction="row" align="center" width={{ base: 'full', md: '30%' }} mb={{ base: 4, md: 0 }}>
           <Image
-            src={`/assets/logo.png`}
+            src={`/assets/logo.webp`}
             alt="Main logo"
             boxSize={{ base: '100px', md: '150px' }}
             borderRadius={"full"}

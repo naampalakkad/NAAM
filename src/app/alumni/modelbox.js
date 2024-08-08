@@ -21,7 +21,7 @@ const ModelBox = ({ isOpen, onClose, selectedAlumni }) => (
           <>
             <Flex justifyContent="center" mb={4}>
               <Image
-                src={selectedAlumni.photoURL}
+                src={selectedAlumni.photoURL || `/assets/usericon.webp`}
                 alt={selectedAlumni.name}
                 className="alumniimage"
                 borderRadius="full"

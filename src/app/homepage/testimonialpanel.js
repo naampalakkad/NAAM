@@ -53,7 +53,7 @@ export default function TestimonialPanel() {
                 <Card key={index} minWidth="260px" maxWidth="300px" m={2}>
                     <CardHeader>
                         <Box display="flex" alignItems="center">
-                            <Image src={item.photo} alt={item.authorName} borderRadius="full" boxSize="50px" />
+                            <Image src={item.photo || `/assets/usericon.webp`} alt={item.authorName} borderRadius="full" boxSize="50px" />
                             <VStack align="start" ml={4}>
                                 <Text fontWeight="bold">{item.authorName}</Text>
                                 <Text color="gray.500">{item.batch}</Text>

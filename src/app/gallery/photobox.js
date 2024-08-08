@@ -82,12 +82,11 @@ const GalleryTiles = () => {
               animation={animation}
             >
               <Image 
-                src={tile.imageUrl} 
+                src={tile.imageUrl || `/assets/logo.webp`} 
                 alt={tile.text} 
                 objectFit="cover" 
                 width="100%" 
                 height="100%"
-                fallbackSrc="https://via.placeholder.com/150"
                 transition="transform 0.3s ease"
                 _hover={{
                   transform: 'scale(1.05)'

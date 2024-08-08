@@ -138,7 +138,7 @@ const BatchRepManager = () => {
                             {filteredUsers.map(user => (
                                 <ListItem key={user.uid} onClick={() => handleAddRep(user)} cursor="pointer" _hover={{ bg: 'gray.100' }} px={3} py={2}>
                                     <Box display="flex" alignItems="center">
-                                        <Avatar size="sm" src={user.photoURL || 'https://i.imgur.com/y7q0v8p.png'} />
+                                        <Avatar size="sm" src={user.photoURL || `/assets/usericon.webp` } />
                                         <Box ml={3}>
                                             <Text fontWeight="bold">{user.email}</Text>
                                             <Text fontSize="sm">{user.batch && `Batch: ${user.batch}`}</Text>
@@ -155,7 +155,7 @@ const BatchRepManager = () => {
                     <ListItem key={rep.id} borderRadius="md" boxShadow="md">
                         <Card p={2}>
                             <Box display="flex" alignItems="center">
-                                <Avatar size="lg" src={rep.photoURL || 'https://i.imgur.com/y7q0v8p.png'} />
+                                <Avatar size="lg" src={rep.photoURL || `/assets/usericon.webp`} />
                                 <Box ml={4} flex="1">
                                     <Text fontWeight="bold" fontSize="lg">{rep.email}</Text>
                                     {rep.batch && <Text>{`Batch: ${rep.batch}`}</Text>}
