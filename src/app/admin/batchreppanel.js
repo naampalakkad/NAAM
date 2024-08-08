@@ -22,9 +22,16 @@ const BatchRepPanel = ({ batchRepUID }) => {
                     }));
                     const batch = batchRepData.batch;
                     const filteredUsers = usersArray.filter(user => user.batch === batch);
-                    const approvedUsers = await getdatafromdb('approvedUsers');
-                    setBatchUsers(filteredUsers.filter(user => !approvedUsers[user.uid]));
-                    setApprovedUsers(Object.values(approvedUsers || {}));
+    
+                    const approvedUsersData = await getdatafromdb('approvedUsers');
+                    const approvedUsersArray = Object.keys(approvedUsersData || {}).map(uid => ({
+                        uid,
+                        ...approvedUsersData[uid],
+                    }));
+                    const filteredApprovedUsers = approvedUsersArray.filter(user => user.batch === batch);
+    
+                    setBatchUsers(filteredUsers.filter(user => !filteredApprovedUsers.some(approvedUser => approvedUser.uid === user.uid)));
+                    setApprovedUsers(filteredApprovedUsers);
                 }
             } catch (error) {
                 toast({
@@ -38,9 +45,10 @@ const BatchRepPanel = ({ batchRepUID }) => {
                 setLoading(false);
             }
         };
-
+    
         fetchData();
     }, [toast, batchRepUID]);
+    
 
     const handleApproveUser = async (user) => {
         try {
