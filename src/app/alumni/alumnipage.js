@@ -43,14 +43,15 @@ const AlumniCard = ({ alumni, handleMoreClick }) => (
     borderRadius="lg"
     overflow="hidden"
     boxShadow="md"
-    p={4}
+    p={2}
     textAlign="center"
   >
     <Image
       src={alumni.photoURL}
       alt={alumni.name}
       boxSize="200px"
-      borderRadius="full"
+      objectFit="cover"
+      borderRadius="10px"
       mx="auto"
       fallbackSrc='./assets/usericon.webp'
       mb={4}
