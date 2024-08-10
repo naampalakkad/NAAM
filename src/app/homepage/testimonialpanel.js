@@ -16,8 +16,10 @@ export default function TestimonialPanel() {
                         ...data[key],
                         timestamp: key
                     }));
-                    const sortedData = formattedData.sort((a, b) => b.timestamp - a.timestamp).slice(0, 10);
-                    setTestimonials(sortedData);
+                    const shuffledData = formattedData.sort(() => 0.5 - Math.random());
+                    const selectedTestimonials = shuffledData.slice(0, 4);
+    
+                    setTestimonials(selectedTestimonials);
                 }
             } catch (error) {
                 console.error("Error fetching testimonials: ", error);
@@ -25,9 +27,10 @@ export default function TestimonialPanel() {
                 setLoading(false);
             }
         }
-
+    
         fetchData();
     }, []);
+    
 
     if (loading) {
         return (
