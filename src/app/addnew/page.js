@@ -4,7 +4,7 @@ import { Input, Button, Select, FormControl, FormLabel, FormHelperText, useToast
 import { ChevronDownIcon } from '@chakra-ui/icons';
 import './page.css';
 import dynamic from 'next/dynamic';
-import { saveposttodb, auth, savetesttodb,getdatafromdb, getuserdetailfromdb,savedatatodb } from '@/lib/firebase';
+import {  auth, getdatafromdb, savedatatodb } from '@/lib/firebase';
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { useRouter } from 'next/navigation';
 
@@ -60,10 +60,10 @@ function Page() {
     let user = await getdatafromdb("approvedUsers/"+auth.currentUser.uid);
     try {
       let testimonialData = {
-        authorName: user.name,
+        authorName: user.name || "unavailable",
         content: testimonialContent,
-        photo: user.photoURL,
-        batch: user.batch,
+        photo: user.photoURL || "",
+        batch: user.batch || "unavailable",
         time: new Date().getTime(),
       };
   
@@ -185,7 +185,7 @@ function Page() {
             content: quillContent,
             type: formData.type,
             time: new Date().getTime(),
-            authorName: auth.currentUser.displayName,
+            authorName: auth.currentUser.displayName || "unavailable",
             likes: {} 
           };
           savedatatodb('content/pendingposts/'+postdata.time,postdata)
