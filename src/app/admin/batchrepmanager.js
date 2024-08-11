@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { VStack, Button, Input, List, ListItem, useToast, Box, Heading, Text, Avatar, Card, Spinner } from '@chakra-ui/react';
+import { VStack, Button, Input, List, ListItem, useToast, SimpleGrid, Box, Heading, Text, Avatar, Card, Spinner } from '@chakra-ui/react';
 import { savedatatodb, deletedatafromdb, getdatafromdb } from '@/lib/firebase';
 
 const BatchRepManager = () => {
@@ -150,26 +150,29 @@ const BatchRepManager = () => {
                     </Box>
                 )}
             </Box>
-            <List spacing={2} maxHeight="50vh" overflowY="auto">
-                {batchReps.map(rep => (
-                    <ListItem key={rep.id} borderRadius="md" boxShadow="md">
-                        <Card p={2}>
-                            <Box display="flex" alignItems="center">
-                                <Avatar size="lg" src={rep.photoURL || `/assets/usericon.webp`} />
-                                <Box ml={4} flex="1">
-                                    <Text fontWeight="bold" fontSize="lg">{rep.email}</Text>
-                                    {rep.batch && <Text>{`Batch: ${rep.batch}`}</Text>}
-                                    {rep.number && <Text>{`Number: ${rep.number}`}</Text>}
-                                    {rep.rollno && <Text>{`Roll Number: ${rep.rollno}`}</Text>}
-                                </Box>
-                                <Button colorScheme="red" onClick={() => handleRemoveRep(rep.id, rep.email)}>
-                                    Remove
-                                </Button>
-                            </Box>
-                        </Card>
-                    </ListItem>
-                ))}
-            </List>
+            <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={4} maxHeight="50vh" overflowY="auto">
+    {batchReps.map(rep => (
+        <Box key={rep.id} borderRadius="md" boxShadow="md">
+            <Card p={4}>
+                <Box display="flex" alignItems="center" mb={4}>
+                    <Avatar size="lg" src={rep.photoURL || `/assets/usericon.webp`} />
+                    <Box ml={4} flex="1">
+                        <Text fontWeight="bold" fontSize="lg">{rep.email}</Text>
+                        {rep.batch && <Text>{`Batch: ${rep.batch}`}</Text>}
+                        {rep.number && <Text>{`Number: ${rep.number}`}</Text>}
+                        {rep.rollno && <Text>{`Roll Number: ${rep.rollno}`}</Text>}
+                    </Box>
+                </Box>
+                <Box display="flex" justifyContent="flex-end" mt={4}>
+                    <Button colorScheme="red" onClick={() => handleRemoveRep(rep.id, rep.email)}>
+                        Remove
+                    </Button>
+                </Box>
+            </Card>
+        </Box>
+    ))}
+</SimpleGrid>
+
         </VStack>
     );
 };
