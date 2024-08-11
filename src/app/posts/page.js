@@ -48,7 +48,7 @@ const Blog = () => {
                     px={['50px', '100px']}
                 >
                     <Heading mb="30px" textAlign="center" fontFamily={'open Sans'}>
-                        NEWS AND UPDATES
+                        Articles
                     </Heading>
                     <Flex justifyContent="space-between" alignItems="center">
                         <Select
