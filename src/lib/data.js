@@ -9,20 +9,20 @@ export async function getCarouselImageUrls() {
 
 export const statistics = [
   {
-    "title": "years",
-    "text": "7",
+    "title": "years Legacy",
+    "text": "30",
   },
   {
-    "title": "Years of Service",
-    "text": "35+",
+    "title": "Batches",
+    "text": "29",
   },
   {
     "title": "Almunis",
-    "text": "10k+",
+    "text": "2k+",
   },
   {
-    "title": "branches",
-    "text": "10+",
+    "title": "Years",
+    "text": "7",
   }
 ]
 
