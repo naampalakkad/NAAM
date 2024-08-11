@@ -4,8 +4,8 @@ const AboutPage = () => {
   const ContactInfo = () => {
     return (
       <VStack  mt={4}>
-      <Badge colorScheme="teal" p={2} borderRadius="md">Email: sreejithksgupta2255@gmail.com</Badge>
-      <Badge colorScheme="teal" p={2} borderRadius="md">Phone: 9846370188</Badge>
+      <Badge colorScheme="teal" p={2} borderRadius="md">Email: naampalakkad@gmail.com</Badge>
+      <Badge colorScheme="teal" p={2} borderRadius="md">Phone: +91 7306181024</Badge>
     </VStack>
     
     );

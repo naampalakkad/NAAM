@@ -207,6 +207,7 @@ export const BlogPost = ({ post }) => {
                                     className="comment-textarea"
                                     borderColor={colorMode === 'dark' ? 'white' : 'black'}
                                     _placeholder={{ color: 'black' }}
+                                    maxLength={200}
                                 />
                                 <Button onClick={handleCommentSubmit} colorScheme="teal" ml="2" className="submit-button">Submit</Button>
                             </Box>

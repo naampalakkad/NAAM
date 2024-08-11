@@ -40,7 +40,7 @@ const AdminPage = () => {
           <h2>
             <AccordionButton>
               <Box as="span" flex="1" textAlign="left">
-                <Heading size="lg" color="teal.500">Carousal Images</Heading>
+                <Heading size="lg" color="teal.500">Carousal Management</Heading>
               </Box>
               <AccordionIcon />
             </AccordionButton>
@@ -53,7 +53,7 @@ const AdminPage = () => {
           <h2>
             <AccordionButton>
               <Box as="span" flex="1" textAlign="left">
-                <Heading size="lg" color="teal.500">Gallery Images</Heading>
+                <Heading size="lg" color="teal.500">Gallery Management</Heading>
               </Box>
               <AccordionIcon />
             </AccordionButton>
@@ -66,7 +66,7 @@ const AdminPage = () => {
           <h2>
             <AccordionButton>
               <Box as="span" flex="1" textAlign="left">
-                <Heading size="lg" color="teal.500">Gallery Manager</Heading>
+                <Heading size="lg" color="teal.500">Album Management</Heading>
               </Box>
               <AccordionIcon />
             </AccordionButton>

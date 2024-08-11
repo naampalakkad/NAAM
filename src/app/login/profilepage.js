@@ -87,18 +87,18 @@ const SignedInBox = ({ user }) => {
       errors.batch = "Batch number must be less than 100";
     }
   
-    // Validate phone number
-    const phoneRegex = /^\d{10}$/;
-    if (!userdata.number) {
-      errors.number = "Phone number is required";
-    } else if (!phoneRegex.test(userdata.number)) {
-      errors.number = "Phone number must be a 10-digit number";
-    }
+    // // Validate phone number
+    // const phoneRegex = /^\d{10}$/;
+    // if (!userdata.number) {
+    //   errors.number = "Phone number is required";
+    // } else if (!phoneRegex.test(userdata.number)) {
+    //   errors.number = "Phone number must be a 10-digit number";
+    // }
   
-    // Validate alternate phone number
-    if (userdata.alternate && !phoneRegex.test(userdata.alternate)) {
-      errors.alternate = "Alternate phone number must be a 10-digit number";
-    }
+    // // Validate alternate phone number
+    // if (userdata.alternate && !phoneRegex.test(userdata.alternate)) {
+    //   errors.alternate = "Alternate phone number must be a 10-digit number";
+    // }
   
     // Validate roll number
     const rollNumber = Number(userdata.rollno);

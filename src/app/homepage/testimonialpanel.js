@@ -16,8 +16,10 @@ export default function TestimonialPanel() {
                         ...data[key],
                         timestamp: key
                     }));
-                    const sortedData = formattedData.sort((a, b) => b.timestamp - a.timestamp).slice(0, 10);
-                    setTestimonials(sortedData);
+                    const shuffledData = formattedData.sort(() => 0.5 - Math.random());
+                    const selectedTestimonials = shuffledData.slice(0, 4);
+    
+                    setTestimonials(selectedTestimonials);
                 }
             } catch (error) {
                 console.error("Error fetching testimonials: ", error);
@@ -25,9 +27,10 @@ export default function TestimonialPanel() {
                 setLoading(false);
             }
         }
-
+    
         fetchData();
     }, []);
+    
 
     if (loading) {
         return (
@@ -56,7 +59,7 @@ export default function TestimonialPanel() {
                             <Image src={item.photo || `/assets/usericon.webp`} alt={item.authorName} borderRadius="full" boxSize="50px" />
                             <VStack align="start" ml={4}>
                                 <Text fontWeight="bold">{item.authorName}</Text>
-                                <Text color="gray.500">{item.batch}</Text>
+                                <Text color="gray.500">Batch  {item.batch}</Text>
                             </VStack>
                         </Box>
                     </CardHeader>
