@@ -152,9 +152,9 @@ export async function getdatafromStorage(location) {
 async function compressImage(imageFile) {
   const compressor = new ImageCompressor();
   const compressedImage = await compressor.compress(imageFile, {
-    maxWidth: 720,
-    maxHeight: 540,
-    quality: 0.8,
+    maxWidth: 1200,
+    maxHeight: 720,
+    quality: 0.9,
     mimeType: 'image/webp',
   });
   return new File([compressedImage], imageFile.name, {
