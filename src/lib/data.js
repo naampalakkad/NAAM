@@ -46,7 +46,7 @@ export const socialMediaUrls = [
   "https://www.facebook.com/groups/jnvitesalumni/",
   // "https://www.x.com",
   // "https://www.instagram.com",
-  "https://www.youtube.com"
+  "https://www.youtube.com/@navodayaalumniassociationm5762"
 ];
 
 
