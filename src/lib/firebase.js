@@ -65,17 +65,23 @@ export const checkIfUserSignedIn = () => {
           if (approvedUsers && approvedUsers[user.uid]) {
             resolve(user); 
           } else {
-            resolve(null); 
+            const users = await getdatafromdb('users');
+            if (users && users[user.uid]) {
+              resolve({ ...user, status: 'pending' }); 
+            } else {
+              resolve(null); 
+            }
           }
         } catch (error) {
           reject(error); 
         }
       } else {
-        resolve(null);
+        resolve(null); 
       }
     }, reject);
   });
 };
+
 export async function checkuserrole(role) {
   return new Promise((resolve) => {
     auth.onAuthStateChanged(async (user) => {
