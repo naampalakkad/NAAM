@@ -12,7 +12,7 @@ const LightboxComponent = ({ images, isOpen, ind, onClose }) => {
     <Lightbox
       slides={images}
       open={isOpen}
-      index={ind} // Set initial index if provided
+      index={ind} 
       close={onClose}
       plugins={[Fullscreen, Slideshow, Thumbnails, Zoom]}
     />

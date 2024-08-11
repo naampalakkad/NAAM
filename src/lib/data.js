@@ -7,26 +7,6 @@ export async function getCarouselImageUrls() {
   return carouselImageUrls;
 }
 
-export async function getGalleryImageUrls() {
-  const galleryImageUrls = [];
-  const urls = await getdatafromStorage('galleryimgs');
-  for (let i = 0; i < urls.length; i++) {
-    const galleryImageUrl = urls[i];
-    const img = new Image();
-    img.onload = function () {
-      const width = this.width;
-      const height = this.height;
-      const imgdata = { src: galleryImageUrl, width: width, height: height };
-      galleryImageUrls.push(imgdata);
-    };
-    img.src = galleryImageUrl;
-  }
-  while (galleryImageUrls.length < urls.length) {
-    await new Promise(r => setTimeout(r, 1000));
-  }
-  return galleryImageUrls;
-}
-
 export const statistics = [
   {
     "title": "years",
