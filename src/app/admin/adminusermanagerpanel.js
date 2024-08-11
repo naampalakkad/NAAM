@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { VStack, Button, List, ListItem, useToast, Box, Heading, Text, Avatar, Spinner, Card, useColorModeValue } from '@chakra-ui/react';
+import { VStack, Button, List, ListItem, useToast, Box, Heading, Text,SimpleGrid, Avatar, Spinner, Card, useColorModeValue } from '@chakra-ui/react';
 import { savedatatodb, deletedatafromdb, getdatafromdb } from '@/lib/firebase';
 
 const AdminUserManagerPanel = () => {
@@ -117,57 +117,63 @@ const AdminUserManagerPanel = () => {
     }
 
     return (
-        <VStack spacing={6} align="stretch">
-            <Box>
-                <Heading size="xl" textAlign="center" p={2} m={2} borderRadius="md">Approved Users</Heading>
-                <List spacing={2} maxHeight="50vh" overflowY="auto">
-                    {approvedUsers.map(user => (
-                        <ListItem key={user.uid} borderRadius="md" boxShadow="md" bg={cardBg}>
-                            <Card p={4}>
-                                <Box display="flex" alignItems="center">
-                                    <Avatar size="lg" src={user.photoURL || `/assets/usericon.webp`} />
-                                    <Box ml={4} flex="1">
-                                        <Text fontWeight="bold" fontSize="lg">{user.email}</Text>
-                                        {user.batch && <Text>{`Batch: ${user.batch}`}</Text>}
-                                        {user.number && <Text>{`Number: ${user.number}`}</Text>}
-                                        {user.rollno && <Text>{`Roll Number: ${user.rollno}`}</Text>}
-                                    </Box>
-                                    <Button colorScheme="yellow" onClick={() => handleUnapproveUser(user)}>
-                                        Unapprove
-                                    </Button>
-                                </Box>
-                            </Card>
-                        </ListItem>
-                    ))}
-                </List>
-            </Box>
-            <Box>
-                <Heading size="xl" textAlign="center" p={2} m={2} borderRadius="md">Pending Users</Heading>
-                <List spacing={2} maxHeight="50vh" overflowY="auto">
-                    {allUsers.map(user => (
-                        <ListItem key={user.uid} borderRadius="md" boxShadow="md" bg={cardBg}>
-                            <Card p={4}>
-                                <Box display="flex" alignItems="center">
-                                    <Avatar size="lg" src={user.photoURL || `/assets/usericon.webp`} />
-                                    <Box ml={4} flex="1">
-                                        <Text fontWeight="bold" fontSize="lg">{user.email}</Text>
-                                        {user.batch && <Text>{`Batch: ${user.batch}`}</Text>}
-                                        {user.number && <Text>{`Number: ${user.number}`}</Text>}
-                                        {user.rollno && <Text>{`Roll Number: ${user.rollno}`}</Text>}
-                                    </Box>
-                                    <Button colorScheme="green" onClick={() => handleApproveUser(user)}>
-                                        Approve
-                                    </Button>
-                                    <Button colorScheme="red" ml={2} onClick={() => handleRemoveUser(user.uid)}>
-                                        Remove
-                                    </Button>
-                                </Box>
-                            </Card>
-                        </ListItem>
-                    ))}
-                </List>
-            </Box>
-        </VStack>
+<VStack spacing={6} align="stretch">
+    <Box>
+        <Heading size="xl" textAlign="center" p={2} m={2} borderRadius="md">Pending Users</Heading>
+        <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={4} maxHeight="50vh" overflowY="auto">
+            {allUsers.map(user => (
+                <Box key={user.uid} borderRadius="md" boxShadow="md" bg={cardBg}>
+                    <Card p={4}>
+                        <Box display="flex" alignItems="center" mb={4}>
+                            <Avatar size="lg" src={user.photoURL || `/assets/usericon.webp`} />
+                            <Box ml={4} flex="1">
+                                <Text fontWeight="bold" fontSize="lg">{user.email}</Text>
+                                {user.batch && <Text>{`Batch: ${user.batch}`}</Text>}
+                                {user.number && <Text>{`Number: ${user.number}`}</Text>}
+                                {user.rollno && <Text>{`Roll Number: ${user.rollno}`}</Text>}
+                            </Box>
+                        </Box>
+                        <Box display="flex" justifyContent="flex-end" mt={4}>
+                            <Button colorScheme="green" onClick={() => handleApproveUser(user)}>
+                                Approve
+                            </Button>
+                            <Button colorScheme="red" ml={2} onClick={() => handleRemoveUser(user.uid)}>
+                                Remove
+                            </Button>
+                        </Box>
+                    </Card>
+                </Box>
+            ))}
+        </SimpleGrid>
+    </Box>
+
+    <Box>
+        <Heading size="xl" textAlign="center" p={2} m={2} borderRadius="md">Approved Users</Heading>
+        <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={4} maxHeight="50vh" overflowY="auto">
+            {approvedUsers.map(user => (
+                <Box key={user.uid} borderRadius="md" boxShadow="md" bg={cardBg}>
+                    <Card p={4}>
+                        <Box display="flex" alignItems="center" mb={4}>
+                            <Avatar size="lg" src={user.photoURL || `/assets/usericon.webp`} />
+                            <Box ml={4} flex="1">
+                                <Text fontWeight="bold" fontSize="lg">{user.email}</Text>
+                                {user.batch && <Text>{`Batch: ${user.batch}`}</Text>}
+                                {user.number && <Text>{`Number: ${user.number}`}</Text>}
+                                {user.rollno && <Text>{`Roll Number: ${user.rollno}`}</Text>}
+                            </Box>
+                        </Box>
+                        <Box display="flex" justifyContent="flex-end" mt={4}>
+                            <Button colorScheme="yellow" onClick={() => handleUnapproveUser(user)}>
+                                Unapprove
+                            </Button>
+                        </Box>
+                    </Card>
+                </Box>
+            ))}
+        </SimpleGrid>
+    </Box>
+</VStack>
+
     );
 };
 

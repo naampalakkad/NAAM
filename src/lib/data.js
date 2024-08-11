@@ -30,7 +30,7 @@ export const MenuItems = [
   { name: 'Home', link: '/' },
   { name: 'Gallery', link: '/gallery' },
   { name: 'Alumni', link: '/alumni' },
-  { name: 'News', link: '/posts' },
+  { name: 'Articles', link: '/posts' },
   { name: 'Calender', link: '/calender' },
   { name: 'Profile', link: '/login' },
 ];
