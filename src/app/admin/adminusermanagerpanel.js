@@ -1,28 +1,32 @@
 import React, { useState, useEffect } from 'react';
-import { VStack, Button, List, ListItem, useToast, Box, Heading, Text, Avatar, Spinner, Card, useColorModeValue } from '@chakra-ui/react';
+import {
+    VStack, Button, Input, List, ListItem, useToast, Box, Heading, Text,
+    SimpleGrid, Avatar, Spinner, Card, useColorModeValue, InputGroup, InputLeftElement
+} from '@chakra-ui/react';
 import { savedatatodb, deletedatafromdb, getdatafromdb } from '@/lib/firebase';
+import { SearchIcon } from '@chakra-ui/icons';
 
 const AdminUserManagerPanel = () => {
     const [allUsers, setAllUsers] = useState([]);
     const [approvedUsers, setApprovedUsers] = useState([]);
+    const [searchTerm, setSearchTerm] = useState('');
     const [loading, setLoading] = useState(true);
     const toast = useToast();
     const cardBg = useColorModeValue('gray.50', 'gray.700');
-    const tealTint = useColorModeValue('teal.100', 'teal.900');
-    
+
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const usersData = await getdatafromdb('users') || {};
                 const approvedUsers = await getdatafromdb('approvedUsers') || {};
-    
+
                 const usersArray = Object.keys(usersData).map(uid => ({
                     uid,
                     ...usersData[uid],
                 }));
-    
-                setAllUsers(usersArray.filter(user => !approvedUsers[user.uid]));
-                setApprovedUsers(Object.values(approvedUsers));
+
+                setAllUsers(usersArray.filter(user => !approvedUsers[user.uid]).sort((a, b) => a.name.localeCompare(b.name)));
+                setApprovedUsers(Object.values(approvedUsers).sort((a, b) => a.name.localeCompare(b.name)));
             } catch (error) {
                 toast({
                     title: "Error fetching data.",
@@ -35,17 +39,16 @@ const AdminUserManagerPanel = () => {
                 setLoading(false);
             }
         };
-    
+
         fetchData();
     }, [toast]);
-    
 
     const handleApproveUser = async (user) => {
         try {
             await savedatatodb(`approvedUsers/${user.uid}`, user);
             await deletedatafromdb(`users/${user.uid}`);
-            setAllUsers(prev => prev.filter(u => u.uid !== user.uid));
-            setApprovedUsers(prev => [...prev, user]);
+            setAllUsers(prev => prev.filter(u => u.uid !== user.uid).sort((a, b) => a.name.localeCompare(b.name)));
+            setApprovedUsers(prev => [...prev, user].sort((a, b) => a.name.localeCompare(b.name)));
             toast({
                 title: "User approved.",
                 status: "success",
@@ -67,8 +70,8 @@ const AdminUserManagerPanel = () => {
         try {
             await savedatatodb(`users/${user.uid}`, user);
             await deletedatafromdb(`approvedUsers/${user.uid}`);
-            setApprovedUsers(prev => prev.filter(u => u.uid !== user.uid));
-            setAllUsers(prev => [...prev, user]);
+            setApprovedUsers(prev => prev.filter(u => u.uid !== user.uid).sort((a, b) => a.name.localeCompare(b.name)));
+            setAllUsers(prev => [...prev, user].sort((a, b) => a.name.localeCompare(b.name)));
             toast({
                 title: "User unapproved.",
                 status: "success",
@@ -89,7 +92,7 @@ const AdminUserManagerPanel = () => {
     const handleRemoveUser = async (id) => {
         try {
             await deletedatafromdb(`users/${id}`);
-            setAllUsers(prev => prev.filter(user => user.uid !== id));
+            setAllUsers(prev => prev.filter(user => user.uid !== id).sort((a, b) => a.name.localeCompare(b.name)));
             toast({
                 title: "User removed.",
                 status: "success",
@@ -107,6 +110,18 @@ const AdminUserManagerPanel = () => {
         }
     };
 
+    const filteredAllUsers = allUsers.filter(user =>
+        user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (user.name && user.name.toLowerCase().includes(searchTerm.toLowerCase())) ||
+        (user.batch && user.batch.toString().toLowerCase().includes(searchTerm.toLowerCase()))
+    );
+
+    const filteredApprovedUsers = approvedUsers.filter(user =>
+        user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (user.name && user.name.toLowerCase().includes(searchTerm.toLowerCase())) ||
+        (user.batch && user.batch.toString().toLowerCase().includes(searchTerm.toLowerCase()))
+    );
+
     if (loading) {
         return (
             <Box textAlign="center" py={10}>
@@ -118,43 +133,31 @@ const AdminUserManagerPanel = () => {
 
     return (
         <VStack spacing={6} align="stretch">
-            <Box>
-                <Heading size="xl" textAlign="center" p={2} m={2} borderRadius="md">Approved Users</Heading>
-                <List spacing={2} maxHeight="50vh" overflowY="auto">
-                    {approvedUsers.map(user => (
-                        <ListItem key={user.uid} borderRadius="md" boxShadow="md" bg={cardBg}>
-                            <Card p={4}>
-                                <Box display="flex" alignItems="center">
-                                    <Avatar size="lg" src={user.photoURL || `/assets/usericon.webp`} />
-                                    <Box ml={4} flex="1">
-                                        <Text fontWeight="bold" fontSize="lg">{user.email}</Text>
-                                        {user.batch && <Text>{`Batch: ${user.batch}`}</Text>}
-                                        {user.number && <Text>{`Number: ${user.number}`}</Text>}
-                                        {user.rollno && <Text>{`Roll Number: ${user.rollno}`}</Text>}
-                                    </Box>
-                                    <Button colorScheme="yellow" onClick={() => handleUnapproveUser(user)}>
-                                        Unapprove
-                                    </Button>
-                                </Box>
-                            </Card>
-                        </ListItem>
-                    ))}
-                </List>
-            </Box>
+            <InputGroup>
+                <InputLeftElement pointerEvents="none" children={<SearchIcon color="gray.300" />} />
+                <Input
+                    type="text"
+                    placeholder="Search by email, name, or batch"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                />
+            </InputGroup>
+
             <Box>
                 <Heading size="xl" textAlign="center" p={2} m={2} borderRadius="md">Pending Users</Heading>
-                <List spacing={2} maxHeight="50vh" overflowY="auto">
-                    {allUsers.map(user => (
-                        <ListItem key={user.uid} borderRadius="md" boxShadow="md" bg={cardBg}>
+                <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={4} maxHeight="50vh" overflowY="auto">
+                    {filteredAllUsers.map(user => (
+                        <Box key={user.uid} borderRadius="md" boxShadow="md" bg={cardBg}>
                             <Card p={4}>
-                                <Box display="flex" alignItems="center">
+                                <Box display="flex" alignItems="center" mb={4}>
                                     <Avatar size="lg" src={user.photoURL || `/assets/usericon.webp`} />
                                     <Box ml={4} flex="1">
                                         <Text fontWeight="bold" fontSize="lg">{user.email}</Text>
+                                        {user.name && <Text>{`Name: ${user.name}`}</Text>}
                                         {user.batch && <Text>{`Batch: ${user.batch}`}</Text>}
                                         {user.number && <Text>{`Number: ${user.number}`}</Text>}
                                         {user.rollno && <Text>{`Roll Number: ${user.rollno}`}</Text>}
-                                    </Box>
+                                        <Box display="flex" justifyContent="flex-end" mt={4}>
                                     <Button colorScheme="green" onClick={() => handleApproveUser(user)}>
                                         Approve
                                     </Button>
@@ -162,10 +165,38 @@ const AdminUserManagerPanel = () => {
                                         Remove
                                     </Button>
                                 </Box>
+                                    </Box>
+                                </Box>
+                             
                             </Card>
-                        </ListItem>
+                        </Box>
                     ))}
-                </List>
+                </SimpleGrid>
+            </Box>
+
+            <Box>
+                <Heading size="xl" textAlign="center" p={2} m={2} borderRadius="md">Approved Users</Heading>
+                <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={4} maxHeight="50vh" overflowY="auto">
+                    {filteredApprovedUsers.map(user => (
+                        <Box key={user.uid} borderRadius="md" boxShadow="md" bg={cardBg}>
+                            <Card p={4}>
+                                <Box display="flex" alignItems="center" mb={4}>
+                                    <Avatar size="lg" src={user.photoURL || `/assets/usericon.webp`} />
+                                    <Box ml={4} flex="1">
+                                        <Text fontWeight="bold" fontSize="lg">{user.email}</Text>
+                                        {user.name && <Text>{`Name: ${user.name}`}</Text>}
+                                        {user.batch && <Text>{`Batch: ${user.batch}`}</Text>}
+                                        {user.number && <Text>{`Number: ${user.number}`}</Text>}
+                                        {user.rollno && <Text>{`Roll Number: ${user.rollno}`}</Text>}
+                                        <Button colorScheme="yellow" mt={2} onClick={() => handleUnapproveUser(user)}>
+                                        Unapprove
+                                    </Button>
+                                    </Box>
+                                </Box>
+                            </Card>
+                        </Box>
+                    ))}
+                </SimpleGrid>
             </Box>
         </VStack>
     );

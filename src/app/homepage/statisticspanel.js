@@ -8,7 +8,7 @@ export default function Statisticspanel() {
             {statistics.map((statistic, index) => (
                 <Circle
                     key={index}
-                    size={{ base: "120px", md: "250px" }} // Responsive size based on screen width
+                    size={{ base: "120px", md: "250px" }}
                     bgGradient="linear(to-r, teal.500, green.500)"
                     boxShadow="xl"
                     _hover={{ transform: "scale(1.05)", transition: "0.3s" }}
@@ -17,7 +17,7 @@ export default function Statisticspanel() {
                     justifyContent="center"
                     alignItems="center"
                     textAlign="center"
-                    mb={{ base: 1, md: 0 }} // Margin bottom for spacing, 0 on medium screens
+                    mb={{ base: 1, md: 0 }}
                 >
                     <Heading fontSize={{ base: "4xl", md: "6xl" }} color="white" className='statsval'>
                         {statistic.text}

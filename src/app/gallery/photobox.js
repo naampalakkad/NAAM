@@ -103,7 +103,7 @@ const GalleryTiles = () => {
                 flexDirection="row"
                 justifyContent="space-between"
               >
-                <Heading size="md">{tile.text}</Heading>
+                <Heading size="md" color={"teal"}>{tile.text}</Heading>
                 <ArrowForwardIcon w={6} h={6} />
               </Center>
             </Box>

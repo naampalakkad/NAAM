@@ -7,42 +7,22 @@ export async function getCarouselImageUrls() {
   return carouselImageUrls;
 }
 
-export async function getGalleryImageUrls() {
-  const galleryImageUrls = [];
-  const urls = await getdatafromStorage('galleryimgs');
-  for (let i = 0; i < urls.length; i++) {
-    const galleryImageUrl = urls[i];
-    const img = new Image();
-    img.onload = function () {
-      const width = this.width;
-      const height = this.height;
-      const imgdata = { src: galleryImageUrl, width: width, height: height };
-      galleryImageUrls.push(imgdata);
-    };
-    img.src = galleryImageUrl;
-  }
-  while (galleryImageUrls.length < urls.length) {
-    await new Promise(r => setTimeout(r, 1000));
-  }
-  return galleryImageUrls;
-}
-
 export const statistics = [
   {
-    "title": "years",
-    "text": "7",
+    "title": "years Legacy",
+    "text": "30",
   },
   {
-    "title": "Years of Service",
-    "text": "35+",
+    "title": "Batches",
+    "text": "29",
   },
   {
     "title": "Almunis",
-    "text": "10k+",
+    "text": "2k+",
   },
   {
-    "title": "branches",
-    "text": "10+",
+    "title": "Years",
+    "text": "7",
   }
 ]
 
@@ -50,7 +30,7 @@ export const MenuItems = [
   { name: 'Home', link: '/' },
   { name: 'Gallery', link: '/gallery' },
   { name: 'Alumni', link: '/alumni' },
-  { name: 'News', link: '/posts' },
+  { name: 'Articles', link: '/posts' },
   { name: 'Calender', link: '/calender' },
   { name: 'Profile', link: '/login' },
 ];
@@ -66,7 +46,7 @@ export const socialMediaUrls = [
   "https://www.facebook.com/groups/jnvitesalumni/",
   // "https://www.x.com",
   // "https://www.instagram.com",
-  "https://www.youtube.com"
+  "https://www.youtube.com/@navodayaalumniassociationm5762"
 ];
 
 

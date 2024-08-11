@@ -12,6 +12,8 @@ if (typeof window !== "undefined") {
       console.error('Error loading ImageCompressor:', err);
     }); 
 }
+
+
 const firebaseConfig = {
   apiKey: "AIzaSyAwBCJsji0R5UeZuKkroe4JsS3RSrVHrsA",
   authDomain: "naamsiteprod.firebaseapp.com",
@@ -22,16 +24,7 @@ const firebaseConfig = {
   appId: "1:441558746731:web:da6e9e5f18396ac0bd132e",
   measurementId: "G-PPQBL6FYQT"
 };
-// const firebaseConfig = {
-//   apiKey: "AIzaSyD3teEBN7Ai6JXlvtbGaE6r_NTLK0Kpm4A",
-//   authDomain: "naam-751a5.firebaseapp.com",
-//   projectId: "naam-751a5",
-//   storageBucket: "naam-751a5.appspot.com",
-//   messagingSenderId: "635247227682",
-//   appId: "1:635247227682:web:01891d1adee715c4f7ab7b",
-//   measurementId: "G-1DCGC388NY",
-//   databaseURL: "https://naam-751a5-default-rtdb.asia-southeast1.firebasedatabase.app"
-// };
+
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const storage = getStorage(app);
@@ -65,17 +58,23 @@ export const checkIfUserSignedIn = () => {
           if (approvedUsers && approvedUsers[user.uid]) {
             resolve(user); 
           } else {
-            resolve(null); 
+            const users = await getdatafromdb('users');
+            if (users && users[user.uid]) {
+              resolve({ ...user, status: 'pending' }); 
+            } else {
+              resolve(null); 
+            }
           }
         } catch (error) {
           reject(error); 
         }
       } else {
-        resolve(null);
+        resolve(null); 
       }
     }, reject);
   });
 };
+
 export async function checkuserrole(role) {
   return new Promise((resolve) => {
     auth.onAuthStateChanged(async (user) => {
@@ -146,9 +145,9 @@ export async function getdatafromStorage(location) {
 async function compressImage(imageFile) {
   const compressor = new ImageCompressor();
   const compressedImage = await compressor.compress(imageFile, {
-    maxWidth: 720,
-    maxHeight: 540,
-    quality: 0.8,
+    maxWidth: 1200,
+    maxHeight: 720,
+    quality: 0.9,
     mimeType: 'image/webp',
   });
   return new File([compressedImage], imageFile.name, {
