@@ -7,6 +7,7 @@ import dynamic from 'next/dynamic';
 import {  auth, getdatafromdb, savedatatodb } from '@/lib/firebase';
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { useRouter } from 'next/navigation';
+import AdminApprovalWarning from '@/lib/approvalwarning'
 
 if (typeof window !== 'undefined') {
   var ReactQuill = require('react-quill');
@@ -327,6 +328,7 @@ function Page() {
               Cancel
             </Button>
           </FormControl>
+          <AdminApprovalWarning/>
         </>
       )}
     </div>
