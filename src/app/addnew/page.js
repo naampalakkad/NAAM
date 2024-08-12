@@ -113,6 +113,11 @@ function Page() {
     setFile(e.target.files[0]);
   }
 
+
+  const handleCancel =()=>{
+    window.location.href = "/posts";
+
+  }
   const handleSubmit = async (event) => {
     try {
       event.preventDefault();
@@ -317,6 +322,9 @@ function Page() {
           <FormControl style={{ paddingTop: '25px' }}>
             <Button onClick={handleSubmit} colorScheme='yellow' type='submit' className='submit-button' mt={4}  >
               Submit
+            </Button>
+            <Button onClick={handleCancel} colorScheme='red' mt={4} ml={2}>
+              Cancel
             </Button>
           </FormControl>
         </>
