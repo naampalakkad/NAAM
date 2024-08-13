@@ -68,15 +68,15 @@ const AboutPage = () => {
             <CardBody>
               <Stack direction={{ base: "column", md: "row" }} spacing={4}>
                 <VStack align="start">
-                  <Heading size="md" color="gray.900">Integrity</Heading>
+                  <Heading size="md" >Integrity</Heading>
                   <Text fontSize="md">We uphold the highest standards of integrity and transparency in all our actions and communications.</Text>
                 </VStack>
                 <VStack align="start">
-                  <Heading size="md" color="gray.900">Community</Heading>
+                  <Heading size="md" >Community</Heading>
                   <Text fontSize="md">We believe in the power of community and the strength that comes from mutual support and collaboration.</Text>
                 </VStack>
                 <VStack align="start">
-                  <Heading size="md" color="gray.900">Excellence</Heading>
+                  <Heading size="md" >Excellence</Heading>
                   <Text fontSize="md">We strive for excellence in all our endeavors, encouraging our members to achieve their fullest potential.</Text>
                 </VStack>
               </Stack>
