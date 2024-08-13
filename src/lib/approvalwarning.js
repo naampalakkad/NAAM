@@ -18,7 +18,7 @@ const AdminApprovalWarning = () => {
     >
       <Icon as={WarningIcon} boxSize={6} color="yellow.500" mr={3} />
       <Text color="gray.700">
-        Subject to admin approval. Contact your Batch Representative if not approved. Others can only see once it is approved by admin.
+        Posts need to get the admin's stamp of approval before they can see the light of day!.
       </Text>
     </Box>
   );
