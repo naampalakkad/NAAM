@@ -190,6 +190,17 @@ export const BlogPost = ({ post }) => {
                             <button className="close-modal modal-container-close-button" onClick={toggleModal}>CLOSE</button>
                         </div>
                         <div className="modal-container-content">
+                            <div>
+                            <img
+                                src={postdata.thumbnail}
+                                className="post-thumbnail"
+                                alt="Thumbnail"/>
+                            </div>
+                            <div>
+                            <strong style={{ fontSize: '12px' }}>
+                               Posted by : {postdata.authorName} 
+                               </strong>
+                            </div>
                             <div style={{ textAlign: 'center' }}>
                                 <strong style={{ fontSize: '40px' }}>{postdata.title}</strong>
                             </div>
