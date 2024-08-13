@@ -1,5 +1,5 @@
-import React from 'react';
-import { signInoutWithGoogle } from "@/lib/firebase";
+import React, { useState, useEffect } from 'react';
+import { signInoutWithGoogle,checkIfUserSignedIn,checkuserrole  } from "@/lib/firebase";
 import { Box, Heading, Image, Flex, Button, Card,Badge } from "@chakra-ui/react";
 import { FaEdit, FaSignOutAlt, FaUpload } from "react-icons/fa";
 
@@ -7,6 +7,23 @@ const ProfileSection = ({ user, profileImage, handleImageChange, onEdit,verified
     const handleSignOut = () => {
         signInoutWithGoogle();
     };
+
+    const [isUserAdmin, setIsAdmin] = useState(false);
+
+    useEffect(() => {
+      const checkSignIn = async () => {
+        const user = await checkIfUserSignedIn();
+        if (user) {
+          const isUserAdmin = await checkuserrole('admin');
+          const isUserBatchRep = await checkuserrole('batchreplist');
+          setIsAdmin(isUserAdmin || isUserBatchRep);
+        } else {
+          setIsAdmin(false);
+        }
+      };
+  
+      checkSignIn();
+    }, []);
 
     return (
 
@@ -59,6 +76,9 @@ const ProfileSection = ({ user, profileImage, handleImageChange, onEdit,verified
                     onChange={handleImageChange}
                     style={{ display: 'none' }}
                 />
+                {isUserAdmin&&<Button onClick={() => window.location.href="./admin"} colorScheme="blue" size="sm" mt={2} leftIcon={<FaUpload />}>
+                    Go to Admin Panel
+                </Button> }
             </Card>
     );
 };

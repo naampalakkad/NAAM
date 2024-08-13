@@ -2,10 +2,11 @@ import React, { useState, useMemo, useCallback } from 'react';
 import {
   Drawer, DrawerBody, DrawerFooter, DrawerHeader, DrawerOverlay, DrawerContent,
   DrawerCloseButton, FormControl, FormLabel, Input, Button, useToast,
-  Textarea
+  Textarea,
+  Flex
 } from "@chakra-ui/react";
-import { savedatatodb } from "@/lib/firebase";
-import { auth } from '@/lib/firebase';
+import { savedatatodb, auth } from "@/lib/firebase";
+import AdminApprovalWarning from '@/lib/approvalwarning'
 
 const AddEventDrawer = ({ isOpen, onClose, selectedDate, setSelectedDate, events, setEvents }) => {
   const [eventTitle, setEventTitle] = useState('');
@@ -136,10 +137,13 @@ const AddEventDrawer = ({ isOpen, onClose, selectedDate, setSelectedDate, events
           <Button type="submit" style={{ display: 'none' }}></Button>
         </DrawerBody>
         <DrawerFooter>
-          <Button variant="outline" mr={3} onClick={onClose}>
-            Cancel
-          </Button>
-          <Button colorScheme="blue" onClick={handleSubmit}>Submit</Button>
+          <Flex direction={"column"}>
+            <AdminApprovalWarning />
+            <Flex p={3} justifyContent={"space-evenly"}>
+              <Button variant="outline" mr={3} onClick={onClose}>Cancel</Button>
+              <Button colorScheme="blue" onClick={handleSubmit}>Submit</Button>
+            </Flex>
+          </Flex>
         </DrawerFooter>
       </DrawerContent>
     </Drawer>

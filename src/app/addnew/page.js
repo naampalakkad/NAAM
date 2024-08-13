@@ -7,6 +7,7 @@ import dynamic from 'next/dynamic';
 import {  auth, getdatafromdb, savedatatodb } from '@/lib/firebase';
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { useRouter } from 'next/navigation';
+import AdminApprovalWarning from '@/lib/approvalwarning'
 
 if (typeof window !== 'undefined') {
   var ReactQuill = require('react-quill');
@@ -113,6 +114,11 @@ function Page() {
     setFile(e.target.files[0]);
   }
 
+
+  const handleCancel =()=>{
+    window.location.href = "/posts";
+
+  }
   const handleSubmit = async (event) => {
     try {
       event.preventDefault();
@@ -318,7 +324,11 @@ function Page() {
             <Button onClick={handleSubmit} colorScheme='yellow' type='submit' className='submit-button' mt={4}  >
               Submit
             </Button>
+            <Button onClick={handleCancel} colorScheme='red' mt={4} ml={2}>
+              Cancel
+            </Button>
           </FormControl>
+          <AdminApprovalWarning/>
         </>
       )}
     </div>
