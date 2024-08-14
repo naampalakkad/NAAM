@@ -31,14 +31,14 @@ export const MenuItems = [
   { name: 'Gallery', link: '/gallery' },
   { name: 'Alumni', link: '/alumni' },
   { name: 'Articles', link: '/posts' },
-  { name: 'Calender', link: '/calender' },
-  { name: 'Profile', link: '/login' },
+  { name: 'Calendar', link: '/calendar' },
+  { name: 'Profile', link: '/profile' },
 ];
 
 export const FooterMenuItems = [
   { name: 'About Us', link: '/aboutus' },
   { name: 'ByLaw', link: '/law' },
-  { name: 'Profile', link: '/login' },
+  { name: 'Profile', link: '/profile' },
 ];
 
 export const socialMediaUrls = [
