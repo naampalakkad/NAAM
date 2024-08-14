@@ -202,7 +202,7 @@ export const BlogPost = ({ post }) => {
                                </strong>
                             </div>
                             <div style={{ textAlign: 'center' }}>
-                                <strong style={{ fontSize: '40px' }}>{postdata.title}</strong>
+                                <strong style={{ fontSize: '24px' }}>{postdata.title}</strong>
                             </div>
                             <ReactQuill value={postdata.content} readOnly={true} modules={{ toolbar: false }} />
                         </div>

@@ -104,13 +104,14 @@ body.active-modal {
 }
 
 .modal-container .modal-container-content {
-    margin: 40px;
+    margin: 10px;
+    padding-top: 50px;
     text-align: justify;
 }
 
 .modal-container .modal-container-content p {
     margin-bottom: 15px;
-    font-size: 18px;
+    font-size: 16px;
     line-height: 1.6;
 }
 
