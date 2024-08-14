@@ -157,7 +157,8 @@ const BatchRepManager = () => {
                 <Box display="flex" alignItems="center" mb={4}>
                     <Avatar size="lg" src={rep.photoURL || `/assets/usericon.webp`} />
                     <Box ml={4} flex="1">
-                        <Text fontWeight="bold" fontSize="lg">{rep.email}</Text>
+                    {rep.name &&  <Text fontWeight="bold" fontSize="lg">{rep.name}</Text>}
+                        {rep.email && <Text>{`Email: ${rep.email}`}</Text>}
                         {rep.batch && <Text>{`Batch: ${rep.batch}`}</Text>}
                         {rep.number && <Text>{`Number: ${rep.number}`}</Text>}
                         {rep.rollno && <Text>{`Roll Number: ${rep.rollno}`}</Text>}

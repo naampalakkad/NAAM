@@ -183,8 +183,9 @@ const AdminUserManagerPanel = () => {
                                 <Box display="flex" alignItems="center" mb={4}>
                                     <Avatar size="lg" src={user.photoURL || `/assets/usericon.webp`} />
                                     <Box ml={4} flex="1">
-                                        <Text fontWeight="bold" fontSize="lg">{user.email}</Text>
-                                        {user.name && <Text>{`Name: ${user.name}`}</Text>}
+                                        
+                                        {user.name && <Text fontWeight="bold" fontSize="lg"> {user.name}</Text>}
+                                        {user.email && <Text>{`Email: ${user.email}`}</Text>}
                                         {user.batch && <Text>{`Batch: ${user.batch}`}</Text>}
                                         {user.number && <Text>{`Number: ${user.number}`}</Text>}
                                         {user.rollno && <Text>{`Roll Number: ${user.rollno}`}</Text>}
