@@ -2,7 +2,12 @@
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { auth, getdatafromdb } from '@/lib/firebase';
-import { Box, Badge, Heading, Text, VStack, HStack, Image, Flex, Spinner, Button, List, ListItem, useToast } from '@chakra-ui/react';
+import { 
+  Box, Badge, Heading, Text, VStack, HStack, Image, Flex, Spinner, 
+  Button, List, ListItem, useToast, Drawer, DrawerBody, DrawerFooter, 
+  DrawerHeader, DrawerOverlay, DrawerContent, DrawerCloseButton, 
+  useBreakpointValue 
+} from '@chakra-ui/react';
 import CommentSection from './CommentSection';
 import LatestPostsPanel from './LatestPostsPanel';
 
@@ -14,14 +19,16 @@ export default function BlogPost() {
   const [previousPostId, setPreviousPostId] = useState(null);
   const toast = useToast();
   const router = useRouter();
+  const isMobile = useBreakpointValue({ base: true, md: false });
+  const [isDrawerOpen, setDrawerOpen] = useState(false);
+
+  const toggleDrawer = () => setDrawerOpen(!isDrawerOpen);
 
   useEffect(() => {
     const fetchPost = async () => {
       if (id) {
         const post = await getdatafromdb(`content/approvedposts/${id}`);
         setPost(post);
-
-        // Fetch adjacent posts
         const allPosts = await getdatafromdb('content/approvedposts');
         const postIds = Object.keys(allPosts).sort((a, b) => allPosts[b].timestamp - allPosts[a].timestamp);
         const currentIndex = postIds.indexOf(id);
@@ -49,7 +56,7 @@ export default function BlogPost() {
     );
   }
 
-  // Generate Table of Contents
+
   const generateTOC = () => {
     const toc = [];
     post.content.ops.forEach((op, idx) => {
@@ -67,11 +74,11 @@ export default function BlogPost() {
   };
 
   return (
-    <Flex>
+    <Flex direction={{ base: 'column', md: 'row' }}>
       <Box flex="1" maxW="800px" mx="auto" p={5} pt="12vh">
         <Heading mb={4}>{post.title}</Heading>
         <HStack spacing={2} mb={4}>
-          <Badge colorScheme="yellow">{post.authorName}</Badge>
+          <Badge colorScheme="yellow" width={300} overflow={"hidden"}>{post.authorName}</Badge>
           <Badge colorScheme="blue">{post.type}</Badge>
         </HStack>
         <VStack spacing={4} align="start">
@@ -81,24 +88,25 @@ export default function BlogPost() {
           {post.content.ops.map((op, idx) => {
             if (op.insert && typeof op.insert === 'string') {
               return (
-                <Text key={idx} textAlign="justify" id={`section-${idx}`}>
-                  {op.attributes && op.attributes.bold ? (
-                    <strong>{op.insert}</strong>
-                  ) : (
-                    op.insert
-                  )}
+                <Text fontSize={"small"} key={idx}  id={`section-${idx}`}>
+                  {op.insert.split('\n').map((line, index) => (
+                    <span key={index}>
+                      {line}
+                      <br />
+                    </span>
+                  ))}
                 </Text>
               );
             } else if (op.attributes && op.attributes.header) {
               const HeadingComponent = `h${op.attributes.header}`;
               return (
-                <HeadingComponent key={idx} textAlign="justify" id={`section-${idx}`}>
+                <HeadingComponent p={3} key={idx} textAlign="justify" id={`section-${idx}`}>
                   {op.insert}
                 </HeadingComponent>
               );
             } else if (op.attributes && op.attributes.link) {
               return (
-                <a key={idx} href={op.attributes.link} style={{ color: 'teal' }} target="_blank" rel="noopener noreferrer">
+                <a key={idx} p={3} href={op.attributes.link} style={{ color: 'teal' }} target="_blank" rel="noopener noreferrer">
                   {op.insert}
                 </a>
               );
@@ -107,14 +115,15 @@ export default function BlogPost() {
                 <Image
                   key={idx}
                   src={op.insert.image}
+                  width={"300px"}
+                  height={"auto"}
                   alt="Post content"
                   mx="auto"
-                  // fallbackSrc="/path/to/loading-image.gif" 
                   loading="lazy" 
                 />
               );
             }
-            return null;
+            return <div key={idx}><br /><br /></div>;
           })}
         </VStack>
         <CommentSection postId={id} />
@@ -135,7 +144,27 @@ export default function BlogPost() {
           </Button>
         </HStack>
       </Box>
-      <LatestPostsPanel />
+
+      {isMobile ? (
+        <>
+          <Button onClick={toggleDrawer} position="fixed" bottom={4} right={4} colorScheme="teal">
+            Latest Posts
+          </Button>
+          <Drawer isOpen={isDrawerOpen} placement="bottom" onClose={toggleDrawer} >
+            <DrawerOverlay />
+            <DrawerContent>
+              <DrawerCloseButton />
+              <DrawerBody>
+                <LatestPostsPanel />
+              </DrawerBody>
+            </DrawerContent>
+          </Drawer>
+        </>
+      ) : (
+        <Box width="300px" mt={"10vh"} borderLeftWidth="1px" borderColor="gray.200">
+        <LatestPostsPanel />
+        </Box>
+      )}
     </Flex>
   );
 }

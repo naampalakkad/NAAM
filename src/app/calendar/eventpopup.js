@@ -41,7 +41,7 @@ const EventDetailModal = ({ showEventDetailModal, setShowEventDetailModal, selec
   }, [selectedEvent]);
 
   const handleShare = () => {
-    const url = `${window.location.origin}/calender?eventId=${eventDetails.id}`;
+    const url = `${window.location.origin}/calendar?eventId=${eventDetails.id}`;
 
     navigator.clipboard.writeText(url).then(() => {
       toast({

@@ -165,6 +165,13 @@ function Page() {
         });
         return;
       }
+      toast({
+        title: "Loading...",
+        description: "Please wait a moment...",
+        status: 'info',
+        duration: 3000,
+        isClosable: true,
+      });
       let file = isfile;
       const compressor = new ImageCompressor();
       const compressedImage = await compressor.compress(file, {
