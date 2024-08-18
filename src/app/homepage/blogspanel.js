@@ -103,6 +103,7 @@ const BlogsPanel = () => {
   }, [posts, fetchLikes]);
 
   const openModal = (post) => {
+    // window.location.href=`/blog/${post[0]}`;
     setSelectedPost(post);
     setIsOpen(true);
   };

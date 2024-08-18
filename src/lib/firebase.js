@@ -13,6 +13,17 @@ if (typeof window !== "undefined") {
     }); 
 }
 
+
+// const firebaseConfig = {
+//   apiKey: "AIzaSyAwBCJsji0R5UeZuKkroe4JsS3RSrVHrsA",
+//   authDomain: "naamsiteprod.firebaseapp.com",
+//   databaseURL: "https://naamsiteprod-default-rtdb.asia-southeast1.firebasedatabase.app",
+//   projectId: "naamsiteprod",
+//   storageBucket: "naamsiteprod.appspot.com",
+//   messagingSenderId: "441558746731",
+//   appId: "1:441558746731:web:da6e9e5f18396ac0bd132e",
+//   measurementId: "G-PPQBL6FYQT"
+// };
 const firebaseConfig = {
   apiKey: "AIzaSyD3teEBN7Ai6JXlvtbGaE6r_NTLK0Kpm4A",
   authDomain: "naam-751a5.firebaseapp.com",
@@ -23,6 +34,7 @@ const firebaseConfig = {
   measurementId: "G-1DCGC388NY",
   databaseURL: "https://naam-751a5-default-rtdb.asia-southeast1.firebasedatabase.app"
 };
+
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const storage = getStorage(app);

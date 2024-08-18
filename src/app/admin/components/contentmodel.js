@@ -43,7 +43,12 @@ const ContentSection = memo(({ content }) => (
             if (op.insert && typeof op.insert === 'string') {
                 return (
                     <Text key={idx} textAlign="justify" id={`section-${idx}`}>
-                        {op.attributes && op.attributes.bold ? <strong>{op.insert}</strong> : op.insert}
+                        {op.insert.split('\n').map((line, index) => (
+                            <span key={index}>
+                                {line}
+                                <br />
+                            </span>
+                        ))}
                     </Text>
                 );
             } else if (op.attributes && op.attributes.header) {
@@ -60,7 +65,7 @@ const ContentSection = memo(({ content }) => (
                     </Link>
                 );
             } else if (op.insert && op.insert.image) {
-                return <Image key={idx} src={op.insert.image} alt="Item content" mx="auto" />;
+                return <Image key={idx} src={op.insert.image} width={"300px"} alt="Item content" mx="auto" />;
             }
             return null;
         })}
@@ -117,21 +122,22 @@ const ItemModal = ({ isOpen, onClose, selectedItem, currentPath }) => {
     };
 
     return (
-        <Modal isOpen={isOpen} onClose={onClose} scrollBehavior="inside" size="xxl">
+        <Modal isOpen={isOpen} onClose={onClose} scrollBehavior="inside" size="full">
             <ModalOverlay />
-            <ModalContent>
-                <ModalHeader>{selectedItem.title}</ModalHeader>
+            <ModalContent maxW={{ base: "100%", md: "80%", lg: "60%" }} mx="auto">
+                <ModalHeader fontSize={{ base: "lg", md: "xl" }}>{selectedItem.title}</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
-                    <Box width="60vw" mx="auto" p={5} pt="12vh">
-                        <Heading mb={4}>{selectedItem.title}</Heading>
+                    <Box mx="auto" p={{ base: 3, md: 5 }} pt="2vh">
                         <HStack spacing={2} mb={4}>
-                            <Badge colorScheme="yellow">{selectedItem.authorName}</Badge>
+                            <Badge colorScheme="yellow" width={{ base: "100px", md: "200px" }} overflow="hidden">
+                                {selectedItem.authorName}
+                            </Badge>
                             <Badge colorScheme="blue">{selectedItem.type}</Badge>
                         </HStack>
                         <ContentSection content={selectedItem.content} />
                         <VStack align="start" spacing={4} w="full" pt={4}>
-                            <Heading fontSize="lg" mb={2}>Comments</Heading>
+                            <Heading fontSize={{ base: "md", md: "lg" }} mb={2}>Comments</Heading>
                             {loadingComments ? (
                                 <Spinner size="lg" />
                             ) : comments.length > 0 ? (

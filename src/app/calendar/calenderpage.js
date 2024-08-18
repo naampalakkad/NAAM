@@ -5,7 +5,7 @@ import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
-import { Box, Flex, Button, Spinner, Card, Text } from "@chakra-ui/react";
+import { Box, Flex, Button, Spinner, Card, Text, useToast } from "@chakra-ui/react";
 import { getdatafromdb, auth, checkuserrole } from "@/lib/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import EventList from './eventlist';
@@ -13,6 +13,7 @@ import AddEventDrawer from './addevent';
 import EventDetailModal from './eventpopup';
 
 export default function Calendar() {
+  const toast = useToast();
   const searchParams = useSearchParams();
   const calendarRef = useRef(null);
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -23,6 +24,7 @@ export default function Calendar() {
   const [showAddEventModal, setShowAddEventModal] = useState(false);
   const [showEventDetailModal, setShowEventDetailModal] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
+  const toastShownRef = useRef(false);  // <-- Add a ref to track if the toast was shown
 
   useEffect(() => {
     const loadEventsFromFirebase = async () => {
@@ -62,10 +64,18 @@ export default function Calendar() {
           }
         });
         setShowEventDetailModal(true);
+        toastShownRef.current = false;  
+      } else if (!toastShownRef.current) { 
+        toast({
+          title: "Event not found.",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+        toastShownRef.current = true; 
       }
     }
-  }, [events, searchParams]);
-  
+  }, [events, searchParams, toast]);
 
   const handleDateClick = useCallback((arg) => {
     if (user && isAdmin) {
@@ -90,12 +100,12 @@ export default function Calendar() {
     }
   }, [user]);
 
-  const futureEvents = useMemo(() => 
-    events.filter(event => new Date(`${event.date}T${event.time}`) > new Date()), 
+  const futureEvents = useMemo(() =>
+    events.filter(event => new Date(`${event.date}T${event.time}`) > new Date()),
     [events]
   );
 
-  const eventList = useMemo(() => 
+  const eventList = useMemo(() =>
     events.map(event => ({
       title: event.title,
       id: event.id,
@@ -105,7 +115,7 @@ export default function Calendar() {
         time: event.time,
         venue: event.venue,
       },
-    })), 
+    })),
     [events]
   );
 
@@ -113,7 +123,7 @@ export default function Calendar() {
     <Box
       width={'full'}
       p={1}
-      m={0.1  }
+      m={0.1}
       bg="blue.500"
       borderRadius="md"
       color="white"
@@ -141,7 +151,7 @@ export default function Calendar() {
           <Card className='card'>
             <FullCalendar
               ref={calendarRef}
-              plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+              plugins={[dayGridPlugin, interactionPlugin]}
               initialView={'dayGridMonth'}
               headerToolbar={{
                 start: "today prev,next",

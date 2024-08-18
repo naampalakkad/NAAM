@@ -49,7 +49,7 @@ export default function LatestPostsPanel() {
   };
 
   return (
-    <Box width="300px" p={4} mt="12vh" borderLeftWidth="1px" borderColor="gray.200">
+    <Box  p={4} >
       <Heading size="lg" color={"teal"} mb={4}>Latest Posts</Heading>
       <Input
         value={searchTerm}
@@ -81,12 +81,15 @@ export default function LatestPostsPanel() {
                       src={post[1].thumbnail || '/defaultImage.jpg'}
                       alt={post[1].title}
                       mb={2}
-                      fallbackSrc="/path/to/loading-image.gif" // Placeholder image or loading animation
+                      fallbackSrc="/path/to/loading-image.gif"
                       loading="lazy"
+                      width={"150"}
+                      height={"150"}
+                      objectFit={"cover"}
                     />
                     <HStack mb={2}>
                       <Badge colorScheme="blue">{post[1]?.type}</Badge>
-                      <Badge colorScheme="yellow">{post[1]?.authorName}</Badge>
+                      <Badge colorScheme="yellow" width={"200px"} overflow={"hidden"}>{post[1]?.authorName}</Badge>
                     </HStack>
                     <Text fontWeight="bold">{post[1].title}</Text>
                   </MotionCard>
@@ -99,4 +102,3 @@ export default function LatestPostsPanel() {
     </Box>
   );
 }
-
