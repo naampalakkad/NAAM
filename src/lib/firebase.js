@@ -14,16 +14,15 @@ if (typeof window !== "undefined") {
 }
 
 
- 
 const firebaseConfig = {
-  apiKey: "AIzaSyAwBCJsji0R5UeZuKkroe4JsS3RSrVHrsA",
-  authDomain: "naamsiteprod.firebaseapp.com",
-  databaseURL: "https://naamsiteprod-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "naamsiteprod",
-  storageBucket: "naamsiteprod.appspot.com",
-  messagingSenderId: "441558746731",
-  appId: "1:441558746731:web:da6e9e5f18396ac0bd132e",
-  measurementId: "G-PPQBL6FYQT"
+  apiKey: "AIzaSyD3teEBN7Ai6JXlvtbGaE6r_NTLK0Kpm4A",
+  authDomain: "naam-751a5.firebaseapp.com",
+  projectId: "naam-751a5",
+  storageBucket: "naam-751a5.appspot.com",
+  messagingSenderId: "635247227682",
+  appId: "1:635247227682:web:01891d1adee715c4f7ab7b",
+  measurementId: "G-1DCGC388NY",
+  databaseURL: "https://naam-751a5-default-rtdb.asia-southeast1.firebasedatabase.app"
 };
 
 const app = initializeApp(firebaseConfig);
