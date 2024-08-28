@@ -33,8 +33,8 @@ const PostCard = ({ post, onOpen, liked, onLike, likesCount }) => (
     <CardBody>
       <Stack>
         <HStack>
-          <Badge colorScheme="blue">{post[1]?.type}</Badge>
-          <Badge colorScheme="yellow">{post[1]?.authorName}</Badge>
+        <Badge  overflow={"hidden"}  colorScheme="blue">{post[1]?.type}</Badge>
+        <Badge overflow={"hidden"} colorScheme="yellow">{post[1]?.authorName}</Badge>
         </HStack>
         <Heading size={"md"}>{post[1]?.title}</Heading>
         <HStack justifyContent={"space-between"}>

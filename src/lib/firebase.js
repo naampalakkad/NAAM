@@ -13,8 +13,7 @@ if (typeof window !== "undefined") {
     }); 
 }
 
-
- 
+    
 const firebaseConfig = {
   apiKey: "AIzaSyAwBCJsji0R5UeZuKkroe4JsS3RSrVHrsA",
   authDomain: "naamsiteprod.firebaseapp.com",
