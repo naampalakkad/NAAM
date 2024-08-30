@@ -45,6 +45,7 @@
   "devDependencies": {
     "@swc/cli": "^0.3.12",
     "@swc/core": "^1.5.29",
+    "typescript": "5.5.4",
     "webpack": "^5.94.0"
   }
 }

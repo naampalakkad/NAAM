@@ -1,0 +1,27 @@
+{
+    "theme_color": "#8936FF",
+    "background_color": "#2EC6FE",
+    "icons": [
+        {
+            "purpose": "maskable",
+            "sizes": "512x512",
+            "src": "icon512_maskable.webp",
+            "type": "image/webp"
+        },
+        {
+            "purpose": "any",
+            "sizes": "512x512",
+            "src": "icon512_rounded.webp",
+            "type": "image/webp"
+        }
+    ],
+    "orientation": "any",
+    "display": "standalone",
+    "dir": "auto",
+    "lang": "en-US",
+    "name": "Naam Alumni Website",
+    "short_name": "Naam",
+    "start_url": "http://localhost:3000/",
+    "scope": "http://localhost:3000/",
+    "description": "Bringing Alumni of JNV Palakkad Together. "
+}
