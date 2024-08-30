@@ -12,6 +12,13 @@ const config = {
 
 const theme = extendTheme({ config });
 
+export const metadata = {
+  title: "NAAM - Navodaya Alumni Association",
+  description: "Discover the world's hidden wonders and hidden gems",
+    manifest: "/manifest.json",
+    keywords: [" naam", "naam website"],
+  };
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
