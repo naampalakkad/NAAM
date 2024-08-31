@@ -170,7 +170,16 @@ export async function uploadImgToStorage(location, imageFile) {
   try {
     const renamedFile = await compressImage(imageFile);
     const storageRef = sref(storage, `${location}/${renamedFile.name}`);
-    await uploadBytes(storageRef, renamedFile);
+    const metadata = {
+      cacheControl: 'public, max-age=31536000', 
+      contentType: renamedFile.type, 
+      contentDisposition: 'inline',
+      contentLanguage: 'en',
+      customMetadata: {
+        uploadedBy: auth.currentUser.email,
+      },
+    };
+    await uploadBytes(storageRef, renamedFile, metadata);
     const imageUrl = await getDownloadURL(storageRef);
     return imageUrl;
   } catch (error) {
