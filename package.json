@@ -11,6 +11,7 @@
   "dependencies": {
     "@chakra-ui/icons": "^2.1.1",
     "@chakra-ui/react": "^2.8.2",
+    "@ducanh2912/next-pwa": "^10.2.8",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
     "@fortawesome/fontawesome-free": "^6.5.1",
@@ -27,6 +28,7 @@
     "framer-motion": "^11.2.12",
     "image-compressor.js": "^1.1.4",
     "next": "^14.2.4",
+    "next-pwa": "^5.6.0",
     "react": "^18.2.0",
     "react-calendar": "^4.8.0",
     "react-dom": "^18.2.0",
@@ -37,10 +39,14 @@
     "react-select": "^5.8.0",
     "react-social-icons": "^6.12.0",
     "react-type-animation": "^3.2.0",
+    "sharp": "^0.33.5",
+    "workbox-webpack-plugin": "^7.1.0",
     "yet-another-react-lightbox": "^3.18.0"
   },
   "devDependencies": {
     "@swc/cli": "^0.3.12",
-    "@swc/core": "^1.5.29"
+    "@swc/core": "^1.5.29",
+    "typescript": "5.5.4",
+    "webpack": "^5.94.0"
   }
 }

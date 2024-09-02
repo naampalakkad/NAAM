@@ -4,6 +4,7 @@ function Header() {
     <head>
       <title>NAAM Alumni Association</title>
       <link rel="icon" href="/assets/logo.webp"/>
+      <meta charSet="UTF-8"/>
       <meta name="color-scheme" content="light dark" />
       <meta name="description" content="Connect with fellow NAAM alumni, share experiences, and build lasting relationships." />
       <meta name="keywords" content="NAAM alumni, alumni network, connect, memories, careers" />
