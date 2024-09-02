@@ -21,7 +21,7 @@
     "lang": "en-US",
     "name": "Naam Alumni Website",
     "short_name": "Naam",
-    "start_url": "http://localhost:3000/",
-    "scope": "http://localhost:3000/",
+    "start_url": "https://naampalakkad.in/",
+    "scope": "https://naampalakkad.in/",
     "description": "Bringing Alumni of JNV Palakkad Together. "
 }
