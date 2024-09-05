@@ -6,17 +6,17 @@ import { ChevronRightIcon } from '@chakra-ui/icons';
 
 const MenuItem = ({ item }) => (
   <a href={item.link}>
-    <Text fontSize="md" color="white" p={4} _hover={{ textDecoration: 'underline' }}>
+    <Text fontSize="md" color="white" p={0.3} _hover={{ textDecoration: 'underline' }}>
       {item.name}
     </Text>
   </a>
 );
 
 const Socials = () => (
-  <Flex spacing={4} width={{ base: 'full', md: '30%' }} mb={{ base: 2, md: 0 }} justifyContent={"space-evenly"} alignContent={"center"}>
+  <Flex spacing={1} width={{ base: 'full', md: '30%' }}justifyContent={"space-evenly"} alignContent={"center"}>
     {socialMediaUrls.map((url) => (
       <IconButton
-        m={5}
+        m={3}
         key={url}
         as={SocialIcon}
         url={url}
@@ -42,13 +42,12 @@ const Footer = () => {
         direction={{ base: 'column', md: 'row' }}
         justify="space-between"
         align="center"
-        px={{ base: 4, md: 8 }}
       >
-        <Flex direction="row" align="center" width={{ base: 'full', md: '30%' }} mb={{ base: 4, md: 0 }}>
+        <Flex direction="row" align="center" width={{ base: 'full', md: '30%' }}>
           <Image
             src={`/assets/logo.webp`}
             alt="Main logo"
-            boxSize={{ base: '100px', md: '150px' }}
+            boxSize={{ base: '100px', md: '100px' }}
             borderRadius={"full"}
             m={5}
             onClick={() => window.location.href = '/'}
@@ -60,7 +59,7 @@ const Footer = () => {
             <Text fontSize={{ base: 'sm', md: 'md' }}>Malampuzha, Palakkad, Kerala, India</Text>
           </Stack>
         </Flex>
-        <Flex direction={{ base: 'column', md: 'row' }} align="center" justifyContent={"space-evenly"} width={{ base: 'full', md: '30%' }} mb={{ base: 2, md: 0 }}>
+        <Flex direction={{ base: 'column', md: 'row' }} align="center" justifyContent={"space-evenly"} width={{ base: 'full', md: '30%' }}>
           {FooterMenuItems.map(item => (
             <MenuItem key={item.name} item={item} />
           ))}
