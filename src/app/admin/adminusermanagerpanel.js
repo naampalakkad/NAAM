@@ -124,7 +124,7 @@ const AdminUserManagerPanel = () => {
 
     if (loading) {
         return (
-            <Box textAlign="center" py={10}>
+            <Box textAlign="center" py={2}>
                 <Spinner size="xl" />
                 <Text mt={4}>Loading...</Text>
             </Box>
@@ -132,7 +132,7 @@ const AdminUserManagerPanel = () => {
     }
 
     return (
-        <VStack spacing={6} align="stretch">
+        <VStack spacing={3} align="stretch">
             <InputGroup>
                 <InputLeftElement pointerEvents="none" children={<SearchIcon color="gray.300" />} />
                 <Input
@@ -144,12 +144,12 @@ const AdminUserManagerPanel = () => {
             </InputGroup>
 
             <Box>
-                <Heading size="xl" textAlign="center" p={2} m={2} borderRadius="md">Pending Users</Heading>
-                <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={4} maxHeight="50vh" overflowY="auto">
+                <Heading size="xl" textAlign="center" p={2}  borderRadius="md">Pending Users</Heading>
+                <SimpleGrid columns={{ base: 1, md: 2, lg: 3  }} spacing={1} maxHeight="50vh" overflowY="auto">
                     {filteredAllUsers.map(user => (
                         <Box key={user.uid} borderRadius="md" boxShadow="md" bg={cardBg}>
-                            <Card p={4}>
-                                <Box display="flex" alignItems="center" mb={4}>
+                            <Card p={2}>
+                                <Box display="flex" alignItems="center" mb={2}>
                                     <Avatar size="lg" src={user.photoURL || `/assets/usericon.webp`} />
                                     <Box ml={4} flex="1">
                                         <Text fontWeight="bold" fontSize="lg">{user.email}</Text>
@@ -175,12 +175,12 @@ const AdminUserManagerPanel = () => {
             </Box>
 
             <Box>
-                <Heading size="xl" textAlign="center" p={2} m={2} borderRadius="md">Approved Users</Heading>
+                <Heading size="xl" textAlign="center" p={1} m={1} borderRadius="md">Approved Users</Heading>
                 <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={4} maxHeight="50vh" overflowY="auto">
                     {filteredApprovedUsers.map(user => (
-                        <Box key={user.uid} borderRadius="md" boxShadow="md" bg={cardBg}>
-                            <Card p={4}>
-                                <Box display="flex" alignItems="center" mb={4}>
+                        <Box key={user.uid} borderRadius="md" boxShadow="md" bg={cardBg} overflow={"hidden"}>
+                            <Card p={2}>
+                                <Box display="flex" alignItems="center" mb={2}>
                                     <Avatar size="lg" src={user.photoURL || `/assets/usericon.webp`} />
                                     <Box ml={4} flex="1">
                                         
@@ -189,7 +189,7 @@ const AdminUserManagerPanel = () => {
                                         {user.batch && <Text>{`Batch: ${user.batch}`}</Text>}
                                         {user.number && <Text>{`Number: ${user.number}`}</Text>}
                                         {user.rollno && <Text>{`Roll Number: ${user.rollno}`}</Text>}
-                                        <Button colorScheme="yellow" mt={2} onClick={() => handleUnapproveUser(user)}>
+                                        <Button colorScheme="yellow" mt={1} onClick={() => handleUnapproveUser(user)}>
                                         Unapprove
                                     </Button>
                                     </Box>

@@ -124,7 +124,7 @@ const BatchRepManager = () => {
     }
 
     return (
-        <VStack spacing={6} align="stretch">
+        <VStack spacing={3} align="stretch">
             <Heading size="lg" textAlign="center">Batch Representatives</Heading>
             <Box>
                 <Input
@@ -150,25 +150,24 @@ const BatchRepManager = () => {
                     </Box>
                 )}
             </Box>
-            <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={4} maxHeight="50vh" overflowY="auto">
+            <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={2} maxHeight="50vh" overflowY="auto">
     {batchReps.map(rep => (
         <Box key={rep.id} borderRadius="md" boxShadow="md">
-            <Card p={4}>
-                <Box display="flex" alignItems="center" mb={4}>
+            <Card p={2}>
+                <Box display="flex" alignItems="center" >
                     <Avatar size="lg" src={rep.photoURL || `/assets/usericon.webp`} />
-                    <Box ml={4} flex="1">
+                    <Box ml={2} flex="1">
                     {rep.name &&  <Text fontWeight="bold" fontSize="lg">{rep.name}</Text>}
                         {rep.email && <Text>{`Email: ${rep.email}`}</Text>}
                         {rep.batch && <Text>{`Batch: ${rep.batch}`}</Text>}
                         {rep.number && <Text>{`Number: ${rep.number}`}</Text>}
                         {rep.rollno && <Text>{`Roll Number: ${rep.rollno}`}</Text>}
-                    </Box>
-                </Box>
-                <Box display="flex" justifyContent="flex-end" mt={4}>
-                    <Button colorScheme="red" onClick={() => handleRemoveRep(rep.id, rep.email)}>
+                        <Button colorScheme="red" onClick={() => handleRemoveRep(rep.id, rep.email)}>
                         Remove
                     </Button>
+                    </Box>
                 </Box>
+              
             </Card>
         </Box>
     ))}

@@ -24,7 +24,7 @@ export default function AuthChecker({ children }) {
   }, []);
 
   const signInRedirect = () => {
-    window.location.href = '/login';
+    window.location.href = '/profile';
   };
 
   const cardStyle = {
