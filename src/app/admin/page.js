@@ -32,7 +32,7 @@ export default function AlumniListPage() {
   }, []);
 
   const signInRedirect = () => {
-    window.location.href = '/login';
+    window.location.href = '/profile';
   };
 
   return (
