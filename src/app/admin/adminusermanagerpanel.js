@@ -147,29 +147,29 @@ const AdminUserManagerPanel = () => {
                 <Heading size="xl" textAlign="center" p={2}  borderRadius="md">Pending Users</Heading>
                 <SimpleGrid columns={{ base: 1, md: 2, lg: 3  }} spacing={1} maxHeight="50vh" overflowY="auto">
                     {filteredAllUsers.map(user => (
-                        <Box key={user.uid} borderRadius="md" boxShadow="md" bg={cardBg}>
-                            <Card p={2}>
-                                <Box display="flex" alignItems="center" mb={2}>
-                                    <Avatar size="lg" src={user.photoURL || `/assets/usericon.webp`} />
-                                    <Box ml={4} flex="1">
-                                        <Text fontWeight="bold" fontSize="lg">{user.email}</Text>
-                                        {user.name && <Text>{`Name: ${user.name}`}</Text>}
-                                        {user.batch && <Text>{`Batch: ${user.batch}`}</Text>}
-                                        {user.number && <Text>{`Number: ${user.number}`}</Text>}
-                                        {user.rollno && <Text>{`Roll Number: ${user.rollno}`}</Text>}
-                                        <Box display="flex" justifyContent="flex-end" mt={4}>
-                                    <Button colorScheme="green" onClick={() => handleApproveUser(user)}>
-                                        Approve
-                                    </Button>
-                                    <Button colorScheme="red" ml={2} onClick={() => handleRemoveUser(user.uid)}>
-                                        Remove
-                                    </Button>
-                                </Box>
-                                    </Box>
-                                </Box>
-                             
-                            </Card>
-                        </Box>
+                     <Box key={user.uid} borderRadius="md" boxShadow="md" bg={cardBg}>
+                     <Card p={2}>
+                         <Box display="flex" alignItems="center" mb={2}>
+                             <Avatar size="lg" src={user.photoURL || `/assets/usericon.webp`} />
+                             <Box ml={2} flex="1" overflow={"scroll"}>
+                                {user.name && <Text>Name: {user.name}</Text>}
+                                 {user.email && <Text>Email: {user.email}</Text>}
+                                 {user.batch && <Text>Batch: {user.batch}</Text>}
+                                 {user.number && <Text>Number: {user.number}</Text>}
+                                 {user.rollno && <Text>Roll Number: {user.rollno}</Text>}
+                                 <Box display="flex"  mt={4}>
+                                     <Button colorScheme="green" onClick={() => handleApproveUser(user)}>
+                                         Approve
+                                     </Button>
+                                     <Button colorScheme="red" ml={2} onClick={() => handleRemoveUser(user.uid)}>
+                                         Remove
+                                     </Button>
+                                 </Box>
+                             </Box>
+                         </Box>
+                     </Card>
+                 </Box>
+                 
                     ))}
                 </SimpleGrid>
             </Box>
