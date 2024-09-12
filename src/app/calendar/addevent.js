@@ -115,6 +115,7 @@ const AddEventDrawer = ({ isOpen, onClose, selectedDate, setSelectedDate, events
               value={eventTitle}
               onChange={(e) => setEventTitle(e.target.value)}
               focusBorderColor="blue.500"
+              maxLength={100}
             />
           </FormControl>
           <FormControl mb={4} isRequired>
@@ -123,6 +124,7 @@ const AddEventDrawer = ({ isOpen, onClose, selectedDate, setSelectedDate, events
               value={eventDesc}
               onChange={(e) => setEventDesc(e.target.value)}
               focusBorderColor="blue.500"
+              maxLength={500}
             />
           </FormControl>
           <FormControl mb={4} isRequired>
@@ -132,6 +134,7 @@ const AddEventDrawer = ({ isOpen, onClose, selectedDate, setSelectedDate, events
               value={eventVenue}
               onChange={(e) => setEventVenue(e.target.value)}
               focusBorderColor="blue.500"
+              maxLength={100}
             />
           </FormControl>
           <Button type="submit" style={{ display: 'none' }}></Button>
