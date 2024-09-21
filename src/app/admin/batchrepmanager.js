@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { VStack, Button, Input, List, ListItem, useToast, SimpleGrid, Box, Heading, Text, Avatar, Card, Spinner } from '@chakra-ui/react';
 import { savedatatodb, deletedatafromdb, getdatafromdb } from '@/lib/firebase';
+import debounce from 'lodash/debounce';
 
 const BatchRepManager = () => {
     const [batchReps, setBatchReps] = useState([]);
@@ -13,17 +14,25 @@ const BatchRepManager = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const repsData = await getdatafromdb('userroles/batchreps');
-                if (repsData) {
-                    setBatchReps(Object.values(repsData));
-                }
-                const usersData = await getdatafromdb('approvedUsers');
-                if (usersData) {
-                    const usersArray = Object.keys(usersData).map(uid => ({
-                        uid,
-                        ...usersData[uid],
-                    }));
-                    setUsers(usersArray);
+                const batchReplistData = await getdatafromdb('userroles/batchreplist');
+                if (batchReplistData) {
+                    const repEmails = Object.keys(batchReplistData).map(emailKey =>
+                        emailKey.replace(/_/g, '.')
+                    );
+
+                    const usersData = await getdatafromdb('approvedUsers');
+                    if (usersData) {
+                        const usersArray = Object.keys(usersData).map(uid => ({
+                            uid,
+                            ...usersData[uid],
+                        }));
+
+                        const matchedBatchReps = usersArray.filter(user => repEmails.includes(user.email));
+                        matchedBatchReps.sort((a, b) => a.batch - b.batch);
+
+                        setBatchReps(matchedBatchReps);
+                        setUsers(usersArray);
+                    }
                 }
             } catch (error) {
                 toast({
@@ -41,10 +50,17 @@ const BatchRepManager = () => {
         fetchData();
     }, [toast]);
 
+    const debouncedHandleEmailChange = useMemo(() => 
+        debounce((e) => {
+            const filtered = users.filter(user => 
+                user.email.toLowerCase().includes(e.target.value.toLowerCase())
+            );
+            setFilteredUsers(filtered);
+        }, 300), [users]);
+
     const handleEmailChange = (e) => {
         setNewRepEmail(e.target.value);
-        const filtered = users.filter(user => user.email.toLowerCase().includes(e.target.value.toLowerCase()));
-        setFilteredUsers(filtered);
+        debouncedHandleEmailChange(e);
     };
 
     const handleAddRep = async (user) => {
@@ -58,20 +74,11 @@ const BatchRepManager = () => {
             return;
         }
 
-        const newRep = {
-            id: user.uid,
-            email: user.email,
-            batch: user.batch,
-            number: user.number,
-            photoURL: user.photoURL,
-            rollno: user.rollno,
-        };
         const emailKey = user.email.replace(/\./g, '_');
 
         try {
-            await savedatatodb(`userroles/batchreps/${newRep.id}`, newRep);
             await savedatatodb(`userroles/batchreplist/${emailKey}`, true);
-            setBatchReps(prev => [...prev, newRep]);
+            setBatchReps(prev => [...prev, user]);
             setNewRepEmail('');
             setFilteredUsers([]);
             toast({
@@ -91,12 +98,11 @@ const BatchRepManager = () => {
         }
     };
 
-    const handleRemoveRep = async (id, email) => {
+    const handleRemoveRep = async (email) => {
         const emailKey = email.replace(/\./g, '_');
         try {
-            await deletedatafromdb(`userroles/batchreps/${id}`);
             await deletedatafromdb(`userroles/batchreplist/${emailKey}`);
-            setBatchReps(prev => prev.filter(rep => rep.id !== id));
+            setBatchReps(prev => prev.filter(rep => rep.email !== email));
             toast({
                 title: "Batch representative removed.",
                 status: "success",
@@ -124,55 +130,73 @@ const BatchRepManager = () => {
     }
 
     return (
-        <VStack spacing={3} align="stretch">
+        <VStack spacing={2} align="stretch">
             <Heading size="lg" textAlign="center">Batch Representatives</Heading>
-            <Box>
+            <Box maxW="sm" w="full" mx="auto">
                 <Input
-                    placeholder="Enter email to search"
+                    placeholder="Search users by email"
                     value={newRepEmail}
                     onChange={handleEmailChange}
+                    mb={4}
+                    size="md"
+                    borderColor="gray.300"
+                    fontSize={{ base: 'sm', md: 'md' }}
                 />
                 {filteredUsers.length > 0 && (
-                    <Box mt={2} border="1px" borderColor="gray.200" borderRadius="md" maxHeight="200px" overflowY="auto">
+                    <Box
+                        border="1px"
+                        borderColor="gray.200"
+                        borderRadius="md"
+                        maxHeight="150px"
+                        overflowY="scroll"
+                        fontSize="sm"
+                    >
+                        <Heading variant="sm" textAlign={"center"} p={1}>Suggestions</Heading>
                         <List spacing={3}>
                             {filteredUsers.map(user => (
-                                <ListItem key={user.uid} onClick={() => handleAddRep(user)} cursor="pointer" _hover={{ bg: 'gray.100' }} px={3} py={2}>
+                                <ListItem key={user.uid} onClick={() => handleAddRep(user)} cursor="pointer" _hover={{ bg: 'gray.100' }} p={1}>
+                                   <Card>
                                     <Box display="flex" alignItems="center">
-                                        <Avatar size="sm" src={user.photoURL || `/assets/usericon.webp` } />
+                                        <Avatar size="sm" src={user.photoURL || `/assets/usericon.webp`} />
                                         <Box ml={3}>
-                                            <Text fontWeight="bold">{user.email}</Text>
-                                            <Text fontSize="sm">{user.batch && `Batch: ${user.batch}`}</Text>
+                                            <Text fontWeight="bold" fontSize="sm">{user.name}</Text>
+                                            <Text fontWeight="bold" fontSize="sm">{user.email}</Text>
+                                            <Text fontSize="xs">{user.batch && `Batch: ${user.batch}`}</Text>
                                         </Box>
                                     </Box>
+                                    </Card>
                                 </ListItem>
                             ))}
                         </List>
                     </Box>
                 )}
             </Box>
-            <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={2} maxHeight="50vh" overflowY="auto">
-    {batchReps.map(rep => (
-        <Box key={rep.id} borderRadius="md" boxShadow="md">
-            <Card p={2}>
-                <Box display="flex" alignItems="center" >
-                    <Avatar size="lg" src={rep.photoURL || `/assets/usericon.webp`} />
-                    <Box ml={2} flex="1">
-                    {rep.name &&  <Text fontWeight="bold" fontSize="lg">{rep.name}</Text>}
-                        {rep.email && <Text>{`Email: ${rep.email}`}</Text>}
-                        {rep.batch && <Text>{`Batch: ${rep.batch}`}</Text>}
-                        {rep.number && <Text>{`Number: ${rep.number}`}</Text>}
-                        {rep.rollno && <Text>{`Roll Number: ${rep.rollno}`}</Text>}
-                        <Button colorScheme="red" onClick={() => handleRemoveRep(rep.id, rep.email)}>
-                        Remove
-                    </Button>
+            <SimpleGrid
+                columns={{ base: 1, sm: 2, md: 3 }}
+                spacing={2}
+                maxHeight={{ base: 'auto', md: '50vh' }}
+                overflowY="auto"
+                p={2}
+                w="full"
+            >
+                {batchReps.map(rep => (
+                    <Box key={rep.uid} borderRadius="md" boxShadow="md">
+                        <Card p={2}>
+                            <Box display="flex" alignItems="center">
+                                <Avatar size="lg" src={rep.photoURL || `/assets/usericon.webp`} />
+                                <Box ml={1} flex="1" minW="0">
+                                    <Text fontWeight="bold" fontSize="md" isTruncated>{rep.name || 'No Name'}</Text>
+                                    <Text fontSize="sm">{`Batch: ${rep.batch || 'Not available'}`}</Text>
+                                    <Text fontSize="sm" isTruncated>{`Roll Number: ${rep.rollno || 'Not Available'}`}</Text>
+                                </Box>
+                                <Button colorScheme="red" ml={4} onClick={() => handleRemoveRep(rep.email)}>
+                                    Remove
+                                </Button>
+                            </Box>
+                        </Card>
                     </Box>
-                </Box>
-              
-            </Card>
-        </Box>
-    ))}
-</SimpleGrid>
-
+                ))}
+            </SimpleGrid>
         </VStack>
     );
 };
