@@ -5,6 +5,10 @@ import {
 } from '@chakra-ui/react';
 import { savedatatodb, deletedatafromdb, getdatafromdb } from '@/lib/firebase';
 import { SearchIcon } from '@chakra-ui/icons';
+import { saveAs } from 'file-saver';
+import { Parser } from 'json2csv';
+import * as XLSX from 'xlsx';
+
 
 const AdminUserManagerPanel = () => {
     const [allUsers, setAllUsers] = useState([]);
@@ -122,6 +126,50 @@ const AdminUserManagerPanel = () => {
         (user.batch && user.batch.toString().toLowerCase().includes(searchTerm.toLowerCase()))
     );
 
+    const exportAsCSV = () => {
+        const json2csvParser = new Parser();
+        const unapprovedCsv = json2csvParser.parse(allUsers);
+        const approvedCsv = json2csvParser.parse(approvedUsers);
+
+        const blob = new Blob([`Approved Users\n${approvedCsv}`], {
+            type: 'text/csv;charset=utf-8;',
+        });
+        saveAs(blob, 'approved users.csv');
+        const blob2 =  new Blob([`Unapproved Users\n${unapprovedCsv}`], {
+            type: 'text/csv;charset=utf-8;',
+        });
+        saveAs(blob2, 'unapproved users.csv');
+    };
+
+    const exportAsExcel = () => {
+       
+        const unapprovedWb = XLSX.utils.book_new(); 
+        const unapprovedSheet = XLSX.utils.json_to_sheet(allUsers); 
+        XLSX.utils.book_append_sheet(unapprovedWb, unapprovedSheet, "Unapproved Users"); 
+    
+        const unapprovedWbout = XLSX.write(unapprovedWb, { bookType: 'xlsx', type: 'array' });
+        const unapprovedBlob = new Blob([unapprovedWbout], { type: 'application/octet-stream' });
+    
+        const approvedWb = XLSX.utils.book_new(); 
+        const approvedSheet = XLSX.utils.json_to_sheet(approvedUsers); 
+        XLSX.utils.book_append_sheet(approvedWb, approvedSheet, "Approved Users"); 
+    
+        const approvedWbout = XLSX.write(approvedWb, { bookType: 'xlsx', type: 'array' }); 
+        const approvedBlob = new Blob([approvedWbout], { type: 'application/octet-stream' }); 
+        saveAs(approvedBlob, 'approved_users.xlsx'); 
+        saveAs(unapprovedBlob, 'unapproved_users.xlsx'); 
+    };
+    
+
+    const exportAsJSON = () => {
+        const data = {
+            unapprovedUsers: allUsers,
+            approvedUsers: approvedUsers,
+        };
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+        saveAs(blob, 'users.json');
+    };
+
     if (loading) {
         return (
             <Box textAlign="center" py={2}>
@@ -142,6 +190,12 @@ const AdminUserManagerPanel = () => {
                     onChange={(e) => setSearchTerm(e.target.value)}
                 />
             </InputGroup>
+
+            <Box textAlign="center">
+                <Button colorScheme="blue" onClick={exportAsCSV} m={2}>Export as CSV</Button>
+                <Button colorScheme="green" onClick={exportAsExcel} m={2}>Export as Excel</Button>
+                <Button colorScheme="teal" onClick={exportAsJSON} m={2}>Export as JSON</Button>
+            </Box>
 
             <Box>
                 <Heading size="xl" textAlign="center" p={2}  borderRadius="md">Pending Users</Heading>
