@@ -292,7 +292,7 @@ function Page() {
         <>
           <FormControl isRequired>
             <FormLabel>Title</FormLabel>
-            <Input variant='filled' placeholder='Enter the title' type='text' name='title' value={formData.title} onChange={onChangeHandler} required />
+            <Input variant='filled' placeholder='Enter the title' maxLength={100} type='text' name='title' value={formData.title} onChange={onChangeHandler} required />
             <FormHelperText></FormHelperText>
           </FormControl>
           <FormControl isRequired>

@@ -1,43 +1,68 @@
 import React, { useState, useEffect } from 'react';
-import { VStack, Button, List, ListItem, useToast, Box, Heading, Text, Avatar, Spinner, Card, useColorModeValue } from '@chakra-ui/react';
-import { savedatatodb, deletedatafromdb, getdatafromdb } from '@/lib/firebase';
+import {
+    VStack, Button, List, ListItem, useToast, Box, Heading, Text, Avatar, Spinner, Card, Flex,
+    SimpleGrid,
+} from '@chakra-ui/react';
+import { savedatatodb, deletedatafromdb, getdatafromdb, auth } from '@/lib/firebase';
 
-const BatchRepPanel = ({ batchRepUID }) => {
+const BatchRepPanel = () => {
     const [batchUsers, setBatchUsers] = useState([]);
     const [approvedUsers, setApprovedUsers] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [isBatchRep, setIsBatchRep] = useState(false);
+    const [batchRepDetails, setBatchRepDetails] = useState(null);
     const toast = useToast();
-    const cardBg = useColorModeValue('gray.50', 'gray.700');
-    const tealTint = useColorModeValue('teal.100', 'teal.900');
+    const currentUserEmail = auth.currentUser?.email.replace(/\./g, '_'); // Format email for Firebase
 
     useEffect(() => {
-        const fetchData = async () => {
+        const fetchBatchData = async () => {
+            setLoading(true);
             try {
-                const usersData = await getdatafromdb('users') || {};
-                const batchRepData = await getdatafromdb(`userroles/batchreps/${batchRepUID}`) || {};
-                if (usersData && batchRepData) {
-                    const usersArray = Object.keys(usersData).map(uid => ({
-                        uid,
-                        ...usersData[uid],
-                    }));
-                    const batch = batchRepData.batch;
-                    const filteredUsers = usersArray.filter(user => user.batch === batch);
-    
-                    const approvedUsersData = await getdatafromdb('approvedUsers');
-                    const approvedUsersArray = Object.keys(approvedUsersData || {}).map(uid => ({
-                        uid,
-                        ...approvedUsersData[uid],
-                    }));
-                    const filteredApprovedUsers = approvedUsersArray.filter(user => user.batch === batch);
-    
-                    setBatchUsers(filteredUsers.filter(user => !filteredApprovedUsers.some(approvedUser => approvedUser.uid === user.uid)));
-                    setApprovedUsers(filteredApprovedUsers);
+                // Check if the user is a batch representative
+                const batchRepData = await getdatafromdb(`userroles/batchreplist/${currentUserEmail}`);
+                console.log('Batch Rep Data:', batchRepData); // Debugging
+                if (!batchRepData) {
+                    setIsBatchRep(false);
+                    return;
                 }
+
+                setIsBatchRep(true);
+                setBatchRepDetails(batchRepData); // Store batch rep details for display
+
+                const [approvedUsersData, usersData] = await Promise.all([
+                    getdatafromdb('approvedUsers') || {},
+                    getdatafromdb('users') || {},
+                ]);
+                console.log('Approved Users Data:', approvedUsersData); // Debugging
+                console.log('Users Data:', usersData); // Debugging
+
+                const batchRep = Object.values(approvedUsersData).find(user => user.email === auth.currentUser?.email);
+
+                if (!batchRep?.batch) {
+                    toast({
+                        title: 'Batch information not found.',
+                        description: 'No batch data associated with this user.',
+                        status: 'error',
+                        duration: 2000,
+                        isClosable: true,
+                    });
+                    return;
+                }
+
+                const userBatch = batchRep.batch;
+                const usersArray = Object.keys(usersData).map(uid => ({ uid, ...usersData[uid] }));
+                const filteredApprovedUsers = Object.values(approvedUsersData).filter(user => user.batch === userBatch);
+                const filteredBatchUsers = usersArray.filter(user =>
+                    user.batch === userBatch && !filteredApprovedUsers.some(approved => approved.uid === user.uid),
+                );
+
+                setApprovedUsers(filteredApprovedUsers);
+                setBatchUsers(filteredBatchUsers);
             } catch (error) {
                 toast({
-                    title: "Error fetching data.",
+                    title: 'Error fetching data.',
                     description: error.message,
-                    status: "error",
+                    status: 'error',
                     duration: 2000,
                     isClosable: true,
                 });
@@ -45,72 +70,32 @@ const BatchRepPanel = ({ batchRepUID }) => {
                 setLoading(false);
             }
         };
-    
-        fetchData();
-    }, [toast, batchRepUID]);
-    
 
-    const handleApproveUser = async (user) => {
-        try {
-            await savedatatodb(`approvedUsers/${user.uid}`, user);
-            await deletedatafromdb(`users/${user.uid}`);
-            setBatchUsers(prev => prev.filter(u => u.uid !== user.uid));
-            setApprovedUsers(prev => [...prev, user]);
-            toast({
-                title: "User approved.",
-                status: "success",
-                duration: 2000,
-                isClosable: true,
-            });
-        } catch (error) {
-            toast({
-                title: "Error approving user.",
-                description: error.message,
-                status: "error",
-                duration: 2000,
-                isClosable: true,
-            });
+        if (currentUserEmail) {
+            fetchBatchData();
         }
-    };
+    }, [toast, currentUserEmail]);
 
-    const handleUnapproveUser = async (user) => {
+    const handleUserUpdate = async (user, approve) => {
         try {
-            await savedatatodb(`users/${user.uid}`, user);
-            await deletedatafromdb(`approvedUsers/${user.uid}`);
-            setApprovedUsers(prev => prev.filter(u => u.uid !== user.uid));
-            setBatchUsers(prev => [...prev, user]);
-            toast({
-                title: "User unapproved.",
-                status: "success",
-                duration: 2000,
-                isClosable: true,
-            });
+            if (approve) {
+                await savedatatodb(`approvedUsers/${user.uid}`, user);
+                await deletedatafromdb(`users/${user.uid}`);
+                setBatchUsers(prev => prev.filter(u => u.uid !== user.uid));
+                setApprovedUsers(prev => [...prev, user]);
+                toast({ title: 'User approved.', status: 'success', duration: 2000, isClosable: true });
+            } else {
+                await savedatatodb(`users/${user.uid}`, user);
+                await deletedatafromdb(`approvedUsers/${user.uid}`);
+                setApprovedUsers(prev => prev.filter(u => u.uid !== user.uid));
+                setBatchUsers(prev => [...prev, user]);
+                toast({ title: 'User unapproved.', status: 'success', duration: 2000, isClosable: true });
+            }
         } catch (error) {
             toast({
-                title: "Error unapproving user.",
+                title: 'Error updating user.',
                 description: error.message,
-                status: "error",
-                duration: 2000,
-                isClosable: true,
-            });
-        }
-    };
-
-    const handleRemoveUser = async (id) => {
-        try {
-            await deletedatafromdb(`users/${id}`);
-            setBatchUsers(prev => prev.filter(user => user.uid !== id));
-            toast({
-                title: "User removed.",
-                status: "success",
-                duration: 2000,
-                isClosable: true,
-            });
-        } catch (error) {
-            toast({
-                title: "Error removing user.",
-                description: error.message,
-                status: "error",
+                status: 'error',
                 duration: 2000,
                 isClosable: true,
             });
@@ -126,57 +111,76 @@ const BatchRepPanel = ({ batchRepUID }) => {
         );
     }
 
-    return (
-        <VStack spacing={6} align="stretch">
-            <Heading size="3xl" textAlign="center"  p={1} mt={3} borderRadius="md">Batch Management</Heading>
-            <Box>
-                <Heading size="2xl" textAlign="center"  p={2} m={5} borderRadius="md">Approved Users</Heading>
-                <List spacing={2} maxHeight="50vh" overflowY="auto">
-                    {approvedUsers.map(user => (
-                        <ListItem key={user.uid} borderRadius="md" boxShadow="md" bg={cardBg}>
-                            <Card p={4}>
-                                <Box display="flex" alignItems="center">
-                                    <Avatar size="lg" src={user.photoURL || `/assets/usericon.webp`} />
-                                    <Box ml={4} flex="1">
-                                        <Text fontWeight="bold" fontSize="lg">{user.email}</Text>
-                                        {user.batch && <Text>{`Batch: ${user.batch}`}</Text>}
-                                        {user.number && <Text>{`Number: ${user.number}`}</Text>}
-                                        {user.rollno && <Text>{`Roll Number: ${user.rollno}`}</Text>}
-                                    </Box>
-                                    <Button colorScheme="yellow" onClick={() => handleUnapproveUser(user)}>
-                                        Unapprove
-                                    </Button>
-                                </Box>
-                            </Card>
-                        </ListItem>
-                    ))}
-                </List>
+    if (!isBatchRep) {
+        return (
+            <Box textAlign="center" py={10}>
+                <Heading size="lg">You are not a batch representative.</Heading>
             </Box>
+        );
+    }
+
+    const UserCard = ({ user, onAction, actionLabel, actionColor }) => (
+        <Card p={4} display="flex" flexDirection= {'row' } alignItems="center" key={user.uid} borderRadius="sm">
+            <Box display="flex" flexDirection="row" alignItems="center">
+                <Avatar size="md" src={user.photoURL || `/assets/usericon.webp`} />
+                <Box p={2} maxWidth="200px" overflow="hidden">
+                    <Text  isTruncated>{user.name}</Text>
+                    <Text isTruncated>{user.email}</Text>
+                    <Text isTruncated>{`Batch: ${user.batch}`}</Text>
+                    <Text isTruncated>{`Roll No: ${user.rollno || 'N/A'}`}</Text>
+                </Box>
+            </Box>
+            <Button p={2} colorScheme={actionColor} onClick={() => onAction(user)}>
+                {actionLabel}
+            </Button>
+        </Card>
+    );
+
+    return (
+        <VStack spacing={2} align="stretch" p={2}>
+
+            <Heading size="lg" textAlign="center">Batch Management</Heading>
+
+            {/* Approved Users */}
             <Box>
-                <Heading size="2xl" textAlign="center" p={2} m={5} borderRadius="md">Non-Approved Users</Heading>
-                <List spacing={2} maxHeight="50vh" overflowY="auto">
-                    {batchUsers.map(user => (
-                        <ListItem key={user.uid} borderRadius="md" boxShadow="md" bg={cardBg}>
-                            <Card p={4}>
-                                <Box display="flex" alignItems="center">
-                                    <Avatar size="lg" src={user.photoURL || `/assets/usericon.webp`} />
-                                    <Box ml={4} flex="1">
-                                        <Text fontWeight="bold" fontSize="lg">{user.email}</Text>
-                                        {user.batch && <Text>{`Batch: ${user.batch}`}</Text>}
-                                        {user.number && <Text>{`Number: ${user.number}`}</Text>}
-                                        {user.rollno && <Text>{`Roll Number: ${user.rollno}`}</Text>}
-                                    </Box>
-                                    <Button colorScheme="green" onClick={() => handleApproveUser(user)}>
-                                        Approve
-                                    </Button>
-                                    <Button colorScheme="red" ml={2} onClick={() => handleRemoveUser(user.uid)}>
-                                        Remove
-                                    </Button>
-                                </Box>
-                            </Card>
-                        </ListItem>
+                <Heading size="md" m={5}  textAlign="center">Approved Users</Heading>
+                <SimpleGrid
+                    spacing={2}
+                    maxHeight="50vh"
+                    overflowY="auto"
+                    columns={{ sm: 1, md: 2, lg: 3 }}
+                >
+                    {approvedUsers.map(user => (
+                        <UserCard
+                            key={user.uid}
+                            user={user}
+                            onAction={() => handleUserUpdate(user, false)}
+                            actionLabel="Unapprove"
+                            actionColor="yellow"
+                        />
                     ))}
-                </List>
+                </SimpleGrid>
+            </Box>
+
+            {/* Non-approved Users */}
+            <Box>
+                <Heading size="md" m={5} textAlign="center">Non-approved Users</Heading>
+                <SimpleGrid
+                    spacing={2}
+                    maxHeight="50vh"
+                    overflowY="auto"
+                    columns={{ sm: 1, md: 2, lg: 3 }}
+                >
+                    {batchUsers.map(user => (
+                        <UserCard
+                            key={user.uid}
+                            user={user}
+                            onAction={() => handleUserUpdate(user, true)}
+                            actionLabel="Approve"
+                            actionColor="green"
+                        />
+                    ))}
+                </SimpleGrid>
             </Box>
         </VStack>
     );
