@@ -29,7 +29,7 @@ export const statistics = [
 export const MenuItems = [
   { name: 'Home', link: '/' },
   { name: 'Gallery', link: '/gallery' },
-  { name: 'Scholorship', link: '/scholorship' },
+  { name: 'Scholarship', link: '/Scholarship' },
   { name: 'Alumni', link: '/alumni' },
   { name: 'Articles', link: '/posts' },
   { name: 'Calendar', link: '/calendar' },

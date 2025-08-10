@@ -16,7 +16,7 @@ const ScholorshipPage = () => {
 
   return (
     <Flex direction="column" align="center" justify="center" height="100vh" p={4} pt={"10vh"}>
-      <Heading as="h1" mb={4} textAlign="center">Scholorship</Heading>
+      <Heading as="h1" mb={4} textAlign="center">Scholarship</Heading>
       <Box mb={4} width="100%" maxW="900px" fontSize={"160%"} textAlign="center">
         <p>Please read all the conditions carefully before submitting your application to 
            ensure that you do not miss out on this valuable opportunity.
