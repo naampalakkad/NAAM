@@ -29,6 +29,7 @@ export const statistics = [
 export const MenuItems = [
   { name: 'Home', link: '/' },
   { name: 'Gallery', link: '/gallery' },
+  { name: 'Scholarship', link: '/Scholarship' },
   { name: 'Alumni', link: '/alumni' },
   { name: 'Articles', link: '/posts' },
   { name: 'Calendar', link: '/calendar' },
@@ -39,6 +40,8 @@ export const FooterMenuItems = [
   { name: 'About Us', link: '/aboutus' },
   { name: 'ByLaw', link: '/law' },
   { name: 'Profile', link: '/profile' },
+  { name: 'Scholorship', link: '/scolorship' },
+
 ];
 
 export const socialMediaUrls = [
